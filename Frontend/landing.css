@@ -1,0 +1,270 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Black background */
+    color: white; /* White text */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: black; 
+}
+
+/* Logo */
+.logo {
+    width: 150px; /* Adjust as needed */
+}
+
+/* Navigation Bar */
+.navbar {
+    background: rgba(92, 84, 112, 0.6);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40%; 
+    border-radius: 20px;
+    box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7); 
+    backdrop-filter: blur(10px); 
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    top: 5%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    margin-top: 10px; 
+}
+
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+
+.navbar ul li {
+    display: inline;
+}
+
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Navigation Bar Hover Effect */
+.navbar:hover {
+    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); /* Stronger glow effect */
+}
+
+/* Navigation Links Hover Effect */
+.navbar ul li a:hover {
+    color: #FFD700; /* Gold color effect on hover */
+}
+
+/* Main Content Section */
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 50px;
+}
+
+/* Text Box */
+.text-box {
+    max-width: 40%;
+    background-color: #5C5470; /* Background color for text box */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    height: 425px;
+}
+
+/* Text Box Headings */
+.text-box h1 {
+    font-size: 24px;
+    color: white;
+}
+
+/* Text Box Paragraphs */
+.text-box p {
+    font-size: 21px;
+    color: #D9D9D9;
+    text-align: justify;
+    font-weight: 400;
+    font-family: "Poppins", sans-serif;
+    text-indent: 10px;
+}
+
+/* Adding a soft gradient effect to text */
+.text-box p::first-letter {
+    font-size: 26px;
+    font-weight: bold;
+    color: #FFD700; 
+}
+
+/* Get Started  Button */
+.gt-button {
+    background-color: #E5C4C4; /* Light pinkish shade */
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 190px; /* Adjust positioning */
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Button Hover Effect */
+.gt-button:hover {
+    background-color: #d0a8a8; /* Slightly darker shade on hover */
+}
+
+/* Main Image */
+.main-image {
+    width: 40%;
+    border-radius: 10%;
+    padding-right: 30px;
+}
+
+/* 
+========================================
+        FEATURES SECTION 
+======================================== 
+*/
+.features-container {
+    text-align: center;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+    
+}
+.features-heading
+{
+  padding-top: 10px;
+  text-align: center;
+  background: rgba(92, 84, 112, 0.6);
+  padding: 15px 200px;
+  display: inline-block;
+  border-radius: 20px;
+  box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7); 
+  backdrop-filter: blur(10px); 
+  transition: all 0.3s ease-in-out;
+}
+
+/* Styling for each feature box */
+.feature-box {
+    background-color: #6b6582; /* Matching the header color */
+    padding: 25px;
+    border-radius: 10px;
+    width: 20%;
+    text-align: left;
+    box-shadow: 0px 0px 10px rgba(107, 101, 130, 0.5); /* Soft glow effect */
+    
+}
+
+/* Feature box heading */
+.feature-box h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/* Feature box text */
+.feature-box p {
+    font-size: 20px;
+    color: #e0e0e0; /* Light gray for better readability */
+    
+}
+
+/* 
+========================================
+        START NOW BUTTON
+======================================== 
+*/
+
+.stn-button {
+    background-color: #e5c4c4; /* Light pink for contrast */
+    color: black;
+    border: none;
+    padding: 12px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 30px;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+    margin-left: 0.1rem;
+}
+
+/* Button hover effect */
+.stn-button:hover {
+    background-color: #d0a8a8;
+}
+
+/* 
+========================================
+        ABOUT US SECTION 
+======================================== 
+*/ 
+
+h2
+{
+    padding-top: 10px;
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.aboutus-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px; /* Adds spacing between elements */
+    width: 100%;
+    padding: 20px;
+}
+
+.aboutus-box {
+    background-color: #6b6582;
+    padding: 185px 10px;
+    border-radius: 10px;
+    width: 45%;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(107, 101, 130, 0.5);
+    margin-right: 85px;
+}
+
+.aboutusimage {
+    width: 40%;
+}
+
+.aboutusimage img {
+    width: 100%;
+    border-radius: 10px; /* Reduces excessive roundness */
+}
+
+/* 
+========================================
+       FOOTER SECTION 
+======================================== 
+*/
+
+.footer{
+    text-align: center;
+}

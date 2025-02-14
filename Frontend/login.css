@@ -1,0 +1,156 @@
+/* ===== General Page Styling ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Black background */
+    color: white; /* White text */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: black; 
+}
+
+/* Logo */
+.logo {
+    width: 150px; /* Adjust as needed */
+}
+
+/* Navigation Bar */
+.navbar {
+    background: rgba(92, 84, 112, 0.6);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%; 
+    border-radius: 20px;
+    box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7); 
+    backdrop-filter: blur(10px); 
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    top: 5%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    margin-top: 10px; 
+}
+
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+
+.navbar ul li {
+    display: inline;
+}
+
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Navigation Bar Hover Effect */
+.navbar:hover {
+    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); /* Stronger glow effect */
+}
+
+/* Navigation Links Hover Effect */
+.navbar ul li a:hover {
+    color: #FFD700; /* Gold color effect on hover */
+}
+
+
+/* ===== Login Box Styling ===== */
+.login-box {
+    background-color: black;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(107, 101, 130, 0.5);
+    width: 300px;
+    height: 400px;
+    margin: auto;
+}
+
+/* ===== User Avatar Styling ===== */
+.avatar img {
+    width: 80px;
+    border-radius: 50%;
+    background: #363434;
+    padding: 10px;
+    margin-left: 100px;
+}
+
+/* ===== Form Styling ===== */
+form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* Label Styling */
+label {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Input Fields Styling */
+input {
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #d3d3d3;
+    font-size: 16px;
+}
+
+/* ===== Login Button Styling ===== */
+button {
+    background-color: #e5c4c4;
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Login Button Hover Effect */
+button:hover {
+    background-color: #d0a8a8;
+}
+
+/* ===== Signup Text Styling ===== */
+.signup-text {
+    margin-top: 35px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* Signup Link Styling */
+.signup-text a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Signup Link Hover Effect */
+.signup-text a:hover {
+    color: #FFD700;
+}
