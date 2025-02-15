@@ -222,7 +222,6 @@ header {
         ABOUT US SECTION 
 ======================================== 
 */ 
-
 h2
 {
     padding-top: 10px;
@@ -242,16 +241,64 @@ h2
 
 .aboutus-box {
     background-color: #6b6582;
-    padding: 185px 10px;
+    padding: 50px 10px;
     border-radius: 10px;
     width: 45%;
-    text-align: center;
+    text-align: left;
     box-shadow: 0px 0px 10px rgba(107, 101, 130, 0.5);
     margin-right: 85px;
 }
 
+/* About Us Text Styling */
+.aboutus-box p {
+    font-size: 18px; /* Readable font size */
+    color: #f0f0f0; /* Light gray for contrast against dark background */
+    line-height: 1.8; /* Improves readability with proper line spacing */
+    font-weight: 400;
+    font-family: "Poppins", sans-serif;
+    text-align: justify; /* Ensures a neat paragraph alignment */
+    margin-bottom: 15px; /* Adds spacing between paragraphs */
+}
+
+/* About Us Section - Headings */
+.aboutus-box h3 {
+    font-size: 22px; /* Slightly larger for importance */
+    color: #FFD700; /* Gold color to highlight headings */
+    margin-top: 20px; /* Adds spacing from previous content */
+    text-align: center; /* Centers the headings */
+}
+
+/* About Us - List Items */
+.aboutus-box ul {
+    list-style-type: none; /* Removes default bullet points */
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.aboutus-box ul li {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 8px; /* Adds spacing between list items */
+    padding-left: 25px;
+    position: relative;
+}
+
+/* Custom bullet points for list */
+.aboutus-box ul li::before {
+    content: "✔"; /* Checkmark icon */
+    color: #FFD700; /* Gold checkmark */
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+/* About Us Call-to-Action Text */
+.aboutus-box p strong {
+    color: #FFD700; /* Gold text for emphasis */
+}
+
 .aboutusimage {
-    width: 40%;
+    width: 45%;
 }
 
 .aboutusimage img {
