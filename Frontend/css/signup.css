@@ -70,7 +70,7 @@ header {
 
 /* Navigation Links Hover Effect */
 .navbar ul li a:hover {
-    color: #FFD700; /* Gold color effect on hover */
+    color: paleturquoise; /* Gold color effect on hover */
 }
 
 /* ======= Signup Form Container ======= */
@@ -148,5 +148,5 @@ button:hover {
 
 /* Hover Effect for Login Link */
 .login-text a:hover {
-    color: #FFD700; /* Gold effect on hover */
+    color: paleturquoise; /* Gold effect on hover */
 }

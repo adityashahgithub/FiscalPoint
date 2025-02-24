@@ -70,7 +70,7 @@ header {
 
 /* Navigation Links Hover Effect */
 .navbar ul li a:hover {
-    color: palevioletred; /* Gold color effect on hover */
+    color: paleturquoise; /* Gold color effect on hover */
 }
 
 
@@ -152,5 +152,5 @@ button:hover {
 
 /* Signup Link Hover Effect */
 .signup-text a:hover {
-    color: palevioletred;
+    color: paleturquoise;
 }
