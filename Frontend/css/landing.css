@@ -70,7 +70,7 @@ header {
 
 /* Navigation Links Hover Effect */
 .navbar ul li a:hover {
-    color: #FFD700; /* Gold color effect on hover */
+    color: paleturquoise; /* Gold color effect on hover */
 }
 
 /* Main Content Section */
@@ -111,7 +111,7 @@ header {
 .text-box p::first-letter {
     font-size: 26px;
     font-weight: bold;
-    color: #FFD700; 
+    color: paleturquoise; 
 }
 
 /* Get Started  Button */
@@ -171,7 +171,7 @@ header {
 .features-heading:hover
 {
     box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); /* Stronger glow effect */
-    color: #FFD700; /* Gold color effect on hover */
+    color: paleturquoise; /* Gold color effect on hover */
 }
 
 /* Styling for each feature box */
@@ -269,7 +269,7 @@ h2
 /* About Us Section - Headings */
 .aboutus-box h3 {
     font-size: 22px; /* Slightly larger for importance */
-    color: #FFD700; /* Gold color to highlight headings */
+    color: paleturquoise; /* Gold color to highlight headings */
     margin-top: 20px; /* Adds spacing from previous content */
     text-align: center; /* Centers the headings */
 }
@@ -292,7 +292,7 @@ h2
 /* Custom bullet points for list */
 .aboutus-box ul li::before {
     content: "✔"; /* Checkmark icon */
-    color: #FFD700; /* Gold checkmark */
+    color: paleturquoise; /* Gold checkmark */
     font-weight: bold;
     position: absolute;
     left: 0;
@@ -300,7 +300,7 @@ h2
 
 /* About Us Call-to-Action Text */
 .aboutus-box p strong {
-    color: #FFD700; /* Gold text for emphasis */
+    color: paleturquoise; /* Gold text for emphasis */
 }
 
 .aboutusimage {
