@@ -24,11 +24,11 @@ header {
 /* Navigation Bar */
 .navbar {
     background: rgba(92, 84, 112, 0.6);
-    padding: 15px 30px;
+    padding: 20px 80px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    width: 40%; 
+    width: 30%; 
     border-radius: 20px;
     box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7); 
     backdrop-filter: blur(10px); 
@@ -38,6 +38,19 @@ header {
     left: 50%;
     transform: translateX(-50%); 
     margin-top: 10px; 
+    animation: navbarFadeIn 0.5s ease-out 0.2s forwards;
+   
+    
+}
+@keyframes navbarFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
 
@@ -58,20 +71,19 @@ header {
 .navbar ul li a {
     text-decoration: none;
     color: white;
-    font-size: 22px;
+    font-size: 16px;
     font-weight: bold;
     transition: color 0.3s ease-in-out;
 }
 
-/* Navigation Bar Hover Effect */
 .navbar:hover {
-    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); /* Stronger glow effect */
+    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); 
 }
 
-/* Navigation Links Hover Effect */
 .navbar ul li a:hover {
-    color: paleturquoise; /* Gold color effect on hover */
+    color: paleturquoise; 
 }
+
 
 /* ======= Signup Form Container ======= */
 .signup-container {
