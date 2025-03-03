@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             
             <!-- Signup Link -->
-            <p class="signup-text">New user? <a href="signup.html">Sign up instead</a></p>
+            <p class="signup-text">New user? <a href="signup.php">Sign up instead</a></p>
 
         </div> <!-- End of Login Box -->
     
