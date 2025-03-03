@@ -28,10 +28,11 @@
         <h2>Welcome to Fiscal Point!</h2>
 
         <!-- Signup Form -->
-        <form class="signup-form">
+        <form class="signup-form" onsubmit="return validateForm()">
             <!-- Email Input -->
             <label for="email">Enter your email:</label>
             <input type="email" id="email" placeholder="Email" required>
+            <small id="email-error" class="error-message"></small>
 
             <!-- Full Name Input -->
             <label for="fullname">Full Name:</label>
@@ -39,11 +40,13 @@
 
             <!-- Age Input -->
             <label for="age">Age:</label>
-            <input type="number" id="age" placeholder="Age" required>
+            <input type="number" id="age" placeholder="Age" required min="18" max="100">
+            <small id="age-error" class="error-message"></small>
 
             <!-- Password Input -->
             <label for="password">Password:</label>
             <input type="password" id="password" placeholder="Password" required>
+            <small id="password-error" class="error-message"></small>
 
             <!-- Signup Button -->
             <button type="submit">Get Started</button>
@@ -52,5 +55,17 @@
         <!-- Login Redirect -->
         <p class="login-text">Already a user? <a href="login.html">Login instead</a></p>
     </div>
+</div>
+
+<style>
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+    }
+</style>
+
+ <!-- Linking External JavaScript -->
+ <script src="javascript/signup.js"></script>
+
 </body>
 </html>

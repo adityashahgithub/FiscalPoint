@@ -25,6 +25,7 @@
             <li> <a href="logout.html">Logout</a></li><br>
         </ul>
     </aside>
+    
     <div class="main-content">
         <div class="form-container">
             <h1>Add Expense:</h1>
@@ -32,7 +33,7 @@
                 <h2>Your Budget for This Month:</h2>
                 <p id="budget-display">$0.00</p>
             </div>
-            <form action="addexpense.php" method="POST" onsubmit="showBudget(event)">
+            <form action="addexpense.php" method="POST" onsubmit="return validateDate(event)">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" required>
                 
@@ -68,8 +69,6 @@
                 
                 <div id="otherPaymentDiv" style="display: none;">
                     <label for="other_payment">Specify Payment Method:</label>
-                    <br>
-                    <br>
                     <input type="text" id="other_payment" name="other_payment">
                 </div>
                 
@@ -82,52 +81,7 @@
         <p>Your budget for this month is: <span id="budgetAmount">0</span></p>
     </div>
     
-
-    <script>
-        function toggleOtherPayment() {
-            var paymentMethod = document.getElementById("payment_method").value;
-            var otherPaymentDiv = document.getElementById("otherPaymentDiv");
-            
-            if (paymentMethod === "Other") {
-                otherPaymentDiv.style.display = "block";
-            } else {
-                otherPaymentDiv.style.display = "none";
-            }
-        }
-
-        function showBudget(event) {
-        event.preventDefault(); // Prevent form submission
-        let currentMonth = new Date().toISOString().slice(0, 7); // Get current month (YYYY-MM)
-        let budget = localStorage.getItem("budget_" + currentMonth);
-        
-        if (budget) {
-            document.getElementById("budgetAmount").innerText = budget;
-            document.getElementById("budgetBox").style.display = "block";
-        } else {
-            alert("No budget set for this month!");
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-            // Automatically set the date to today
-            let today = new Date().toISOString().split('T')[0]; 
-            document.getElementById("date").value = today;
-
-            // Fetch and display the budget for the current month
-            let currentMonth = new Date().toISOString().slice(0, 7);
-            let budget = localStorage.getItem("budget_" + currentMonth);
-            
-            if (budget) {
-                document.getElementById("budgetAmount").innerText = budget;
-                document.getElementById("budgetBox").style.display = "block";
-            }
-            
-            // Reset form fields on page refresh
-            document.getElementById("expenseForm").reset();
-
-            // Hide the "Other" payment method field
-            document.getElementById("otherPaymentDiv").style.display = "none";
-        });
-    </script>
+     <!-- Linking External JavaScript -->
+     <script src="javascript/addexpense.js"></script>
 </body>
 </html>
