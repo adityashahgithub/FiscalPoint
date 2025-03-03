@@ -1,3 +1,41 @@
+<?php
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'fiscalpoint');
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Fetch the user's credentials from the database
+    $sql = "SELECT Password FROM User WHERE Email = '$email'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $hashedPassword = $row['Password'];
+
+        // Verify the password
+        if (password_verify($password, $hashedPassword)) {
+            echo "Login successful! Welcome, $email.";
+        } else {
+            echo "Invalid password. Please try again.";
+        }
+    } else {
+        echo "No user found with this email.";
+    }
+    $conn->close();
+}
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
