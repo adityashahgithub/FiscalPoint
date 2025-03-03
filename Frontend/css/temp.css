@@ -270,9 +270,9 @@ header {
 }
 
 /* 
-========================================
-       ABOUT US SECTION
-======================================== 
+
+        ABOUT US SECTION 
+
 */ 
 
 .aboutus-heading
@@ -308,7 +308,7 @@ h2
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px; /* Adds spacing between elements */
+    gap: 20px; 
     width: 100%;
     padding: 20px;
 }
@@ -326,26 +326,26 @@ h2
 
 /* About Us Text Styling */
 .aboutus-box p {
-    font-size: 18px; /* Readable font size */
-    color: #f0f0f0; /* Light gray for contrast against dark background */
-    line-height: 1.8; /* Improves readability with proper line spacing */
+    font-size: 18px; 
+    color: #f0f0f0; 
+    line-height: 1.8; 
     font-weight: 400;
     font-family: "Poppins", sans-serif;
-    text-align: justify; /* Ensures a neat paragraph alignment */
-    margin-bottom: 15px; /* Adds spacing between paragraphs */
+    text-align: justify; 
+    margin-bottom: 15px; 
 }
 
 /* About Us Section - Headings */
 .aboutus-box h3 {
-    font-size: 22px; /* Slightly larger for importance */
-    color: paleturquoise; /* Gold color to highlight headings */
-    margin-top: 20px; /* Adds spacing from previous content */
-    text-align: center; /* Centers the headings */
+    font-size: 22px; 
+    color: paleturquoise; 
+    margin-top: 20px; 
+    text-align: center; 
 }
 
 /* About Us - List Items */
 .aboutus-box ul {
-    list-style-type: none; /* Removes default bullet points */
+    list-style-type: none; 
     padding-left: 0;
     margin-top: 10px;
 }
@@ -353,15 +353,15 @@ h2
 .aboutus-box ul li {
     font-size: 18px;
     color: #fff;
-    margin-bottom: 8px; /* Adds spacing between list items */
+    margin-bottom: 8px; 
     padding-left: 25px;
     position: relative;
 }
 
 /* Custom bullet points for list */
 .aboutus-box ul li::before {
-    content: "✔"; /* Checkmark icon */
-    color: paleturquoise; /* Gold checkmark */
+    content: "✔"; 
+    color: paleturquoise; 
     font-weight: bold;
     position: absolute;
     left: 0;
@@ -369,7 +369,7 @@ h2
 
 /* About Us Call-to-Action Text */
 .aboutus-box p strong {
-    color: paleturquoise; /* Gold text for emphasis */
+    color: paleturquoise; 
 }
 
 .aboutusimage {
@@ -378,7 +378,7 @@ h2
 
 .aboutusimage img {
     width: 100%;
-    border-radius: 10px; /* Reduces excessive roundness */
+    border-radius: 10px; 
 }
 
 .stn-button2 {
@@ -401,9 +401,7 @@ h2
     background-color: #d0a8a8;
 }
 /* 
-========================================
        FOOTER SECTION 
-======================================== 
 */
 
 .footer{

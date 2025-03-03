@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Budget</title>
+    <link rel="stylesheet" href="css/setbudget.css">
+</head>
+<body>
+    <header>
+        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+    </header>
+    
+    <aside class="sidebar">
+        <div class="profile">
+            <img src="css/profile.png" alt="Profile Image" class="avatar">
+        </div>
+        <ul class="menu">
+            <li><p> <span style="font-size: 20px;">Name</span></p></li>
+            <li> <a href="dashboard.html">Dashboard</a></li><br>
+            <li> <a href="Expense.html">Expense Report</a></li><br>
+            <li> <a href="profile.html">Profile</a></li><br>
+            <li> <a href="logout.html">Logout</a></li><br>
+        </ul>
+    </aside>
+    
+    <div class="main-content">
+        <div class="form-container">
+            <h1>Set Budget:</h1>
+            <form id="budgetForm" onsubmit="saveBudget(event)">
+                <label for="month">Select Month:</label>
+                <input type="month" id="month" name="month" required onchange="checkExistingBudget()">
+                
+                <label for="budget">Enter Budget Amount:</label>
+                <input type="number" id="budget" name="budget" step="0.01" required>
+                
+                <button type="submit" class="set-budget-btn">Set Budget</button>
+                <button type="button" id="resetBtn" class="reset-budget-btn" style="display: none;" onclick="resetBudget()">Reset Budget</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date();
+            let currentMonth = today.toISOString().slice(0, 7);
+            document.getElementById("month").setAttribute("min", currentMonth);
+        });
+
+        function saveBudget(event) {
+            event.preventDefault(); // Prevent form submission
+            let month = document.getElementById("month").value;
+            let budget = document.getElementById("budget").value;
+            
+            if (month && budget) {
+                localStorage.setItem("budget_" + month, budget);
+                alert("Budget set successfully for " + month);
+                checkExistingBudget(); // Refresh reset button visibility
+            }
+        }
+
+        function checkExistingBudget() {
+            let month = document.getElementById("month").value;
+            let storedBudget = localStorage.getItem("budget_" + month);
+
+            if (storedBudget) {
+                document.getElementById("budget").value = storedBudget;
+                document.getElementById("resetBtn").style.display = "inline-block"; // Show Reset button
+            } else {
+                document.getElementById("budget").value = "";
+                document.getElementById("resetBtn").style.display = "none"; // Hide Reset button
+            }
+        }
+
+        function resetBudget() {
+            let month = document.getElementById("month").value;
+
+            if (confirm("Are you sure you want to reset the budget for " + month + "?")) {
+                localStorage.removeItem("budget_" + month);
+                document.getElementById("budget").value = "";
+                document.getElementById("resetBtn").style.display = "none";
+                alert("Budget reset successfully for " + month);
+            }
+        }
+    </script>
+
+</body>
+</html>

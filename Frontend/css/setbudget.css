@@ -11,15 +11,13 @@ body {
     height: 100vh;
 }
 .logo {
-  width: 150px;
-  position: absolute; 
-  top: 10px; 
-  left: 10px; 
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
-
 /* Sidebar */
-
 .sidebar {
     width: 250px;
     background-color: #6B6487;
@@ -27,7 +25,7 @@ body {
     border-radius: 20px;
     height: 60%;
     position: absolute;
-    left: 20px; 
+    left: 20px;
     margin-top: 7%;
 }
 
@@ -38,10 +36,9 @@ body {
 }
 
 .avatar {
-  width: 140px;
-  height: 140px;
-  object-fit: cover; 
-
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
 }
 
 .menu {
@@ -49,17 +46,14 @@ body {
     padding: 0;
     padding-top: 5%;
     text-align: left;
-    
-}   
+}
 
 .menu a {
     margin: 15px 0;
     font-size: 20px;
     color: white;
     text-decoration: none;
-    
 }
-
 
 /* Main Content */
 .form-container {
@@ -70,56 +64,39 @@ body {
     border-radius: 8px;
     text-align: center;
     box-shadow: 0px 4px 6px rgba(208, 208, 208, 0.1);
-  }
+}
 
-  .main-content {
+.main-content {
     width: 75%;
     padding: 40px;
     padding-left: 40%;
-  }
-  
-  .main-content h1 {
+}
+
+.main-content h1 {
     margin-bottom: 20px;
     font-family: 'Times New Roman', Times, serif;
-  }
-  
-  form {
+}
+
+form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-  }
-  
-  label {
+}
+
+label {
     font-size: 16px;
     font-weight: bold;
     text-align: justify;
-  }
+}
 
-  .category {
+select, input[type="number"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 90%;
-  }
-  
-  input[type="date"],
-  input[type="text"],
-  input[type="number"]
-   {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 90%;
-  }
+}
 
-  .payment-method {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 90%;
-  }
-  
-  .add-expense-btn {
+.set-budget-btn {
     padding: 10px;
     background-color: palevioletred;
     color: black;
@@ -128,22 +105,19 @@ body {
     cursor: pointer;
     width: 150px;
     margin-left: 30%;
-    
-  }
-  
-  .add-expense-btn:hover {
+}
+
+.set-budget-btn:hover {
     background-color: rgb(167, 62, 97);
-  }
-  
-  /*.budget-box{
-    display: none;
+}
+
+.reset-budget-btn {
     padding: 10px;
-    background-color: #6B6487;
-    color: white;
+    background-color: palevioletred;
+    color: black;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
     width: 150px;
     margin-left: 30%;
-    text-align: center;
-  }
+}
