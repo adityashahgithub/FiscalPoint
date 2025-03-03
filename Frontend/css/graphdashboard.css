@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     margin: 0;
     padding: 0;
@@ -9,16 +10,25 @@ body {
     align-items: center;
     height: 100vh;
 }
+.logo {
+  width: 150px;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+}
 
 
 /* Sidebar */
+
 .sidebar {
     width: 250px;
     background-color: #6B6487;
     padding: 20px;
     border-radius: 20px;
     height: 60%;
-    
+    position: absolute;
+    left: 20px; 
+    margin-top: 7%;
 }
 
 .profile {
@@ -28,23 +38,24 @@ body {
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    background-color: #C9B5C6;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid black;
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
 }
 
 .menu {
     list-style: none;
     padding: 0;
-    padding-top: 2%;
-}
+    padding-top: 5%;
+    text-align: left;
+    
+}   
+
 .menu a {
     margin: 15px 0;
-    font-size: 18px;
+    font-size: 20px;
     color: white;
+    text-decoration: none;
+    
 }

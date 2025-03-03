@@ -19,6 +19,7 @@ body {
     padding: 20px;
     border-radius: 20px;
     height: 60%;
+    margin-top: 4rem;
     
 }
 
@@ -29,14 +30,10 @@ body {
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    background-color: #C9B5C6;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid black;
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
 }
 
 .menu {
@@ -65,7 +62,7 @@ body {
 }
 
 .expense-card {
-    width: 280px;
+    width: 400px;
     height: 180px;
     background-color: #6B6487;
     border-radius: 10px;
@@ -73,16 +70,22 @@ body {
     padding-right: 5%;
     padding-left: 5%;
 }
+
 /*Mothly Budget*/
+.budget-text {
+    text-align: center;
+    margin-left: 26rem;
+}
 .Budget {
     
-    width: 250px;
-    height: 100px;
+    width: 300px;
+    height: 150px;
     background-color: #6B6487;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     padding-right: 5%;
     padding-left: 5%;
-   margin-left: 50%;
+   margin-left: 56%;
    
 }
+
