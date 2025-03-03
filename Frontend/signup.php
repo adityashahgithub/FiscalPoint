@@ -3,7 +3,7 @@
 $servername = "localhost";  // MySQL server (usually localhost)
 $username = "root";         // MySQL username (usually 'root')
 $password = "";             // MySQL password (usually empty for local setup)
-$dbname = "fiscalpoint";    // Your database name
+$dbname = "Fiscalpoint";    // Your database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

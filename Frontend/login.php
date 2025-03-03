@@ -1,6 +1,6 @@
 <?php
 // Database connection
-$conn = new mysqli('localhost', 'root', '', 'fiscalpoint');
+$conn = new mysqli('localhost', 'root', '', 'Fiscalpoint');
 
 // Check connection
 if ($conn->connect_error) {
