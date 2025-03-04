@@ -33,7 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Execute the statement
     if ($stmt->execute()) {
-        echo "New record created successfully";
+        header("Location: Dashboard.html");
+    exit();
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -65,8 +66,8 @@ $conn->close();
        <nav class="navbar">
            <ul>
                <li><a href="landing.html">Home</a></li>
-               <li><a href="login.html">Expense Tracker</a></li>
-               <li><a href="login.html">Cost of Living Calculator</a></li>
+               <li><a href="login.php">Expense Tracker</a></li>
+               <li><a href="login.php">Cost of Living Calculator</a></li>
            </ul>
        </nav>
    </header>    
@@ -98,7 +99,7 @@ $conn->close();
 </form>
 
         <!-- Login Redirect -->
-        <p class="login-text">Already a user? <a href="login.html">Login instead</a></p>
+        <p class="login-text">Already a user? <a href="login.php">Login instead</a></p>
     </div>
 </div>
 
