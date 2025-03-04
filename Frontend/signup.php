@@ -1,9 +1,9 @@
 <?php
-// Step 1: Establish a database connection
-$servername = "localhost";  // MySQL server (usually localhost)
-$username = "root";         // MySQL username (usually 'root')
-$password = "";             // MySQL password (usually empty for local setup)
-$dbname = "Fiscalpoint";    // Your database name
+// Database connection details
+$servername = "localhost"; 
+$username = "root"; 
+$password = ""; 
+$dbname = "FiscalPoint"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -13,42 +13,39 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Step 2: Check if the form is submitted
+// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Step 3: Get the form data
+    // Retrieve form data
+    $Uname = $_POST['Uname'];
     $email = $_POST['email'];
-    $name = $_POST['name'];
-    $age = $_POST['age'];
-    $password = $_POST['password'];
+    $Phone_no = $_POST['Phone_no'];
+    $Password = $_POST['Password'];
 
-    // Step 4: Validate form data (you can add more validations as needed)
-    if (empty($email) || empty($name) || empty($age) || empty($password)) {
-        echo "All fields are required!";
-        exit();
-    }
+    // Hash the password for security
+    $hashed_password = password_hash($Password, PASSWORD_DEFAULT);
 
-    // Step 5: Hash the password for security
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // Get the current timestamp
+    $Created_At = date('Y-m-d H:i:s');
 
-    // Step 6: Prepare the SQL query to insert data into the 'user' table
-    $stmt = $conn->prepare("INSERT INTO user (email, name, age, password) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssis", $email, $name, $age, $hashedPassword); // 's' = string, 'i' = integer
+    // Prepare and bind
+    $stmt = $conn->prepare("INSERT INTO User (Uname, email, Password, Phone_no, Created_At) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $Uname, $email, $hashed_password, $Phone_no, $Created_At);
 
-    // Step 7: Execute the query and check if the insertion is successful
+    // Execute the statement
     if ($stmt->execute()) {
-        echo "Registration successful!";
+        header("Location: Dashboard.html");
+    exit();
     } else {
         echo "Error: " . $stmt->error;
     }
 
-    // Step 8: Close the statement and connection
+    // Close the statement
     $stmt->close();
-    $conn->close();
 }
+
+// Close the connection
+$conn->close();
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,21 +53,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Fiscal Point</title>
-    <link rel="stylesheet" href="css/signup.css">  <!-- Linking External CSS -->
+    <link rel="stylesheet" href="css/signup.css">  
 </head>
 <body>
  <!-- Main Container -->
  <div class="container">
     <!-- Header Section -->
     <header>
-       <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"> <!-- Company Logo -->
+       <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"> 
        
        <!-- Navigation Menu -->
        <nav class="navbar">
            <ul>
                <li><a href="landing.html">Home</a></li>
-               <li><a href="login.html">Expense Tracker</a></li>
-               <li><a href="login.html">Cost of Living Calculator</a></li>
+               <li><a href="login.php">Expense Tracker</a></li>
+               <li><a href="login.php">Cost of Living Calculator</a></li>
            </ul>
        </nav>
    </header>    
@@ -80,32 +77,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Welcome to Fiscal Point!</h2>
 
         <!-- Signup Form -->
-        <form class="signup-form" onsubmit="return validateForm()">
-            <!-- Email Input -->
-            <label for="email">Enter your email:</label>
-            <input type="email" id="email" placeholder="Email" required>
-            <small id="email-error" class="error-message"></small>
+        <form class="signup-form" action="signup.php" method="POST">
+    <!-- Email Input -->
+    <label for="email">Enter your email:</label>
+    <input type="email" id="email" name="email" placeholder="Email" required>
 
-            <!-- Full Name Input -->
-            <label for="fullname">Full Name:</label>
-            <input type="text" id="fullname" placeholder="Full Name" required>
+    <!-- Full Name Input -->
+    <label for="Uname">Full Name:</label>
+    <input type="text" id="Uname" name="Uname" placeholder="Full Name" required>
 
-            <!-- Age Input -->
-            <label for="age">Age:</label>
-            <input type="number" id="age" placeholder="Age" required min="18" max="100">
-            <small id="age-error" class="error-message"></small>
+    <!-- Phone Number Input --> 
+    <label for="Phone_no">Phone Number:</label>
+    <input type="tel" id="Phone_no" name="Phone_no" placeholder="Enter Phone Number" required pattern="[0-9]{10}" maxlength="10">
 
-            <!-- Password Input -->
-            <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Password" required>
-            <small id="password-error" class="error-message"></small>
+    <!-- Password Input -->
+    <label for="Password">Password:</label>
+    <input type="password" id="Password" name="Password" placeholder="Password" required>
 
-            <!-- Signup Button -->
-            <button type="submit">Get Started</button>
-        </form>
+    <!-- Signup Button -->
+    <button type="submit">Get Started</button>
+</form>
 
         <!-- Login Redirect -->
-        <p class="login-text">Already a user? <a href="login.html">Login instead</a></p>
+        <p class="login-text">Already a user? <a href="login.php">Login instead</a></p>
     </div>
 </div>
 

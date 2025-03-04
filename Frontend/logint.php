@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = trim($_POST['password']);
 
         // Prepare and execute SQL statement
-        $stmt = $conn->prepare("SELECT id, Uname, Password FROM User WHERE email = ?");
+        $stmt = $conn->prepare("SELECT Uid, Uname, Password FROM User WHERE email = ?");
         if ($stmt) {
             $stmt->bind_param("s", $email);
             $stmt->execute();
@@ -36,7 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Verify password
                 if (password_verify($password, $row['Password'])) {
-                    $_SESSION['user_id'] = $row['id'];
+                    session_regenerate_id(true); // Prevent session fixation attacks
+                    $_SESSION['Uid'] = $row['Uid']; 
                     $_SESSION['Uname'] = $row['Uname'];
 
                     // Redirect to Dashboard
@@ -60,8 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close connection
 $conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -100,10 +99,10 @@ $conn->close();
             <!-- Login Form -->
             <form action="login.php" method="POST">
                 <label for="email">Enter your email:</label>
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
                 
                 <label for="password">Password:</label>
-                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
                 
                 <button type="submit">Login</button>
             </form>
