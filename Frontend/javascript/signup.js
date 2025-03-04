@@ -16,14 +16,7 @@ function validateForm() {
         emailError.innerText = "";
     }
 
-    // Age Validation (18-100)
-    if (age < 18 || age > 100) {
-        ageError.innerText = "Age must be between 18 and 100.";
-        valid = false;
-    } else {
-        ageError.innerText = "";
-    }
-
+  
     // Password Validation (8+ characters, uppercase, lowercase, number, special char)
     let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
