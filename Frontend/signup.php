@@ -1,9 +1,9 @@
 <?php
 // Database connection parameters
-$servername = "localhost"; // Replace with your server name
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$dbname = "FiscalPoint"; // Replace with your database name
+$servername = "localhost"; 
+$username = "root"; 
+$password = ""; 
+$dbname = "FiscalPoint"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -15,7 +15,9 @@ if ($conn->connect_error) {
 
 // Function to sanitize input data
 function sanitize_input($data) {
-    return htmlspecialchars(trim($data));
+    $data = trim($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 
 // Handle form submission
@@ -27,35 +29,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = sanitize_input($_POST["password"]);
     $created_at = date("Y-m-d H:i:s");
 
-    // Hash the password before storing it
+    // Hash the password before storing it in the database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Check if email already exists in the database
-    $check_query = "SELECT email FROM User WHERE email = ?";
+    $check_query = "SELECT * FROM User WHERE email = ?";
     $stmt = $conn->prepare($check_query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $stmt->store_result();
+    $result = $stmt->get_result();
 
-    if ($stmt->num_rows > 0) {
-        // Email already exists, show pop-up message
-        echo "<script>alert('Email already signed up. Please use a different email.'); window.location.href='signup.html';</script>";
+    if ($result->num_rows > 0) {
+        echo "<script>alert('Email already signed up. Please use a different email.');</script>";
     } else {
         // Insert new user data into database
         $insert_query = "INSERT INTO User (Uname, email, Phone_no, Password, Created_At) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
-        $stmt->bind_param("sssss", $uname, $email, $phone, $hashed_password, $created_at);
+        
+        if ($stmt === false) {
+            die("Error in SQL query: " . $conn->error);
+        }
 
+        $stmt->bind_param("sssss", $uname, $email, $phone, $hashed_password, $created_at);
+        
         if ($stmt->execute()) {
-            // Signup successful, redirect to dashboard
             echo "<script>alert('Registration successful!'); window.location.href='dashboard.html';</script>";
         } else {
-            // Signup failed
-            echo "<script>alert('Registration failed. Please try again.'); window.location.href='signup.html';</script>";
+            echo "<script>alert('Registration failed. Please try again later.');</script>";
         }
     }
 
-    // Close statement
+    // Close the statement
     $stmt->close();
 }
 
