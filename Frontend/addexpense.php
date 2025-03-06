@@ -1,54 +1,52 @@
 <?php
-session_start(); // Start the session
+// Start the session
+session_start();
 
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Fiscalpoint";
+// Database connection parameters
+$servername = "localhost"; // Replace with your server name
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "FiscalPoint"; // Replace with your database name
 
-$conn = new mysqli($host, $username, $password, $dbname);
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Function to sanitize input data
+function sanitize_input($data) {
+    return htmlspecialchars(trim($data));
+}
+
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get user input
-    $date = $_POST['date'];
-    $category = $_POST['category'];
-    $item = $_POST['item'];
-    $cost = $_POST['cost'];
+    $category = sanitize_input($_POST["category"]);
+    $amount = sanitize_input($_POST["amount"]);
+    $date = sanitize_input($_POST["date"]);
+    $description = sanitize_input($_POST["description"]);
+    $uid = $_SESSION["Uid"]; // Get logged-in user's ID
 
-    // Retrieve the user's ID from the session
-    $user_id = $_SESSION['user_id'];
-
-    // Insert the data into the "expense" table
-    $sql = "INSERT INTO expense (UserID, Date, Category, Item, Amount) 
-            VALUES (?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssd", $user_id, $date, $category, $item, $cost);
+    // Insert expense data into the database
+    $insert_query = "INSERT INTO Expense (Uid, Category, Amount, Date, Description) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($insert_query);
+    $stmt->bind_param("isdss", $uid, $category, $amount, $date, $description);
 
     if ($stmt->execute()) {
-        echo "<script>
-            alert('Expense added successfully!');
-            window.location.href = 'addexpense.php';
-        </script>";
+        echo "<script>alert('Expense added successfully!'); window.location.href='dashboard.php';</script>";
     } else {
-        echo "<script>
-            alert('Error adding expense: " . addslashes($stmt->error) . "');
-            window.location.href = 'addexpense.php';
-        </script>";
+        echo "<script>alert('Error adding expense. Please try again.'); window.location.href='AddExpense.php';</script>";
     }
 
+    // Close statement
     $stmt->close();
 }
 
+// Close database connection
 $conn->close();
 ?>
-
-
 
 
 <!DOCTYPE html>
