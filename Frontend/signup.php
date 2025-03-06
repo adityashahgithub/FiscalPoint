@@ -1,3 +1,69 @@
+<?php
+// Database connection parameters
+$servername = "localhost"; // Replace with your server name
+$username = "root"; // Replace with your database username
+$password = ""; // Replace with your database password
+$dbname = "FiscalPoint"; // Replace with your database name
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Function to sanitize input data
+function sanitize_input($data) {
+    return htmlspecialchars(trim($data));
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    $uname = sanitize_input($_POST["uname"]);
+    $email = sanitize_input($_POST["email"]);
+    $phone = sanitize_input($_POST["phone"]);
+    $password = sanitize_input($_POST["password"]);
+    $created_at = date("Y-m-d H:i:s");
+
+    // Hash the password before storing it
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Check if email already exists in the database
+    $check_query = "SELECT email FROM User WHERE email = ?";
+    $stmt = $conn->prepare($check_query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        // Email already exists, show pop-up message
+        echo "<script>alert('Email already signed up. Please use a different email.'); window.location.href='signup.html';</script>";
+    } else {
+        // Insert new user data into database
+        $insert_query = "INSERT INTO User (Uname, email, Phone_no, Password, Created_At) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($insert_query);
+        $stmt->bind_param("sssss", $uname, $email, $phone, $hashed_password, $created_at);
+
+        if ($stmt->execute()) {
+            // Signup successful, redirect to dashboard
+            echo "<script>alert('Registration successful!'); window.location.href='dashboard.html';</script>";
+        } else {
+            // Signup failed
+            echo "<script>alert('Registration failed. Please try again.'); window.location.href='signup.html';</script>";
+        }
+    }
+
+    // Close statement
+    $stmt->close();
+}
+
+// Close database connection
+$conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +94,7 @@
         <h2>Welcome to Fiscal Point!</h2>
 
         <!-- Signup Form -->
-        <form class="signup-form" action="signup.php" method="POST">
+        <form class="signup-form" action="signup.php" method="POST"method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <!-- Email Input -->
     <label for="email">Enter your email:</label>
     <input type="email" id="email" name="email" placeholder="Email" required>
