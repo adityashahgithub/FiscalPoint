@@ -1,12 +1,12 @@
 <?php
-// Start the session
+// Start session to track logged-in user
 session_start();
 
 // Database connection parameters
-$servername = "localhost"; // Replace with your server name
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$dbname = "FiscalPoint"; // Replace with your database name
+$servername = "localhost"; 
+$username = "root"; 
+$password = ""; 
+$dbname = "FiscalPoint"; 
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -24,20 +24,31 @@ function sanitize_input($data) {
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = sanitize_input($_POST["category"]);
-    $amount = sanitize_input($_POST["amount"]);
+    $amount = filter_var(sanitize_input($_POST["cost"]), FILTER_VALIDATE_FLOAT); // Correct field name
     $date = sanitize_input($_POST["date"]);
-    $description = sanitize_input($_POST["description"]);
+    $description = sanitize_input($_POST["item"]); // Correct field name
     $uid = $_SESSION["Uid"]; // Get logged-in user's ID
+
+    // Validate amount
+    if ($amount === false || $amount <= 0) {
+        echo "<script>alert('Invalid amount entered. Please enter a positive number.'); window.history.back();</script>";
+        exit();
+    }
 
     // Insert expense data into the database
     $insert_query = "INSERT INTO Expense (Uid, Category, Amount, Date, Description) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($insert_query);
-    $stmt->bind_param("isdss", $uid, $category, $amount, $date, $description);
+    
+    if ($stmt === false) {
+        die("Error in SQL query: " . $conn->error);
+    }
 
+    $stmt->bind_param("isdss", $uid, $category, $amount, $date, $description);
+    
     if ($stmt->execute()) {
         echo "<script>alert('Expense added successfully!'); window.location.href='dashboard.php';</script>";
     } else {
-        echo "<script>alert('Error adding expense. Please try again.'); window.location.href='AddExpense.php';</script>";
+        echo "<script>alert('Error adding expense. Please try again.'); window.history.back();</script>";
     }
 
     // Close statement
@@ -105,10 +116,10 @@ $conn->close();
                     <option value="Miscellaneous">Miscellaneous</option>
                 </select>
                 
-                <label for="item">Description:</label>
+                <label for="description">Description:</label>
                 <input type="text" id="item" name="item" required>
                 
-                <label for="cost">Cost of Item:</label>
+                <label for="amount">Cost of Item:</label>
                 <input type="number" id="cost" name="cost" step="0.01" required>
                 
                 <label for="payment_method">Payment Method:</label>
