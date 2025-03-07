@@ -13,6 +13,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Enable detailed error reporting
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 // Function to sanitize input data
 function sanitize_input($data) {
     $data = trim($data);
@@ -23,11 +26,17 @@ function sanitize_input($data) {
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
-    $uname = sanitize_input($_POST["uname"]);
+    $uname = sanitize_input($_POST["Uname"]);
     $email = sanitize_input($_POST["email"]);
-    $phone = sanitize_input($_POST["phone"]);
+    $phone = sanitize_input($_POST["Phone_no"]);
     $password = sanitize_input($_POST["password"]);
     $created_at = date("Y-m-d H:i:s");
+
+    // Debugging - Check if values are being captured correctly
+    error_log("Uname: " . $uname);
+    error_log("Email: " . $email);
+    error_log("Phone: " . $phone);
+    error_log("Password: " . $password);
 
     // Hash the password before storing it in the database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -43,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Email already signed up. Please use a different email.');</script>";
     } else {
         // Insert new user data into database
-        $insert_query = "INSERT INTO User (Uname, email, Phone_no, Password, Created_At) VALUES (?, ?, ?, ?, ?)";
+        $insert_query = "INSERT INTO User (`Uname`, `email`, `Phone_no`, `Password`, `Created_At`) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
         
         if ($stmt === false) {
