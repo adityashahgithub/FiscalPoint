@@ -24,10 +24,11 @@ function sanitize_input($data) {
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = sanitize_input($_POST["category"]);
-    $amount = filter_var(sanitize_input($_POST["cost"]), FILTER_VALIDATE_FLOAT); // Correct field name
+    $amount = filter_var(sanitize_input($_POST["cost"]), FILTER_VALIDATE_FLOAT);
     $date = sanitize_input($_POST["date"]);
-    $description = sanitize_input($_POST["item"]); // Correct field name
-    $uid = $_SESSION["Uid"]; // Get logged-in user's ID
+    $description = sanitize_input($_POST["item"]);
+    $payment_method = sanitize_input($_POST["payment_method"]); // New field for Payment Method
+    $uid = $_SESSION["Uid"];
 
     // Validate amount
     if ($amount === false || $amount <= 0) {
@@ -36,14 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert expense data into the database
-    $insert_query = "INSERT INTO Expense (Uid, Category, Amount, Date, Description) VALUES (?, ?, ?, ?, ?)";
+    $insert_query = "INSERT INTO Expense (Uid, Category, Amount, Date, Description, Payment_Method) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($insert_query);
     
     if ($stmt === false) {
         die("Error in SQL query: " . $conn->error);
     }
 
-    $stmt->bind_param("isdss", $uid, $category, $amount, $date, $description);
+    $stmt->bind_param("isdsss", $uid, $category, $amount, $date, $description, $payment_method);
     
     if ($stmt->execute()) {
         echo "<script>alert('Expense added successfully!'); window.location.href='dashboard.php';</script>";
@@ -58,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close database connection
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
