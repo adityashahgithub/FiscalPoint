@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("isdsss", $uid, $category, $amount, $date, $description, $payment_method);
     
     if ($stmt->execute()) {
-        echo "<script>alert('Expense added successfully!'); window.location.href='dashboard.php';</script>";
+        echo "<script>alert('Expense added successfully!'); window.location.href='addexpense.php';</script>";
     } else {
         echo "<script>alert('Error adding expense. Please try again.'); window.history.back();</script>";
     }
