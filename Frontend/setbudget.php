@@ -1,3 +1,56 @@
+<?php
+session_start();
+
+// Database connection
+$servername = "localhost";
+$username = "root"; // Change if needed
+$password = ""; // Change if needed
+$database = "FiscalPoint"; // Your database name
+
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Ensure user is logged in
+if (!isset($_SESSION['Uid'])) {
+    die("User not logged in.");
+}
+
+$uid = $_SESSION['Uid']; // Fetch logged-in user's ID
+$message = ""; // Message for success or errors
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $month = $_POST['month'];
+    $amount = $_POST['amount'];
+
+    // Validate input
+    if (empty($month) || empty($amount) || !is_numeric($amount)) {
+        $message = "Invalid input. Please enter a valid amount.";
+    } else {
+        // Insert data into Budget table
+        $sql = "INSERT INTO Budget (Uid, Month, Amount) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iss", $uid, $month, $amount);
+
+        if ($stmt->execute()) {
+            $message = "Budget set successfully!";
+        } else {
+            $message = "Error: " . $stmt->error;
+        }
+
+        $stmt->close();
+    }
+}
+
+$conn->close();
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +80,7 @@
     <div class="main-content">
         <div class="form-container">
             <h1>Set Budget:</h1>
-            <form id="budgetForm" onsubmit="saveBudget(event)">
+            <form id="budgetForm" onsubmit="saveBudget(event)" id="budgetForm" action="setbudget.php" method="POST"></form>>
                 <label for="month">Select Month:</label>
                 <input type="month" id="month" name="month" required onchange="checkExistingBudget()">
                 
