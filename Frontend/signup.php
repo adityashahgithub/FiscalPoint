@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $uname = sanitize_input($_POST["Uname"]);
     $email = sanitize_input($_POST["email"]);
     $phone = sanitize_input($_POST["Phone_no"]);
-    $password = sanitize_input($_POST["password"]);
+    $password = sanitize_input($_POST["Password"]);
     $created_at = date("Y-m-d H:i:s");
 
     // Debugging - Check if values are being captured correctly

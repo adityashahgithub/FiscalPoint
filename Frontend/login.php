@@ -45,22 +45,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // If user found
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-
-        // Verify password
+        
+        // If passwords are stored as plain text
         if (password_verify($password, $user["Password"])) {
-            // Store user details in session
+        // If passwords are hashed, use: if (password_verify($password, $user["Password"]))
             $_SESSION["Uid"] = $user["Uid"];
             $_SESSION["Uname"] = $user["Uname"];
             $_SESSION["email"] = $email;
-
+            
             // Redirect to dashboard
             header("Location: dashboard.php");
             exit();
         } else {
-            echo "<script>alert('Invalid email or password!'); window.location.href='login.php';</script>";
+            echo "<script>alert('Invalid password!'); window.location.href='login.php';</script>";
         }
     } else {
-        echo "<script>alert('Invalid email or password!'); window.location.href='login.php';</script>";
+        echo "<script>alert('Invalid email!'); window.location.href='login.php';</script>";
     }
 
     // Close statement
@@ -70,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Close database connection
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -82,47 +81,36 @@ $conn->close();
 </head>
 <body>
 
-    <!-- Main Container -->
     <div class="container">
-     <!-- Header Section -->
-     <header>
-        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"> <!-- Company Logo -->
-        
-        <!-- Navigation Menu -->
-        <nav class="navbar">
-            <ul>
-                <li><a href="landing.html">Home</a></li>
-                <li><a href="#">Expense Tracker</a></li>
-                <li><a href="#">Cost of Living Calculator</a></li>
-            </ul>
-        </nav>
-    </header> 
+        <header>
+            <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+            <nav class="navbar">
+                <ul>
+                    <li><a href="landing.html">Home</a></li>
+                    <li><a href="#">Expense Tracker</a></li>
+                    <li><a href="#">Cost of Living Calculator</a></li>
+                </ul>
+            </nav>
+        </header>
 
-        <!-- Login Box -->
         <div class="login-box">
-            
-            <!-- User Avatar -->
             <div class="avatar">
                 <img src="css/userpfp.png" alt="User Icon">
             </div>
-            
-            <!-- Login Form -->
+
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <label for="email">Enter your email:</label>
-                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="email" name="email" placeholder="Email" required>
                 
-                <label for="Password">Password:</label>
-                <input type="password" id="password" placeholder="Password" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
                 
                 <button type="submit">Login</button>
             </form>
             
-            <!-- Signup Link -->
             <p class="signup-text">New user? <a href="signup.php">Sign up instead</a></p>
-
-        </div> <!-- End of Login Box -->
-    
-    </div> <!-- End of Main Container -->
+        </div>
+    </div>
 
 </body>
 </html>
