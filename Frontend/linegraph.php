@@ -18,11 +18,12 @@ if ($conn->connect_error) {
 if (!isset($_SESSION['Uid'])) {
     die("User not logged in");
 }
+
 $uid = $_SESSION['Uid'];
 $month = isset($_POST['month']) ? $_POST['month'] : date('Y-m');
 
-// Fetch budget data for the selected month
-$sql = "SELECT Bid, Amount FROM Budget WHERE Uid = ? AND Month = ? ORDER BY Bid";
+// Fetch budget data for the selected month (Extract Day from Month column)
+$sql = "SELECT DAY(Month) AS day, Amount FROM Budget WHERE Uid = ? AND DATE_FORMAT(Month, '%Y-%m') = ? ORDER BY day";
 
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
@@ -35,7 +36,7 @@ $result = $stmt->get_result();
 
 $data = [];
 while ($row = $result->fetch_assoc()) {
-    $data[$row['Bid']] = $row['Amount'];
+    $data[$row['day']] = $row['Amount'];
 }
 
 $stmt->close();
@@ -63,7 +64,7 @@ $conn->close();
         const ctx = document.getElementById('budgetChart').getContext('2d');
         const data = <?php echo json_encode($data); ?>;
         
-        const labels = Object.keys(data).map(id => `Entry ${id}`);
+        const labels = Object.keys(data).map(day => `Day ${day}`);
         const amounts = Object.values(data);
 
         new Chart(ctx, {
@@ -80,7 +81,7 @@ $conn->close();
             options: {
                 responsive: true,
                 scales: {
-                    x: { title: { display: true, text: 'Entry ID' } },
+                    x: { title: { display: true, text: 'Day of the Month' } },
                     y: { title: { display: true, text: 'Amount Spent' } }
                 }
             }
