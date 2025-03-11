@@ -1,0 +1,48 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #6B6487;
+    padding: 20px;
+    border-radius: 20px;
+    height: 60%;
+    margin-top: 4rem;
+    
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    padding-top: 2%;
+}
+.menu a {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+}
