@@ -1,0 +1,91 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.logo {
+  width: 150px;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+}
+
+
+/* Sidebar */
+
+.sidebar {
+    width: 250px;
+    background-color: #6B6487;
+    padding: 20px;
+    border-radius: 20px;
+    height: 60%;
+    position: absolute;
+    left: 20px; 
+    margin-top: 7%;
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    padding-top: 5%;
+    text-align: left;
+    
+}   
+
+.menu a {
+    margin: 15px 0;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    
+}
+
+.table-container {
+    width: 50%;
+    margin: 20px auto; /* Aligns it to the top */
+    background-color: #86a69c;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 10px;
+    height: 50%;
+}
+
+table {
+    width: 60%;
+    border-collapse: collapse;
+    height: 50%;
+   margin-left: 10rem;
+    
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 12px;
+    text-align: left;
+    font-size: 18px;
+}
+
+th {
+    background-color: #86a69c;
+    font-weight: bold;
+}

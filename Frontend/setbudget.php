@@ -70,10 +70,13 @@ $conn->close();
         </div>
         <ul class="menu">
             <li><p> <span style="font-size: 20px;">Name</span></p></li>
-            <li> <a href="dashboard.html">Dashboard</a></li><br>
-            <li> <a href="Expense.html">Expense Report</a></li><br>
+            <li> <a href="dashboard.php">Dashboard</a></li><br>
+            <li> <a href="setbudget.php">Budget</a></li><br>
+            <li> <a href="addexpense.php">Add Expense </a></li><br>
+            <li> <a href="linegraph.php">Line Graph Report </a></li><br>
+            <li> <a href="linegraph.php">Pie Graph Report </a></li><br>
             <li> <a href="profile.html">Profile</a></li><br>
-            <li> <a href="logout.html">Logout</a></li><br>
+            <li> <a href="logout.php">Logout</a></li><br>
         </ul>
     </aside>
     
@@ -81,9 +84,9 @@ $conn->close();
         <div class="form-container">
             <h1>Set Budget:</h1>
             <form id="budgetForm" onsubmit="saveBudget(event)" id="budgetForm" action="setbudget.php" method="POST"></form>>
-                <label for="month">Select Month:</label>
+                <label for="month"> Select Month:</label>
                 <input type="month" id="month" name="month" required onchange="checkExistingBudget()">
-                
+                <br>
                 <label for="budget">Enter Budget Amount:</label>
                 <input type="number" id="budget" name="budget" step="0.01" required>
                 
