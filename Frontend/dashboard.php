@@ -33,7 +33,8 @@ $today_expense = isset($row_today['amount']) ? $row_today['amount'] : 0;
 $sql_yesterday = "SELECT * FROM Expense WHERE Uid = $uid AND DATE(Date) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)";
 $result_yesterday = $conn->query($sql_yesterday);
 $row_yesterday = $result_yesterday->fetch_assoc();
-$yesterday_expense = $row_yesterday['amount'];
+$yesterday_expense = isset($row_yesterday['amount']) ? $row_yesterday['amount'] : 0;
+
 
 // Query to fetch monthly expense
 $sql_monthly = "SELECT SUM(amount) AS total_monthly FROM Expense WHERE Uid = $uid AND MONTH(Date) = MONTH(CURDATE())";

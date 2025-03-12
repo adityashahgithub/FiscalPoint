@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssss", $uname, $email, $phone, $hashed_password, $created_at);
         
         if ($stmt->execute()) {
-            echo "<script>alert('Registration successful!'); window.location.href='dashboard.php';</script>";
+            echo "<script>alert('Registration successful!'); window.location.href='dashboard.';</script>";
         } else {
             echo "<script>alert('Registration failed. Please try again later.');</script>";
         }
