@@ -86,7 +86,9 @@ $conn->close();
         </div><br>
             <div class="expense-box">
                 <h3>Today's Expense:</h3>
-                <div class="expense-card"><?php echo $today_expense; ?></div>
+                <div class="expense-card">
+                <p style="text-align: center; font-weight: bold; ">
+                    <?php echo $today_expense; ?></div>
             </div>
             <div class="expense-box">
                 <h3>Yesterday's Expense:</h3>
