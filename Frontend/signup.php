@@ -1,4 +1,7 @@
 <?php
+// Start session
+session_start();
+
 // Database connection parameters
 $servername = "localhost"; 
 $username = "root"; 
@@ -62,7 +65,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssss", $uname, $email, $phone, $hashed_password, $created_at);
         
         if ($stmt->execute()) {
-            echo "<script>alert('Registration successful!'); window.location.href='dashboard.';</script>";
+            // Store user session (optional)
+            $_SESSION['Uid'] = $conn->insert_id;
+            $_SESSION['Uname'] = $uname;
+
+            // Redirect to dashboard
+            header("Location: dashboard.php");
+            exit();
         } else {
             echo "<script>alert('Registration failed. Please try again later.');</script>";
         }
@@ -111,6 +120,7 @@ $conn->close();
     <!-- Email Input -->
     <label for="email">Enter your email:</label>
     <input type="email" id="email" name="email" placeholder="Email" required>
+    <span id="email-error" class="error-message"></span>
 
     <!-- Full Name Input -->
     <label for="Uname">Full Name:</label>
@@ -123,7 +133,7 @@ $conn->close();
     <!-- Password Input -->
     <label for="Password">Password:</label>
     <input type="password" id="Password" name="Password" placeholder="Password" required>
-
+    <span id="password-error" class="error-message"></span> 
     <!-- Signup Button -->
     <button type="submit">Get Started</button>
 </form>

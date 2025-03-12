@@ -23,10 +23,13 @@ if ($conn->connect_error) {
 $uid = $_SESSION['Uid'];
 
 // Query to fetch today's expense
-$sql_today = "SELECT * FROM Expense WHERE Uid = $uid AND DATE(Date) = CURDATE()";
-$result_today = $conn->query($sql_today);
+$sql_today = "SELECT SUM(amount) AS total_today FROM Expense WHERE Uid = ? AND DATE(Date) = CURDATE()";
+$stmt = $conn->prepare($sql_today);
+$stmt->bind_param("i", $uid);
+$stmt->execute();
+$result_today = $stmt->get_result();
 $row_today = $result_today->fetch_assoc();
-$today_expense = isset($row_today['amount']) ? $row_today['amount'] : 0;
+$today_expense = isset($row_today['total_today']) ? $row_today['total_today'] : 0;
 
 
 // Query to fetch yesterday's expense
