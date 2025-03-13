@@ -77,7 +77,8 @@ $conn->close();
             <li> <a href="setbudget.php">Budget</a></li><br>
             <li> <a href="addexpense.php">Add Expense </a></li><br>
             <li> <a href="linegraph.php">Line Graph Report </a></li><br>
-            <li> <a href="linegraph.php">Pie Graph Report </a></li><br>
+            <li> <a href="piegraph.php">Pie Graph Report </a></li><br>
+            <li> <a href="tabularreport.php">Tabular Report </a></li><br>
             <li> <a href="profile.html">Profile</a></li><br>
             <li> <a href="logout.php">Logout</a></li><br>
         </ul>
