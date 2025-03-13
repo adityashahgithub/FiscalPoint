@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000; 
+    color: white; 
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: black; 
+}
+
+/* Logo */
+.logo {
+    width: 150px; 
+}
+
+/* Navigation Bar */
+.navbar {
+    background: rgba(92, 84, 112, 0.6);
+    padding: 20px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 30%; 
+    border-radius: 20px;
+    box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7); 
+    backdrop-filter: blur(10px); 
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    top: 5%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    margin-top: 10px; 
+    animation: navbarFadeIn 0.5s ease-out 0.2s forwards;
+   
+    
+}
+.sidebar {
+    width: 250px;
+    background-color: #6B6487;
+    padding: 20px;
+    border-radius: 20px;
+    height: 60%;
+    position: absolute;
+    left: 20px;
+    margin-top: 7%;
+}
+@keyframes navbarFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+
+.navbar ul li {
+    display: inline;
+}
+
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar:hover {
+    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); 
+}
+
+.navbar ul li a:hover {
+    color: paleturquoise; 
+}
+
+
+/* ===== Login Box Styling ===== */
+.login-box {
+    background-color: black;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(107, 101, 130, 0.5);
+    width: 300px;
+    height: 400px;
+    margin: auto;
+}
+
+/* ===== User Avatar Styling ===== */
+.avatar img {
+    width: 80px;
+    border-radius: 50%;
+    background: #363434;
+    padding: 10px;
+    margin-left: 100px;
+}
