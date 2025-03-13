@@ -83,8 +83,13 @@ $conn->close();
             <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="setbudget.php">Budget</a></li>
             <li><a href="addexpense.php">Add Expense</a></li>
+            <li>
+        <a href="#">Graph Reports</a>
+        <ul class="submenu">
             <li><a href="linegraph.php">Line Graph Report</a></li>
             <li><a href="piegraph.php">Pie Graph Report</a></li>
+        </ul>
+    </li>
             <li><a href="profile.html">Profile</a></li>
             <li><a href="logout.php">Logout</a></li>
         </ul>

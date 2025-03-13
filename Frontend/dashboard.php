@@ -72,16 +72,20 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><p> <span style="font-size: 20px;">Name</span></p></li>
-            <li> <a href="dashboard.html">Dashboard</a></li><br>
-            <li> <a href="setbudget.php">Budget</a></li><br>
-            <li> <a href="addexpense.php">Add Expense </a></li><br>
-            <li> <a href="linegraph.php">Line Graph Report </a></li><br>
-            <li> <a href="piegraph.php">Pie Graph Report </a></li><br>
-            <li> <a href="tabularreport.php">Tabular Report </a></li><br>
-            <li> <a href="profile.html">Profile</a></li><br>
-            <li> <a href="logout.php">Logout</a></li><br>
+            <li><a href="dashboard.php">Dashboard</a></li><br>
+            <li><a href="setbudget.php">Budget</a></li><br>
+            <li><a href="addexpense.php">Add Expense</a></li><br>
+            <li>
+        <a href="#">Graph Reports:</a><br>
+        <ul>
+            <li><a href="linegraph.php">Line Graph Report</a></li>
+            <li><a href="piegraph.php">Pie Graph Report</a></li>
         </ul>
+    </li><br>
+            <li><a href="profile.html">Profile</a></li><br>
+            <li><a href="logout.php">Logout</a></li><br>
+        </ul>
+    </aside>
     </aside>
         <main class="dashboard">
             <div>
