@@ -82,6 +82,13 @@ $conn->close();
             <li><a href="piegraph.php">Pie Graph Report</a></li>
         </ul>
     </li><br>
+    <li>
+        <a href="#">Tabular Reports:</a><br>
+        <ul>
+            <li><a href="tabularreport.php">All Expenses</a></li>
+            <li><a href="piegraph.php">Category wise Expense</a></li>
+        </ul>
+    </li><br>
             <li><a href="profile.html">Profile</a></li><br>
             <li><a href="logout.php">Logout</a></li><br>
         </ul>
