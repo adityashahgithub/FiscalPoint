@@ -55,7 +55,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Pie Chart</title>
-    <link rel="stylesheet" href="css/tabularreport.css">
+    <link rel="stylesheet" href="css/piegraph.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
@@ -72,7 +72,7 @@ $conn->close();
             <li><p> <span style="font-size: 20px;">Name:</span> <?php echo htmlspecialchars($user_name); ?></p></li>
            
 
-            <li> <a href="dashboard.html">Dashboard</a></li><br>
+            <li> <a href="dashboard.php">Dashboard</a></li><br>
             <li> <a href="setbudget.php">Budget</a></li><br>
             <li> <a href="addexpense.php">Add Expense </a></li><br>
             <li> <a href="linegraph.php">Line Graph Report </a></li><br>
@@ -83,14 +83,16 @@ $conn->close();
         </ul>
     </aside>
 
-    <div class="chart-container" style="width: 50%; margin: auto;">
+    <div class="chart-container" style="width: 50%; margin: auto; height: 70%;">
         <h2>Expense Distribution</h2>
-        <canvas id="expensePieChart"></canvas>
-    </div>
 
+       
+        <canvas id="expensePieGraph"></canvas>
+    </div>
+        
     <script>
         // Pie Chart Data
-        const ctx = document.getElementById('expensePieChart').getContext('2d');
+        const ctx = document.getElementById('expensePieGraph').getContext('2d');
         const expenseChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -111,13 +113,11 @@ $conn->close();
                     legend: {
                         position: 'top',
                     },
-                    title: {
-                        display: true,
-                        text: 'Expense Breakdown by Category'
-                    }
+                    
                 }
             }
         });
     </script>
+   <script src="javascript/piechart.js"></script>
 </body>
 </html>
