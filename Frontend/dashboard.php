@@ -77,8 +77,8 @@ $conn->close();
     <title>Expense Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
+<header> <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"></header>
 <body>
-    
     <aside class="sidebar">
         <div class="profile">
             <img src="css/profile.png" alt="Profile Image" class="avatar">
@@ -89,28 +89,28 @@ $conn->close();
             <li><a href="addexpense.php">Add Expense</a></li><br>
             <li>
             <li class="dropdown">
-            <a href="#">Graph Reports:<span class="arrow">▼</span></a>
-        <ul class="dropdown-menu">
+            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
+            <ul>
             <li><a href="linegraph.php">Line Graph Report</a></li>
             <li><a href="piegraph.php">Pie Graph Report</a></li>
         </ul>
             </li>
             <br>
     <li>
-        <a href="#">Tabular Reports:</a><br>
+        <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
         <ul>
             <li><a href="tabularreport.php">All Expenses</a></li>
-            <li><a href="piegraph.php">Category wise Expense</a></li>
+            <li><a href="categorywisereport.php">Category wise Expense</a></li>
         </ul>
     </li><br>
-            <li><a href="profile.html">Profile</a></li><br>
+            <li><a href="profile.php">Profile</a></li><br>
             <li><a href="logout.php">Logout</a></li><br>
         </ul>
     </aside>
     </aside>
         <main class="dashboard">
             <div>
-                <h3 class="budget-text">Your Budget :<?php echo $currentMonth; ?></h3>
+                <h3 class="budget-text">Your Budget :  <?php echo $currentMonth; ?></h3>
                 <div class="Budget">
                 <p><?php echo $monthly_budget; ?></p>
             </div>

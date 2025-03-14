@@ -18,7 +18,7 @@ body {
     background-color: #6B6487;
     padding: 20px;
     border-radius: 20px;
-    height: 60%;
+    height: 65%;
     margin-top: 4rem;
     
 }
@@ -35,79 +35,26 @@ body {
   object-fit: cover; 
 
 }
+.logo {
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
 
 .menu {
     list-style: none;
     padding: 0;
-    padding-top: 2%;
+    
 }
 .menu a {
     margin: 15px 0;
     font-size: 18px;
     color: white;
-}
-
-.dropdown ul li a 
-{
-    position: relative; /* To position the dropdown menu */
-    color: black;
-   
+    text-decoration: none;
 }
 
 
-/* Dropdown menu (hidden by default) */
-.dropdown-menu 
-{
-    display: none;
-    position: absolute;
-    top: 100px; /* Position it below the "Services" item */
-    left: 0;
-    background-color: white;
-    color: #333;
-    padding: 10px;
-    list-style: disc; /* Adds bullet points */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 200;
-   
-}
-
-/* Dropdown items */
-.dropdown-menu li 
-{
-    margin: 5px 0;
-    font-size: 22px;
-    cursor: pointer;
-    white-space: nowrap;
-    border-bottom: 1px solid #ddd;
-   
-}
-
-/* Show dropdown on hover */
-.dropdown:hover .dropdown-menu 
-{
-    display: block;
-}
-
-/* Dropdown menu hover effect */
-.dropdown-menu li:hover 
-{
-    color: black;
-    background-color:aquamarine;
-}
-
-/* Add transition and rotate to arrow */
-.arrow {
-  display: inline-block; /* Ensure proper inline display */
-  font-size: 16px;
-  transition: transform 0.3s ease; /* Smooth transition for rotation */
-}
-
-/* Rotate arrow on hover of parent .dropdown */
-.dropdown:hover .arrow {
-  transform: rotate(180deg);
-}
 /* Dashboard */
 .dashboard {
     display: grid;

@@ -7,6 +7,8 @@ session_start(); // Start the session
 if (!isset($_SESSION["Uid"])) {
     die("Error: User not logged in. <a href='login.php'>Login here</a>");
 }
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // Retrieve logged-in user ID
 $user_id = $_SESSION["Uid"];
@@ -71,19 +73,29 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><p> <span style="font-size: 20px;">Name:</span> <?php echo htmlspecialchars($user_name); ?></p></li>
-           
-
-            <li> <a href="dashboard.php">Dashboard</a></li><br>
-            <li> <a href="setbudget.php">Budget</a></li><br>
-            <li> <a href="addexpense.php">Add Expense </a></li><br>
-            <li> <a href="linegraph.php">Line Graph Report </a></li><br>
-            <li> <a href="piegraph.php">Pie Graph Report </a></li><br>
-            <li> <a href="tabularreport.php">Tabular Category wise report </a></li><br>
-            <li> <a href="categorywisereport.php">Category wise report </a></li><br>
-            <li> <a href="profile.html">Profile</a></li><br>
-            <li> <a href="logout.php">Logout</a></li><br>
+            <li><a href="dashboard.php">Dashboard</a></li><br>
+            <li><a href="setbudget.php">Budget</a></li><br>
+            <li><a href="addexpense.php">Add Expense</a></li><br>
+            <li>
+            <li class="dropdown">
+            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
+            <ul>
+            <li><a href="linegraph.php">Line Graph Report</a></li>
+            <li><a href="piegraph.php">Pie Graph Report</a></li>
         </ul>
+            </li>
+            <br>
+    <li>
+        <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
+        <ul>
+            <li><a href="tabularreport.php">All Expenses</a></li>
+            <li><a href="categorywisereport.php">Category wise Expense</a></li>
+        </ul>
+    </li><br>
+            <li><a href="profile.php">Profile</a></li><br>
+            <li><a href="logout.php">Logout</a></li><br>
+        </ul>
+    </aside>
     </aside>
     
     <div >

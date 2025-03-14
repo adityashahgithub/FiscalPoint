@@ -77,22 +77,31 @@ $conn->close();
     <aside class="sidebar">
         <div class="profile">
             <img src="css/profile.png" alt="Profile Image" class="avatar">
-            <p><?php echo htmlspecialchars($user_name); ?></p>
         </div>
         <ul class="menu">
-            <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="setbudget.php">Budget</a></li>
-            <li><a href="addexpense.php">Add Expense</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li><br>
+            <li><a href="setbudget.php">Budget</a></li><br>
+            <li><a href="addexpense.php">Add Expense</a></li><br>
             <li>
-        <a href="#">Graph Reports</a>
-        <ul class="submenu">
+            <li class="dropdown">
+            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
+            <ul>
             <li><a href="linegraph.php">Line Graph Report</a></li>
             <li><a href="piegraph.php">Pie Graph Report</a></li>
         </ul>
-    </li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="logout.php">Logout</a></li>
+            </li>
+            <br>
+    <li>
+        <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
+        <ul>
+            <li><a href="tabularreport.php">All Expenses</a></li>
+            <li><a href="categorywisereport.php">Category wise Expense</a></li>
         </ul>
+    </li><br>
+            <li><a href="profile.php">Profile</a></li><br>
+            <li><a href="logout.php">Logout</a></li><br>
+        </ul>
+    </aside>
     </aside>
 
     <div class="chart-container" style="width: 60%; margin: auto;">
