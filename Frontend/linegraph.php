@@ -66,7 +66,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Line Graph</title>
-    <link rel="stylesheet" href="css/tabularreport.css">
+    <link rel="stylesheet" href="css/linegraph.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
@@ -99,7 +99,7 @@ $conn->close();
         <h2>Expense Trend Over Time</h2>
         
         <!-- Month Selection Form -->
-        <form method="POST" action="">
+        <form method="POST" action=""class="filter-form">
             <label for="month">Select Month:</label>
             <input type="month" id="month" name="month" value="<?php echo $selected_month; ?>">
             <button type="submit">Filter</button>
@@ -109,47 +109,64 @@ $conn->close();
     </div>
 
     <script>
-        // Line Graph Data
-        const ctx = document.getElementById('expenseLineChart').getContext('2d');
-        const expenseChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: <?php echo json_encode($dates); ?>,
-                datasets: [{
-                    label: 'Total Expenses (₹)',
-                    data: <?php echo json_encode($costs); ?>,
-                    fill: false,
-                    borderColor: '#36a2eb',
-                    tension: 0.1
-                }]
+       // Line Graph Data
+const ctx = document.getElementById('expenseLineChart').getContext('2d');
+const expenseChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: <?php echo json_encode($dates); ?>,
+        datasets: [{
+            label: 'Total Expenses (₹)',
+            data: <?php echo json_encode($costs); ?>,
+            fill: false,
+            borderColor: '#ffffff', // White line color
+            backgroundColor: '#86a69c', // Background color for data points
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    color: '#ffffff' // White legend text
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Expenses Over Time'
-                    }
+            title: {
+                display: true,
+                text: 'Expenses Over Time',
+                color: '#ffffff' // White title text
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Date',
+                    color: '#ffffff' // White x-axis label
                 },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Amount (₹)'
-                        }
-                    }
+                ticks: {
+                    color: '#ffffff' // White x-axis values
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Amount (₹)',
+                    color: '#ffffff' // White y-axis label
+                },
+                ticks: {
+                    color: '#ffffff' // White y-axis values
                 }
             }
-        });
+        }
+    }
+});
+
+// Set background color of the canvas
+document.getElementById('expenseLineChart').style.backgroundColor = '#86a69c';
+
     </script>
 </body>
 </html>

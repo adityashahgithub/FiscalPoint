@@ -87,3 +87,41 @@ h2{
  text-align: center;
  font-family: 'Times New Roman', Times, serif;
 }
+
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adds spacing between elements */
+    margin: 20px auto; /* Centers horizontally */
+    padding: 10px;
+    width: fit-content;
+    background-color: #6B6487; /* Light background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+form select, 
+form button {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: palevioletred;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: palevioletred;
+}

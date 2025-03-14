@@ -86,7 +86,7 @@ $conn->close();
     <div class="chart-container" style="width: 50%; margin: auto; height: 70%;">
         <h2 >CategoryWise Expense Distribution</h2>
 
-        <form method="POST" action="">
+        <form method="POST" action="" class="filter-form">
             <label for="month">Select Month:</label>
             <input type="month" id="month" name="month" value="<?php echo $selected_month; ?>">
             <button type="submit">Filter</button>

@@ -38,11 +38,38 @@ if ($stmt_user) {
     die("Error preparing user query: " . $conn->error);
 }
 
-// Fetch Expenses
+// Fetch categories for dropdown
+$sql_categories = "SELECT DISTINCT category FROM Expense WHERE Uid = ?";
+$stmt_categories = $conn->prepare($sql_categories);
+$categories = [];
+if ($stmt_categories) {
+    $stmt_categories->bind_param("i", $user_id);
+    $stmt_categories->execute();
+    $result_categories = $stmt_categories->get_result();
+    while ($row = $result_categories->fetch_assoc()) {
+        $categories[] = $row["category"];
+    }
+    $stmt_categories->close();
+} else {
+    die("Error preparing category query: " . $conn->error);
+}
+
+// Default category selection
+$selected_category = isset($_POST['category']) ? $_POST['category'] : '';
+
+// Fetch Expenses based on selected category
 $sql_expense = "SELECT category, description AS Item, amount AS Cost, date AS Date, Payment_Method FROM Expense WHERE Uid = ?";
+if ($selected_category) {
+    $sql_expense .= " AND category = ?";
+}
+
 $stmt_expense = $conn->prepare($sql_expense);
 if ($stmt_expense) {
-    $stmt_expense->bind_param("i", $user_id);
+    if ($selected_category) {
+        $stmt_expense->bind_param("is", $user_id, $selected_category);
+    } else {
+        $stmt_expense->bind_param("i", $user_id);
+    }
     $stmt_expense->execute();
     $result_expense = $stmt_expense->get_result();
     $stmt_expense->close();
@@ -59,7 +86,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabular Report</title>
-    <link rel="stylesheet" href="css/tabularreport.css">
+    <link rel="stylesheet" href="css/categorywisereport.css">
 </head>
 <body>
     <header>
@@ -72,23 +99,34 @@ $conn->close();
         </div>
         <ul class="menu">
             <li><p> <span style="font-size: 20px;">Name:</span> <?php echo htmlspecialchars($user_name); ?></p></li>
-           
-
-            <li> <a href="dashboard.php">Dashboard</a></li><br>
-            <li> <a href="setbudget.php">Budget</a></li><br>
-            <li> <a href="addexpense.php">Add Expense </a></li><br>
-            <li> <a href="linegraph.php">Line Graph Report </a></li><br>
-            <li> <a href="piegraph.php">Pie Graph Report </a></li><br>
-            <li> <a href="tabularreport.php">Tabular Category wise report </a></li><br>
-            <li> <a href="categorywisereport.php">Category wise report </a></li><br>
-            <li> <a href="profile.html">Profile</a></li><br>
-            <li> <a href="logout.php">Logout</a></li><br>
+            <li><a href="dashboard.php">Dashboard</a></li><br>
+            <li><a href="setbudget.php">Budget</a></li><br>
+            <li><a href="addexpense.php">Add Expense</a></li><br>
+            <li><a href="linegraph.php">Line Graph Report</a></li><br>
+            <li><a href="piegraph.php">Pie Graph Report</a></li><br>
+            <li><a href="tabularreport.php">Tabular Category-wise Report</a></li><br>
+            <li><a href="profile.html">Profile</a></li><br>
+            <li><a href="logout.php">Logout</a></li><br>
         </ul>
     </aside>
     
-    <div >
-        <table>
+    <div>
+        <h2>View Expenses by Category</h2>
+        <form method="POST" action="">
+            <label for="category">Select Category:</label>
+            <select name="category" id="category">
+                <option value="">All Categories</option>
+                <?php
+                foreach ($categories as $category) {
+                    echo "<option value='" . htmlspecialchars($category) . "' " . ($selected_category == $category ? "selected" : "") . ">" . htmlspecialchars($category) . "</option>";
+                }
+                ?>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+
         <h2> All Expenses</h2>
+        <table>
             <thead>
                 <tr>
                     <th>Sr No.</th>
@@ -115,7 +153,7 @@ $conn->close();
                         $sr_no++;
                     }
                 } else {
-                    echo "<tr><td colspan='5'>No expenses found.</td></tr>";
+                    echo "<tr><td colspan='6'>No expenses found.</td></tr>";
                 }
                 ?>
             </tbody>
