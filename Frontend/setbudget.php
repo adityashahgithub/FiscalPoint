@@ -1,55 +1,84 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION["Uid"])) {
+    die("Error: User not logged in. <a href='login.php'>Login here</a>");
+}
+
+$user_id = $_SESSION["Uid"];
 
 // Database connection
 $servername = "localhost";
-$username = "root"; // Change if needed
-$password = ""; // Change if needed
-$database = "FiscalPoint"; // Your database name
+$username = "root";
+$password = "";
+$dbname = "FiscalPoint";
 
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Check connection
+$conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Database connection failed: " . $conn->connect_error);
 }
 
-// Ensure user is logged in
-if (!isset($_SESSION['Uid'])) {
-    die("User not logged in.");
-}
+// Handle form submission (Set Budget)
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["setBudget"])) {
+    $month = $_POST["month"];
+    $monthName = date("F", strtotime($month . "-01"));
+    $amount = $_POST["budget"];
 
-$uid = $_SESSION['Uid']; // Fetch logged-in user's ID
-$message = ""; // Message for success or errors
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $month = $_POST['month'];
-    $amount = $_POST['amount'];
-
-    // Validate input
-    if (empty($month) || empty($amount) || !is_numeric($amount)) {
-        $message = "Invalid input. Please enter a valid amount.";
-    } else {
-        // Insert data into Budget table
-        $sql = "INSERT INTO Budget (Uid, Month, Amount) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iss", $uid, $month, $amount);
-
-        if ($stmt->execute()) {
-            $message = "Budget set successfully!";
-        } else {
-            $message = "Error: " . $stmt->error;
-        }
-
-        $stmt->close();
+    if (empty($month) || empty($amount) || $amount <= 0) {
+        die("<script>alert('Invalid input. Please enter a valid month and budget amount.');</script>");
     }
+
+    // Check if budget exists
+    $check_sql = "SELECT * FROM Budget WHERE Uid = ? AND Month = ?";
+    $stmt_check = $conn->prepare($check_sql);
+    $stmt_check->bind_param("is", $user_id, $monthName);
+    $stmt_check->execute();
+    $result = $stmt_check->get_result();
+
+    if ($result->num_rows > 0) {
+        // Update budget
+        $update_sql = "UPDATE Budget SET Amount = ? WHERE Uid = ? AND Month = ?";
+        $stmt_update = $conn->prepare($update_sql);
+        $stmt_update->bind_param("dis", $amount, $user_id, $monthName);
+        $stmt_update->execute();
+        echo "<script>alert('Budget updated successfully!'); window.location.href='setbudget.php';</script>";
+        $stmt_update->close();
+    } else {
+        // Insert new budget
+        $insert_sql = "INSERT INTO Budget (Uid, Month, Amount) VALUES (?, ?, ?)";
+        $stmt_insert = $conn->prepare($insert_sql);
+        $stmt_insert->bind_param("isd", $user_id, $monthName, $amount);
+        $stmt_insert->execute();
+        echo "<script>alert('Budget set successfully!'); window.location.href='setbudget.php';</script>";
+        $stmt_insert->close();
+    }
+
+    $stmt_check->close();
+}
+
+// Handle budget reset
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["resetBudget"])) {
+    $month = $_POST["month"];
+    $monthName = date("F", strtotime($month . "-01"));
+
+    $delete_sql = "DELETE FROM Budget WHERE Uid = ? AND Month = ?";
+    $stmt_delete = $conn->prepare($delete_sql);
+    $stmt_delete->bind_param("is", $user_id, $monthName);
+    
+    if ($stmt_delete->execute()) {
+        echo "<script>alert('Budget reset successfully!'); window.location.href='setbudget.php';</script>";
+    } else {
+        echo "<script>alert('Error resetting budget.');</script>";
+    }
+
+    $stmt_delete->close();
 }
 
 $conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +87,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Set Budget</title>
     <link rel="stylesheet" href="css/setbudget.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for AJAX -->
 </head>
 <body>
     <header>
@@ -72,22 +102,22 @@ $conn->close();
             <li><p> <span style="font-size: 20px;">Name</span></p></li>
             <li> <a href="dashboard.php">Dashboard</a></li><br>
             <li> <a href="setbudget.php">Budget</a></li><br>
-            <li> <a href="addexpense.php">Add Expense </a></li><br>
+            <li> <a href="addexpense.php">Add Expense</a></li><br>
             <li class="dropdown">
-         <li>
-        <a href="#">Graph Reports ▼</a>
-        <ul class="submenu">
-            <li><a href="linegraph.php">Line Graph Report</a></li>
-            <li><a href="piegraph.php">Pie Graph Report</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#">Tabular Reports ▼</a>
-        <ul class="submenu">
-            <li><a href="tabularreport.php">All Expenses</a></li>
-            <li><a href="categorywisereport.php">Category wise Report</a></li>
-        </ul>
-    </li>
+                <li>
+                    <a href="#">Graph Reports ▼</a>
+                    <ul class="submenu">
+                        <li><a href="linegraph.php">Line Graph Report</a></li>
+                        <li><a href="piegraph.php">Pie Graph Report</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Tabular Reports ▼</a>
+                    <ul class="submenu">
+                        <li><a href="tabularreport.php">All Expenses</a></li>
+                        <li><a href="categorywisereport.php">Category wise Report</a></li>
+                    </ul>
+                </li>
             <li> <a href="profile.html">Profile</a></li><br>
             <li> <a href="logout.php">Logout</a></li><br>
         </ul>
@@ -96,20 +126,42 @@ $conn->close();
     <div class="main-content">
         <div class="form-container">
             <h1>Set Budget:</h1>
-            <form id="budgetForm" onsubmit="saveBudget(event)" id="budgetForm" action="setbudget.php" method="POST"></form>>
-                <label for="month"> Select Month:</label>
-                <input type="month" id="month" name="month" required onchange="checkExistingBudget()">
+            <form id="budgetForm" method="POST">
+                <label for="month">Select Month:</label>
+                <input type="month" id="month" name="month" required>
                 <br>
                 <label for="budget">Enter Budget Amount:</label>
                 <input type="number" id="budget" name="budget" step="0.01" required>
                 
-                <button type="submit" class="set-budget-btn">Set Budget</button>
-                <button type="button" id="resetBtn" class="reset-budget-btn" style="display: none;" onclick="resetBudget()">Reset Budget</button>
+                <button type="submit" name="setBudget" class="set-budget-btn">Set Budget</button>
+                <button type="button" id="resetBtn" class="reset-budget-btn" onclick="resetBudget()">Reset Budget</button>
             </form>
         </div>
     </div>
-    
-     <!-- Linking External JavaScript -->
-     <script src="javascript/setbudget.js"></script>
+
+    <script>
+        function resetBudget() {
+            var selectedMonth = document.getElementById("month").value;
+            if (selectedMonth === "") {
+                alert("Please select a month first.");
+                return;
+            }
+
+            if (confirm("Are you sure you want to reset the budget for the selected month?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "setbudget.php",
+                    data: { resetBudget: true, month: selectedMonth },
+                    success: function(response) {
+                        alert("Budget reset successfully!");
+                        location.reload();
+                    },
+                    error: function() {
+                        alert("Error resetting budget.");
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
