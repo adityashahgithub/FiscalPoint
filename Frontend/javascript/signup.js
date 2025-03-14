@@ -35,3 +35,16 @@ function validateForm() {
 
     return valid; // Only allow form submission if valid
 }
+document.getElementById("signupForm").addEventListener("submit", function(event) {
+    let password = document.getElementById("Password").value;
+    let confirmPassword = document.getElementById("ConfirmPassword").value;
+    let confirmPasswordError = document.getElementById("confirm-password-error");
+
+    if (password !== confirmPassword) {
+        confirmPasswordError.textContent = "Passwords do not match!";
+        confirmPasswordError.style.color = "red";
+        event.preventDefault(); // ❌ This prevents the form from submitting
+    } else {
+        confirmPasswordError.textContent = ""; // ✅ Clear error if passwords match
+    }
+});

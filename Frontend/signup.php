@@ -106,7 +106,7 @@ $conn->close();
            <ul>
                <li><a href="landing.html">Home</a></li>
                <li><a href="login.php">Expense Tracker</a></li>
-               <li><a href="login.php">Cost of Living Calculator</a></li>
+               <li><a href="landing.html#aboutus">About Us</a></li> 
            </ul>
        </nav>
    </header>    
@@ -133,9 +133,13 @@ $conn->close();
     <!-- Password Input -->
     <label for="Password">Password:</label>
     <input type="password" id="Password" name="Password" placeholder="Password" required>
-    <span id="password-error" class="error-message"></span> 
+    <span id="password-error" class="error-message"></span>
+    <label for="ConfirmPassword">Confirm Password:</label>
+        <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
+        <span id="confirm-password-error" class="error-message"></span>
     <!-- Signup Button -->
     <button type="submit">Get Started</button>
+    
 </form>
 
         <!-- Login Redirect -->

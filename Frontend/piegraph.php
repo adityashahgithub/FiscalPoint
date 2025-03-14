@@ -84,7 +84,7 @@ $conn->close();
     </aside>
 
     <div class="chart-container" style="width: 50%; margin: auto; height: 70%;">
-        <h2>Expense Distribution</h2>
+        <h2 >CategoryWise Expense Distribution</h2>
 
         <form method="POST" action="">
             <label for="month">Select Month:</label>
@@ -105,8 +105,12 @@ $conn->close();
                     label: 'Expenses',
                     data: <?php echo json_encode($costs); ?>,
                     backgroundColor: [
-                        '#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', 
-                        '#ff9f40', '#ffcd56', '#c9cbcf', '#ff66a3', '#66ff66'
+                        "#fd7f6f", "#7eb0d5", "#b2e061",
+                         "#bd7ebe", "#ffb55a", "#ffee65", 
+                         "#beb9db", "#fdcce5", "#8bd3c7",
+                         "#ff677d", "#56c1ff", "#a0e65d", "#d39cd3"
+
+
                     ],
                     hoverOffset: 4
                 }]

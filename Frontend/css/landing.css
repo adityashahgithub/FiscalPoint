@@ -34,22 +34,24 @@ header {
 */
 .navbar {
     background: rgba(92, 84, 112, 0.6);
-    padding: 20px 80px;
+    padding: 15px 40px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 40%; 
+    width: 30%;
     border-radius: 20px;
-    box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7); 
-    backdrop-filter: blur(10px); 
+    box-shadow: 0px 4px 15px rgba(124, 114, 155, 0.7);
+    backdrop-filter: blur(10px);
     transition: all 0.3s ease-in-out;
-    position: absolute;
-    top: 5%; 
+    position: fixed;
+    top: 5%;
     left: 50%;
-    transform: translateX(-50%); 
-    margin-top: 10px; 
+    transform: translateX(-50%);
     animation: navbarFadeIn 0.5s ease-out 0.2s forwards;
+    z-index: 1000;
 }
+
+/* Navbar Fade-in Animation */
 @keyframes navbarFadeIn {
     0% {
         opacity: 0;
@@ -61,35 +63,36 @@ header {
     }
 }
 
-
+/* Navbar List Items */
 .navbar ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     gap: 20px;
+    justify-content: center;
+    align-items: center;
 }
-
 
 .navbar ul li {
-    display: inline;
+    display: inline-block;
 }
 
-
+/* Navbar Links */
 .navbar ul li a {
     text-decoration: none;
     color: white;
     font-size: 16px;
     font-weight: bold;
     transition: color 0.3s ease-in-out;
+    text-align: center;
+    display: block;
+    padding: 5px 10px;
 }
 
+/* Navbar Hover Effects */
 .navbar:hover {
-    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9); 
-}
-
-.navbar ul li a:hover {
-    color: paleturquoise; 
+    box-shadow: 0px 0px 25px rgba(124, 114, 155, 0.9);
 }
 
 /* 

@@ -87,8 +87,8 @@ $conn->close();
             <nav class="navbar">
                 <ul>
                     <li><a href="landing.html">Home</a></li>
-                    <li><a href="#">Expense Tracker</a></li>
-                    <li><a href="#">Cost of Living Calculator</a></li>
+                    <li><a href="login.php">Expense Tracker</a></li>
+                    <li><a href="landing.html#aboutus">About Us</a></li> 
                 </ul>
             </nav>
         </header>

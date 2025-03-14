@@ -150,4 +150,15 @@ body {
    margin-left: 56%;
    
 }
+.expense-card, .Budget {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    height: 100px; 
+    font-size: 24px; 
+    font-weight: bold; 
+    text-align: center; 
+    color: white; 
+}
+
 
