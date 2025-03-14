@@ -88,12 +88,14 @@ $conn->close();
             <li><a href="setbudget.php">Budget</a></li><br>
             <li><a href="addexpense.php">Add Expense</a></li><br>
             <li>
-        <a href="#">Graph Reports:</a><br>
-        <ul>
+            <li class="dropdown">
+            <a href="#">Graph Reports:<span class="arrow">▼</span></a>
+        <ul class="dropdown-menu">
             <li><a href="linegraph.php">Line Graph Report</a></li>
             <li><a href="piegraph.php">Pie Graph Report</a></li>
         </ul>
-    </li><br>
+            </li>
+            <br>
     <li>
         <a href="#">Tabular Reports:</a><br>
         <ul>
