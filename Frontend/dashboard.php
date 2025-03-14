@@ -51,6 +51,18 @@ $result_yearly = $conn->query($sql_yearly);
 $row_yearly = $result_yearly->fetch_assoc();
 $yearly_expense = $row_yearly['total_yearly'];
 
+$currentMonth = date("F");
+$sql_budget = "SELECT Amount FROM Budget WHERE Uid = ? AND Month = ?";
+$stmt = $conn->prepare($sql_budget);
+$stmt->bind_param("is", $uid, $currentMonth);
+$stmt->execute();
+$result_budget = $stmt->get_result();
+$row_budget = $result_budget->fetch_assoc();
+$monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
+
+
+
+
 // Close the database connection
 $conn->close();
 ?>
@@ -96,8 +108,9 @@ $conn->close();
     </aside>
         <main class="dashboard">
             <div>
-                <h3 class="budget-text">Your Budget :</h3>
+                <h3 class="budget-text">Your Budget :<?php echo $currentMonth; ?></h3>
                 <div class="Budget">
+                <p><?php echo $monthly_budget; ?></p>
             </div>
         </div><br>
             <div class="expense-box">

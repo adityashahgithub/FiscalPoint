@@ -27,11 +27,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["setBudget"])) {
     $monthName = date("F", strtotime($month . "-01"));
     $amount = $_POST["budget"];
 
+    // Prevent setting budget for past months
+    $currentYearMonth = date("Y-m");
+    if ($month < $currentYearMonth) {
+        die("<script>alert('Cannot set budget for past months!'); window.location.href='setbudget.php';</script>");
+    }
+
     if (empty($month) || empty($amount) || $amount <= 0) {
         die("<script>alert('Invalid input. Please enter a valid month and budget amount.');</script>");
     }
 
-    // Check if budget exists
+    // Check if budget already exists
     $check_sql = "SELECT * FROM Budget WHERE Uid = ? AND Month = ?";
     $stmt_check = $conn->prepare($check_sql);
     $stmt_check->bind_param("is", $user_id, $monthName);
@@ -39,15 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["setBudget"])) {
     $result = $stmt_check->get_result();
 
     if ($result->num_rows > 0) {
-        // Update budget
-        $update_sql = "UPDATE Budget SET Amount = ? WHERE Uid = ? AND Month = ?";
-        $stmt_update = $conn->prepare($update_sql);
-        $stmt_update->bind_param("dis", $amount, $user_id, $monthName);
-        $stmt_update->execute();
-        echo "<script>alert('Budget updated successfully!'); window.location.href='setbudget.php';</script>";
-        $stmt_update->close();
+        echo "<script>alert('Budget for $monthName already exists! Reset it first if you want to change it.'); window.location.href='setbudget.php';</script>";
     } else {
-        // Insert new budget
         $insert_sql = "INSERT INTO Budget (Uid, Month, Amount) VALUES (?, ?, ?)";
         $stmt_insert = $conn->prepare($insert_sql);
         $stmt_insert->bind_param("isd", $user_id, $monthName, $amount);
@@ -87,7 +86,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Set Budget</title>
     <link rel="stylesheet" href="css/setbudget.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for AJAX -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <header>
@@ -133,13 +132,43 @@ $conn->close();
                 <label for="budget">Enter Budget Amount:</label>
                 <input type="number" id="budget" name="budget" step="0.01" required>
                 
-                <button type="submit" name="setBudget" class="set-budget-btn">Set Budget</button>
+                <button type="submit" name="setBudget" id="setBudgetBtn" class="set-budget-btn">Set Budget</button>
                 <button type="button" id="resetBtn" class="reset-budget-btn" onclick="resetBudget()">Reset Budget</button>
             </form>
         </div>
     </div>
 
     <script>
+        // Disable past months
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = String(today.getMonth() + 1).padStart(2, '0'); 
+            let minDate = `${year}-${month}`;
+            document.getElementById("month").setAttribute("min", minDate);
+        });
+
+        function checkExistingBudget() {
+            var selectedMonth = document.getElementById("month").value;
+            if (selectedMonth === "") {
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "check_budget.php",
+                data: { month: selectedMonth },
+                success: function(response) {
+                    if (response.trim() === "exists") {
+                        alert("Budget for this month already exists! You must reset it first.");
+                        document.getElementById("setBudgetBtn").disabled = true;
+                    } else {
+                        document.getElementById("setBudgetBtn").disabled = false;
+                    }
+                }
+            });
+        }
+
         function resetBudget() {
             var selectedMonth = document.getElementById("month").value;
             if (selectedMonth === "") {
