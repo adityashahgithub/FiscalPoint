@@ -90,37 +90,29 @@ th {
 h2{
  text-align: center;
  font-family: 'Times New Roman', Times, serif;
+ font-size: 25px;
 }
-.filter-form {
+form {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
-    gap: 10px; 
-    background-color: rgba(92, 84, 112, 0.6); 
-    padding: 15px; 
-    border-radius: 10px; 
-    width: fit-content; 
-    margin: 95px auto; 
-    position: absolute; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    top: 1px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adds spacing between elements */
+    margin: 20px auto; /* Centers horizontally */
+    padding: 10px;
+    width: fit-content;
+    background-color: rgba(92, 84, 112, 0.6); /* Light background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
-.filter-form label {
-    color: white; /* White text */
-    font-size: 16px;
+form label {
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.filter-form input {
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-}
-
-.filter-form button {
-    background-color: #E5C4C4; /* Button background */
+form select
+form button {
     color: black; /* Button text color */
     border: none;
     padding: 8px 12px;
@@ -129,7 +121,14 @@ h2{
     font-weight: bold;
 }
 
-.filter-form button:hover {
-  
+form button {
+    background-color: #E5C4C4;
     color: black;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+  
+    color: #E5C4C4;
 }

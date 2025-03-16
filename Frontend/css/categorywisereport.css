@@ -112,10 +112,12 @@ form label {
 
 form select, 
 form button {
+    color: black; /* Button text color */
+    border: none;
     padding: 8px 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
     border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 form button {

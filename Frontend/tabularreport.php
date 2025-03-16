@@ -108,7 +108,7 @@ $conn->close();
     
     <div >
     <h2> All Expenses</h2>
-    <form method="POST" action=""class="filter-form">
+    <form method="POST" action="">
             <label for="month">Select Month:</label>
             <input type="month" id="month" name="month" value="<?php echo $selected_month; ?>">
             <button type="submit">Filter</button>
