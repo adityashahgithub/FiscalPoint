@@ -165,13 +165,21 @@ label {
 }
 
 .reset-btn {
-    background-color: #d4b5b5;
+    background-color: #007bff;
     color: black;
 }
 
+.reset-btn:hover {
+    background-color: #0056b3;
+}
+
 .delete-btn {
-    background-color: #d4b5b5;
+    background-color: #dc3545;
     color: black;
+}
+
+.delete-btn:hover {
+    background-color: #a71d2a;
 }
 
 .modal {
