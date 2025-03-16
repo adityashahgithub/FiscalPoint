@@ -105,7 +105,7 @@ $conn->close();
             <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
     </aside>
-    
+   
     <div >
     <h2> All Expenses</h2>
     <form method="POST" action="">
