@@ -89,7 +89,7 @@ header {
 
 /* ===== Login Box Styling ===== */
 .login-box {
-    background-color: black;
+    background-color: rgba(92, 84, 112, 0.6);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(107, 101, 130, 0.5);
@@ -100,11 +100,10 @@ header {
 
 /* ===== User Avatar Styling ===== */
 .avatar img {
-    width: 80px;
+    width: 130px;
     border-radius: 50%;
-    background: #363434;
     padding: 10px;
-    margin-left: 100px;
+    margin-left: 80px;
 }
 
 /* ===== Form Styling ===== */

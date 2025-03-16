@@ -92,7 +92,7 @@ header {
     margin: 2px auto; /* Center alignment */
     padding: 20px;
     border-radius: 10px;
-    background: none; /* Transparent */
+    background: rgba(92, 84, 112, 0.6); /* Transparent */
 }
 
 /* Heading Styling */
@@ -121,7 +121,7 @@ header {
     margin-top: 5px;
     border: none;
     border-radius: 5px;
-    background-color: #2d2a3b; /* Dark input background */
+    background-color: white; /* Dark input background */
     font-size: 16px;
     color: white;
     outline: none;

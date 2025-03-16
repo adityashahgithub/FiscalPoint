@@ -85,7 +85,7 @@ $conn->close();
     <div class="container">
         <header>
     <!-- LOGO-->
-            <img src="css/profile.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+            <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
     <!-- NAVIGATION BAR -->  
             <nav class="navbar">
                 <ul>
@@ -97,7 +97,7 @@ $conn->close();
         </header>
         <div class="login-box">
             <div class="avatar">
-                <img src="css/userpfp.png" alt="User Icon">
+                <img src="css/profile.png" alt="User Icon">
             </div>
          <!-- LOGIN FORM-->
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
