@@ -37,6 +37,7 @@ if ($result->num_rows > 0) {
     exit();
 }
 
+
 $stmt->close();
 $conn->close();
 ?>
@@ -94,8 +95,20 @@ $conn->close();
             <div class="input-field"><?php echo htmlspecialchars($user['Phone_no']); ?></div>
           <br>
             <div class="button-group">
-                <button class="btn reset-btn">Reset Password</button>
-                <button class="btn delete-btn">Delete Account</button>
+                <button class="btn reset-btn" >Reset Password</button>
+                <button class="btn delete-btn" onclick="confirmDelete()">Delete Account</button>
+                <script>
+function confirmDelete() {
+    let confirmation = confirm("Are you sure you want to delete your account?");
+    if (confirmation) {
+        // Send AJAX request to delete the account
+        window.location.href = "landing.php";
+    } else {
+        // Redirect to profile page if user cancels
+        window.location.href = "profile.php";
+    }
+}
+</script>
             </div>
         </div>
     </div>
