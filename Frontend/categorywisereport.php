@@ -137,8 +137,6 @@ $conn->close();
             </select>
             <button type="submit">Filter</button>
         </form>
-
-        <h2> All Expenses</h2>
         <table>
             <thead>
                 <tr>

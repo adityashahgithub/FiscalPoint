@@ -68,6 +68,7 @@ h2 {
     left: 50%; 
     transform: translateX(-50%); 
     text-align: center;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 
@@ -115,11 +116,14 @@ h2 {
 }
 
 .chart-container {
-    padding-left: 20px; /* Space from the left */
+    padding-left:12rem;
     display: flex;
-    justify-content: center; /* Centers the graph */
+    justify-content: center;
     align-items: center;
+   
 }
 #expenseLineChart {
-    padding-left: 50px; /* Adjust the value as needed */
+    padding-left: 50px;
+    border-radius: 20px;
+    
 }
