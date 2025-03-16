@@ -39,8 +39,6 @@ header {
     transform: translateX(-50%); 
     margin-top: 10px; 
     animation: navbarFadeIn 0.5s ease-out 0.2s forwards;
-   
-    
 }
 @keyframes navbarFadeIn {
     0% {
