@@ -21,14 +21,15 @@ body {
 /* Sidebar */
 
 .sidebar {
-    position: absolute; 
-    left: 0; 
-    width: 16%; 
-    height: 56%; 
-    background-color: rgba(92, 84, 112, 0.6); 
+    width: 222.3px;
+    background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
-    border-radius:  20px;
+    border-radius: 20px;
+    height: 68%;
     margin-top: 10%;
+    position: absolute;
+    left: 0%;
+    
 }
 
 

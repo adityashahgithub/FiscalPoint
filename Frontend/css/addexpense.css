@@ -14,13 +14,15 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 250px;
+  width: 245px;
   background-color: rgba(92, 84, 112, 0.6);
   padding: 20px;
   border-radius: 20px;
-  height: 56%;
-  margin-top: 10%; 
+  height: 68%;
+  margin-top: 10%;
+  
 }
+
 
 .profile {
   display: flex;
@@ -85,7 +87,7 @@ object-fit: cover;
   }
   
   label {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     text-align: justify;
   }
@@ -100,7 +102,15 @@ object-fit: cover;
   input[type="date"],
   input[type="text"],
   input[type="number"]
+
    {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%;
+  }
+  .payment-method
+  {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

@@ -18,8 +18,9 @@ body {
     background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
-    height: 56%;
+    height: 68%;
     margin-top: 10%;
+    
 }
 
 .profile {
@@ -84,7 +85,7 @@ form {
 }
 
 label {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     text-align: justify;
 }
@@ -95,7 +96,12 @@ select, input[type="number"] {
     border-radius: 5px;
     width: 90%;
 }
-
+select, input[type="month"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%;
+}
 .set-budget-btn {
     padding: 10px;
     background-color: palevioletred;

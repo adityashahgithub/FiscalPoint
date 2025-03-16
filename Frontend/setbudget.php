@@ -121,7 +121,7 @@ $conn->close();
             <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
     </aside>
-    
+     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="form-container">
             <h1>Set Budget:</h1>

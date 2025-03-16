@@ -103,7 +103,7 @@ $conn->close();
             <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
     </aside>
-    
+     <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="form-container">
             <h1>Add Expense:</h1>
@@ -142,6 +142,8 @@ $conn->close();
                 <select id="payment_method" name="payment_method" onchange="toggleOtherPayment()" required class="payment-method">
                     <option value="Cash">Cash</option>
                     <option value="Credit / Debit card">Credit/Debit card</option>
+                    <option value="UPI Payment">Credit/Debit card</option>
+
                     <option value="Other">Other</option>
                 </select>
                 
