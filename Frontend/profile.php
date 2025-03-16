@@ -96,6 +96,7 @@ $conn->close();
           <br>
             <div class="button-group">
                 <button class="btn reset-btn" onclick="openModal()">Reset Password</button>
+                <button class="btn forgot-btn" onclick="openModal()">Forgot Password</button>
                 <button class="btn delete-btn" onclick="confirmDelete()">Delete Account</button>
             </div>
         </div>

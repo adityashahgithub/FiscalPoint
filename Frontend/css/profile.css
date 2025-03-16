@@ -207,3 +207,12 @@ label {
     font-size: 24px;
     cursor: pointer;
 }
+
+.forgot-btn {
+    background-color: #E5C7C2;
+    color: black;
+}
+
+.forgot-btn:hover {
+    background-color: #e3b2a9;
+}
