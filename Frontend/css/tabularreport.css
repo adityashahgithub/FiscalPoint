@@ -24,7 +24,7 @@ body {
     position: absolute; 
     left: 0; 
     width: 16%; 
-    height: 56%; 
+    height: 67%; 
     background-color: rgba(92, 84, 112, 0.6); 
     padding: 20px;
     border-radius:  20px;
@@ -92,6 +92,7 @@ h2{
  font-family: 'Times New Roman', Times, serif;
  font-size: 25px;
 }
+
 form {
     display: flex;
     justify-content: center;
@@ -105,13 +106,12 @@ form {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-
 form label {
     font-size: 18px;
     font-weight: bold;
 }
 
-form select
+form select, 
 form button {
     color: black; /* Button text color */
     border: none;
@@ -129,6 +129,5 @@ form button {
 }
 
 form button:hover {
-  
-    color: #E5C4C4;
+    background-color: #E5C4C4;
 }

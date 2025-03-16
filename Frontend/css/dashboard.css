@@ -14,12 +14,14 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 260px;
+    width: 18%;
     background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
-    height: 68%;
+    height: 67%;
     margin-top: 10%;
+    
+   
     
 }
 
