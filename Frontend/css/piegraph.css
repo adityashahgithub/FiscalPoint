@@ -10,6 +10,8 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+
 .logo {
   width: 150px;
   position: absolute; 
@@ -19,7 +21,6 @@ body {
 
 
 /* Sidebar */
-
 .sidebar {
     position: absolute; 
     left: 0; 
@@ -77,16 +78,16 @@ h2
     align-items: center; 
     gap: 10px; 
     background-color: #6B6487; 
-    padding: 15px; /* Add some padding */
-    border-radius: 10px; /* Rounded edges */
-    width: fit-content; /* Adjust width based on content */
+    padding: 15px;
+    border-radius: 10px; 
+    width: fit-content; 
     margin: 0px auto 20px auto; 
     margin-left: 34%;
     
 }
 
 .filter-form label {
-    color: white; /* White text */
+    color: white; 
     font-size: 16px;
 }
 
@@ -97,8 +98,8 @@ h2
 }
 
 .filter-form button {
-    background-color: #E5C4C4; /* Button background */
-    color: black; /* Button text color */
+    background-color: #E5C4C4; 
+    color: black; 
     border: none;
     padding: 8px 12px;
     border-radius: 5px;

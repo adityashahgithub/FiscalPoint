@@ -92,6 +92,8 @@ $conn->close();
         </ul>
     </aside>
 
+
+     <!-- MAIN CONTENT -->
     <div class="chart-container" style="width: 50%; margin: auto; height: 70%;">
         <h2 >CategoryWise Expense Distribution</h2>
 
