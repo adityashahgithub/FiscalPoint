@@ -51,6 +51,15 @@ if ($stmt_expense) {
 } else {
     die("Error preparing expense query: " . $conn->error);
 }
+// Get the selected month (default: current month)
+$selected_month = isset($_POST['month']) ? $_POST['month'] : date('Y-m');
+
+// Fetch Expenses for the selected month
+$sql_expense = "SELECT DATE(date) AS expense_date, SUM(amount) AS total_cost 
+                FROM Expense 
+                WHERE Uid = ? AND DATE_FORMAT(date, '%Y-%m') = ? 
+                GROUP BY expense_date 
+                ORDER BY expense_date ASC";
 
 $conn->close();
 ?>
@@ -73,9 +82,9 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><a href="dashboard.php">Dashboard</a></li><br>
-            <li><a href="setbudget.php">Budget</a></li><br>
-            <li><a href="addexpense.php">Add Expense</a></li><br>
+            <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
+            <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
+            <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
             <li>
             <li class="dropdown">
             <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
@@ -92,15 +101,19 @@ $conn->close();
             <li><a href="categorywisereport.php">Category wise Expense</a></li>
         </ul>
     </li><br>
-            <li><a href="profile.php">Profile</a></li><br>
-            <li><a href="logout.php">Logout</a></li><br>
+            <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
+            <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
-    </aside>
     </aside>
     
     <div >
+    <h2> All Expenses</h2>
+    <form method="POST" action=""class="filter-form">
+            <label for="month">Select Month:</label>
+            <input type="month" id="month" name="month" value="<?php echo $selected_month; ?>">
+            <button type="submit">Filter</button>
+        </form>
         <table>
-        <h2> All Expenses</h2>
             <thead>
                 <tr>
                     <th>Sr No.</th>

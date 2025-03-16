@@ -79,9 +79,9 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><a href="dashboard.php">Dashboard</a></li><br>
-            <li><a href="setbudget.php">Budget</a></li><br>
-            <li><a href="addexpense.php">Add Expense</a></li><br>
+            <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
+            <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
+            <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
             <li>
             <li class="dropdown">
             <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
@@ -98,8 +98,8 @@ $conn->close();
             <li><a href="categorywisereport.php">Category wise Expense</a></li>
         </ul>
     </li><br>
-            <li><a href="profile.php">Profile</a></li><br>
-            <li><a href="logout.php">Logout</a></li><br>
+            <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
+            <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
     </aside>
    

@@ -21,15 +21,16 @@ body {
 /* Sidebar */
 
 .sidebar {
-    width: 250px;
-    background-color: #6B6487;
+    position: absolute; 
+    left: 0; 
+    width: 16%; 
+    height: 70%; 
+    background-color: #6B6487; 
     padding: 20px;
-    border-radius: 20px;
-    height: 60%;
-    position: absolute;
-    left: 20px; 
-    margin-top: 7%;
+    border-radius:  20px;
+    margin-top: 10%;
 }
+
 
 .profile {
     display: flex;
@@ -43,22 +44,27 @@ body {
   object-fit: cover; 
 
 }
+.logo {
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
 
 .menu {
     list-style: none;
     padding: 0;
-    padding-top: 5%;
-    text-align: left;
-    
-}   
-
-.menu a {
-    margin: 15px 0;
-    font-size: 20px;
-    color: white;
-    text-decoration: none;
     
 }
+.menu a {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+}
+
+
+
 h1{
     font-family: 'Times New Roman', Times, serif;
 }
