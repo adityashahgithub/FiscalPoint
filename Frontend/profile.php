@@ -37,7 +37,6 @@ if ($result->num_rows > 0) {
     exit();
 }
 
-
 $stmt->close();
 $conn->close();
 ?>
@@ -81,7 +80,6 @@ $conn->close();
         </ul>
     </aside>
 
-
     <div class="profile-container">
         <div class="profile-card">
             <h1>User Details</h1>
@@ -95,10 +93,59 @@ $conn->close();
             <div class="input-field"><?php echo htmlspecialchars($user['Phone_no']); ?></div>
           <br>
             <div class="button-group">
-                <button class="btn reset-btn" >Reset Password</button>
+                <button class="btn reset-btn" onclick="openModal()">Reset Password</button>
                 <button class="btn delete-btn" onclick="confirmDelete()">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+<!-- Password Reset Modal -->
+<div id="resetPasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Reset Password</h2>
+        <input type="password" id="newPassword" placeholder="Enter new password">
+        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+        <button onclick="resetPassword()">Submit</button>
+    </div>
+</div>
+<!-- JavaScript for Modal & Password Reset -->
 <script>
-    function confirmDelete() {
+function openModal() {
+    document.getElementById("resetPasswordModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("resetPasswordModal").style.display = "none";
+}
+
+function resetPassword() {
+    let newPassword = document.getElementById("newPassword").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    fetch('reset_password.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: newPassword })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Password reset successful!");
+            closeModal();
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function confirmDelete() {
     let confirmation = confirm("Are you sure you want to delete your account?");
     if (confirmation) {
         fetch('delete_account.php', {
@@ -119,8 +166,6 @@ $conn->close();
     }
 }
 </script>
-            </div>
-        </div>
-    </div>
+
 </body>
 </html>
