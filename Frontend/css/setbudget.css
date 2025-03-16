@@ -14,13 +14,12 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 31.4%;
+    width: 250px;
     background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
     height: 56%;
     margin-top: 10%;
-    
 }
 
 .profile {
@@ -64,12 +63,13 @@ body {
     border-radius: 8px;
     text-align: center;
     box-shadow: 0px 4px 6px rgba(208, 208, 208, 0.1);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .main-content {
     width: 75%;
     padding: 40px;
-    padding-left: 40%;
 }
 
 .main-content h1 {
@@ -98,7 +98,7 @@ select, input[type="number"] {
 
 .set-budget-btn {
     padding: 10px;
-    background-color: #E5C4C4;
+    background-color: palevioletred;
     color: black;
     border: none;
     border-radius: 5px;
@@ -113,7 +113,7 @@ select, input[type="number"] {
 
 .reset-budget-btn {
     padding: 10px;
-    background-color: #E5C4C4;
+    background-color: palevioletred;
     color: black;
     border: none;
     border-radius: 5px;
