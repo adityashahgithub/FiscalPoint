@@ -93,7 +93,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,11 +104,11 @@ $conn->close();
 <body>
  <!-- Main Container -->
  <div class="container">
-    <!-- Header Section -->
     <header>
+        <!-- LOGO-->
        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"> 
        
-       <!-- Navigation Menu -->
+       <!-- NAVIGATION BAR -->
        <nav class="navbar">
            <ul>
                <li><a href="landing.html">Home</a></li>
@@ -119,7 +118,7 @@ $conn->close();
        </nav>
    </header>    
 
-    <!-- ======= Signup Form Section ======= -->
+    <!--  Signup Form Section -->
     <div class="signup-container">
         <h2>Welcome to Fiscal Point!</h2>
 
@@ -165,7 +164,7 @@ $conn->close();
     }
 </style>
 
- <!-- Linking External JavaScript -->
+ <!--  JavaScript -->
  <script src="javascript/signup.js"></script>
 
 </body>

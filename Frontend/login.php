@@ -77,13 +77,16 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="css/login.css">  <!-- Linking CSS File -->
+     <!-- Linking CSS File -->
+    <link rel="stylesheet" href="css/login.css"> 
 </head>
 <body>
 
     <div class="container">
         <header>
+    <!-- LOGO-->
             <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+    <!-- NAVIGATION BAR -->  
             <nav class="navbar">
                 <ul>
                     <li><a href="landing.html">Home</a></li>
@@ -92,12 +95,11 @@ $conn->close();
                 </ul>
             </nav>
         </header>
-
         <div class="login-box">
             <div class="avatar">
                 <img src="css/userpfp.png" alt="User Icon">
             </div>
-
+         <!-- LOGIN FORM-->
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                 <label for="email">Enter your email:</label>
                 <input type="email" id="email" name="email" placeholder="Email" required>
@@ -107,7 +109,7 @@ $conn->close();
                 
                 <button type="submit">Login</button>
             </form>
-            
+            <!--SUBMIT BUTTON -->
             <p class="signup-text">New user? <a href="signup.php">Sign up instead</a></p>
         </div>
     </div>

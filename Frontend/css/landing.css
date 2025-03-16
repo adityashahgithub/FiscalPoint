@@ -27,11 +27,7 @@ header {
     100% { transform: rotate(350deg); } 
 }
 
-/* 
-========================================
-        NAVIGATION BAR SECTION
-======================================== 
-*/
+/*      NAVIGATION BAR SECTION  */
 .navbar {
     background: rgba(92, 84, 112, 0.6);
     padding: 15px 40px;
@@ -98,11 +94,7 @@ header {
     color: paleturquoise; 
 }
 
-/* 
-========================================
-        MAIN CONTENT SECTION
-======================================== 
-*/
+/*   MAIN CONTENT SECTION */
 .content {
     display: flex;
     align-items: center;
@@ -191,11 +183,7 @@ header {
     }
 }
 
-/* 
-========================================
-         FEATURES SECTION
-======================================== 
-*/
+/*  FEATURES SECTION */
 .features-container {
     text-align: center;
 }

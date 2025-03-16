@@ -60,14 +60,9 @@ $result_budget = $stmt->get_result();
 $row_budget = $result_budget->fetch_assoc();
 $monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
 
-
-
-
 // Close the database connection
 $conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,10 +70,14 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Dashboard</title>
+<!--CSS FILE-->
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
-<header> <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"></header>
+<header> 
+    <!--LOGO-->
+    <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"></header>
 <body>
+    <!--SIDE BAR-->
     <aside class="sidebar">
         <div class="profile">
             <img src="css/profile.png" alt="Profile Image" class="avatar">
@@ -107,6 +106,7 @@ $conn->close();
             <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
     </aside>
+    <!--MAIN CONTENT-->
         <main class="dashboard">
             <div>
                 <h3 class="budget-text">Your Budget :  <?php echo $currentMonth; ?></h3>
