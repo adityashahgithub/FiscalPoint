@@ -1,38 +1,43 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Start session
 session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION["Uid"])) {
-    die("Error: User not logged in. <a href='login.php'>Login here</a>");
-}
-
-$user_id = $_SESSION["Uid"];
-
 // Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "FiscalPoint";
+$servername = "localhost"; 
+$username = "root"; 
+$password = ""; 
+$dbname = "FiscalPoint"; 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
 if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch User Details (including email, password, and phone number)
-$sql_user = "SELECT Uname, email, Password, Phone_no FROM User WHERE Uid = ?";
-$stmt_user = $conn->prepare($sql_user);
-if (!$stmt_user) {
-    die("User Query preparation failed: " . $conn->error);
+// Check if user is logged in
+if (!isset($_SESSION['Uid'])) {
+    header("Location: login.php");
+    exit();
 }
-$stmt_user->bind_param("i", $user_id);
-$stmt_user->execute();
-$result_user = $stmt_user->get_result();
-$user_details = $result_user->fetch_assoc();
-$stmt_user->close();
 
+$uid = $_SESSION['Uid'];
+
+// Fetch user details
+$query = "SELECT Uname, email, Phone_no FROM User WHERE Uid = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $uid);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+} else {
+    echo "User not found!";
+    exit();
+}
+
+$stmt->close();
 $conn->close();
 ?>
 
@@ -45,11 +50,8 @@ $conn->close();
     <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
-    <header>
-        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
-    </header>
-    
-    <aside class="sidebar">
+
+<aside class="sidebar">
         <div class="profile">
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
@@ -77,14 +79,24 @@ $conn->close();
             <li><a href="logout.php">Logout</a></li><br>
         </ul>
     </aside>
-    
-    <div class="user-container">
-    <h2>User Profile</h2>
-        <div class="user-details">
-            <p><strong>Name:</strong> <?php echo htmlspecialchars($user_details['Uname']); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($user_details['email']); ?></p>
-            <p><strong>Password:</strong> <?php echo htmlspecialchars($user_details['Password']); ?></p>
-            <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($user_details['Phone_no']); ?></p>
+
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <h1>User Details</h1>
+            <h2>Name:</h2>
+            <div class="input-field"><?php echo htmlspecialchars($user['Uname']); ?></div>
+
+            <h2>Email:</h2>
+            <div class="input-field"><?php echo htmlspecialchars($user['email']); ?></div>
+
+            <h2>Phone Number:</h2>
+            <div class="input-field"><?php echo htmlspecialchars($user['Phone_no']); ?></div>
+          <br>
+            <div class="button-group">
+                <button class="btn reset-btn">Reset Password</button>
+                <button class="btn delete-btn">Delete Account</button>
+            </div>
         </div>
     </div>
 </body>

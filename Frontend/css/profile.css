@@ -59,31 +59,112 @@ body {
     text-decoration: none;
     
 }
-h2{
-    text-align: center;
+h1{
     font-family: 'Times New Roman', Times, serif;
+}
+h2{
+    text-align:left;
     color: white;
-}
-.user-container {
-    width: 50%;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: #86a69c; /* Green Background */
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    color: white; /* White text for contrast */
-    font-weight: bold;
-      margin-left: 28%;
-}
-
-.user-details {
     font-size: 18px;
-    line-height: 1.8;
+}
+body {
+    background-color: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.user-details p {
-    margin: 10px 0;
-    
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
+label {
+    font-size: 20px;
+}
+
+.input-field {
+    background-color: #716c8f;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    width: 250px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+    color: white;
+
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    background-color: #E5C7C2;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: black;
+}
+
+/* Profile Container */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Profile Card */
+.profile-card {
+    background-color: #6B6487;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(248, 231, 231, 0.476);
+    text-align: center;
+    width: 350px;
+}
+
+/* Input Fields */
+.input-field {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+    color: rgb(70, 68, 68);
+    font-weight: bold;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Button Styling */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    width: 45%;
+}
+
+.reset-btn {
+    background-color: #d4b5b5;
+    color: black;
+}
+
+.delete-btn {
+    background-color: #d4b5b5;
+    color: black;
+}
