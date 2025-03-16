@@ -33,16 +33,21 @@ function validateForm() {
         passwordError.innerText = "";
     }
 
-      
-      // Confirm Password Validation
-      if (password !== confirmPassword) {
-          confirmPasswordError.innerText = "Passwords do not match.";
-          confirmPasswordError.style.color = "red";
-          valid = false;
-      } else {
-          confirmPasswordError.innerText = "";
-      }
-  
-      return valid;
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector(".signup-form");
+        const passwordInput = document.getElementById("Password");
+        const confirmPasswordInput = document.getElementById("ConfirmPassword");
+        const confirmPasswordError = document.getElementById("confirm-password-error");
+    
+        form.addEventListener("submit", function (event) {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordError.textContent = "Passwords do not match!";
+                event.preventDefault(); // Prevent form submission
+            } else {
+                confirmPasswordError.textContent = ""; // Clear error message
+            }
+        });
+    });
+    
 }
 
