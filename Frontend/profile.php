@@ -97,15 +97,25 @@ $conn->close();
             <div class="button-group">
                 <button class="btn reset-btn" >Reset Password</button>
                 <button class="btn delete-btn" onclick="confirmDelete()">Delete Account</button>
-                <script>
-function confirmDelete() {
+<script>
+    function confirmDelete() {
     let confirmation = confirm("Are you sure you want to delete your account?");
     if (confirmation) {
-        // Send AJAX request to delete the account
-        window.location.href = "landing.php";
-    } else {
-        // Redirect to profile page if user cancels
-        window.location.href = "profile.php";
+        fetch('delete_account.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ delete: true })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Account deleted successfully!");
+                window.location.href = "landing.html"; // Redirect to landing page
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 }
 </script>
