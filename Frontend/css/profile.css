@@ -165,12 +165,12 @@ label {
 }
 
 .reset-btn {
-    background-color: #007bff;
+    background-color: #E5C7C2;
     color: black;
 }
 
 .reset-btn:hover {
-    background-color: #0056b3;
+    background-color: #E5C7C2;
 }
 
 .delete-btn {

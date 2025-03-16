@@ -50,6 +50,8 @@ $conn->close();
     <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
+<img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+
 
 <aside class="sidebar">
         <div class="profile">
