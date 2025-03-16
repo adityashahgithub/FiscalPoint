@@ -33,13 +33,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = sanitize_input($_POST["email"]);
     $phone = sanitize_input($_POST["Phone_no"]);
     $password = sanitize_input($_POST["Password"]);
+    $confirm_password = sanitize_input($_POST["ConfirmPassword"]); // New
     $created_at = date("Y-m-d H:i:s");
+
+    // Check if passwords match
+    if ($password !== $confirm_password) {
+        echo "<script>alert('Passwords do not match. Please try again.'); window.history.back();</script>";
+        exit();
+    }
 
     // Debugging - Check if values are being captured correctly
     error_log("Uname: " . $uname);
     error_log("Email: " . $email);
     error_log("Phone: " . $phone);
     error_log("Password: " . $password);
+    error_log("". $confirm_password);
 
     // Hash the password before storing it in the database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -134,9 +142,12 @@ $conn->close();
     <label for="Password">Create Password:</label>
     <input type="password" id="Password" name="Password" placeholder="Password" required>
     <span id="password-error" class="error-message"></span>
+
+    <!-- Confirm Password Input -->
     <label for="ConfirmPassword">Confirm Password:</label>
-        <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
-        <span id="confirm-password-error" class="error-message"></span>
+    <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
+    <span id="confirm-password-error" class="error-message"></span>
+    
     <!-- Signup Button -->
     <button type="submit">Get Started</button>
     
