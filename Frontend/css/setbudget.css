@@ -98,7 +98,7 @@ select, input[type="number"] {
 
 .set-budget-btn {
     padding: 10px;
-    background-color: palevioletred;
+    background-color: #E5C4C4;
     color: black;
     border: none;
     border-radius: 5px;
@@ -113,7 +113,7 @@ select, input[type="number"] {
 
 .reset-budget-btn {
     padding: 10px;
-    background-color: palevioletred;
+    background-color: #E5C4C4;
     color: black;
     border: none;
     border-radius: 5px;

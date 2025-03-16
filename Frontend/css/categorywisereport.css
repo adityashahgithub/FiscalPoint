@@ -119,12 +119,12 @@ form button {
 }
 
 form button {
-    background-color: palevioletred;
+    background-color: #E5C4C4;
     color: black;
     border: none;
     cursor: pointer;
 }
 
 form button:hover {
-    background-color: palevioletred;
+    background-color: #E5C4C4;
 }

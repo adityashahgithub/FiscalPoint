@@ -103,8 +103,8 @@ h2 {
 }
 
 .filter-form button {
-    background-color: white; /* Button background */
-    color: #6B6487; /* Button text color */
+    background-color: #E5C4C4; /* Button background */
+    color: black; /* Button text color */
     border: none;
     padding: 8px 12px;
     border-radius: 5px;
