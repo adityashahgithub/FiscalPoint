@@ -15,7 +15,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 31.4%;
-  background-color: #6B6487;
+  background-color: rgba(92, 84, 112, 0.6);
   padding: 20px;
   border-radius: 20px;
   height: 56%;
@@ -60,7 +60,7 @@ object-fit: cover;
 .form-container {
     margin-top: 12%;
     width: 28rem;
-    background-color: #6B6487;
+    background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 8px;
     text-align: center;

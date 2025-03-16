@@ -105,7 +105,7 @@ header {
 /* Text Box */
 .text-box {
     max-width: 50%;
-    background-color: #5C5470; 
+    background-color: rgba(92, 84, 112, 0.6); 
     padding: 20px;
     border-radius: 15px;
     box-shadow: 5px 5px 10px rgb(199, 243, 242); 
@@ -215,7 +215,7 @@ header {
 
 
 .feature-box {
-    background-color: #6b6582; 
+    background-color: rgba(92, 84, 112, 0.6); 
     padding: 25px;
     border-radius: 10px;
     width: 20%;
@@ -308,7 +308,7 @@ h2
 }
 
 .aboutus-box {
-    background-color: #6b6582;
+    background-color: rgba(92, 84, 112, 0.6);
     padding: 0.5px 10px;
     border-radius: 10px;
     width: 45%;

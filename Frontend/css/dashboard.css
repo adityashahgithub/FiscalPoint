@@ -15,7 +15,7 @@ body {
 /* Sidebar */
 .sidebar {
     width: 250px;
-    background-color: #6B6487;
+    background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
     height: 56%;
@@ -72,7 +72,7 @@ body {
 .expense-card {
     width: 400px;
     height: 180px;
-    background-color: #6B6487;
+    background-color: rgba(92, 84, 112, 0.6);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     padding-right: 5%;
@@ -89,7 +89,7 @@ body {
     
     width: 300px;
     height: 150px;
-    background-color: #6B6487;
+    background-color: rgba(92, 84, 112, 0.6);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     padding-right: 5%;
