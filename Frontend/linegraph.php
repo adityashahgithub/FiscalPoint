@@ -102,10 +102,8 @@ $conn->close();
             <li><a href="logout.php">Logout</a></li><br>
         </ul>
     </aside>
-    </aside>
-
-    <div class="chart-container" style="width: 60%; margin: auto;">
-        <h2>Expense Trend Over Time</h2>
+   
+    <h2>Expense Trend Over Time</h2>
         
         <!-- Month Selection Form -->
         <form method="POST" action=""class="filter-form">
@@ -113,6 +111,10 @@ $conn->close();
             <input type="month" id="month" name="month" value="<?php echo $selected_month; ?>">
             <button type="submit">Filter</button>
         </form>
+
+        
+    <div class="chart-container" style="width: 60%; margin: 2px;">
+       
 
         <canvas id="expenseLineChart"></canvas>
     </div>

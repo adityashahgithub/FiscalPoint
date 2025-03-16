@@ -21,14 +21,16 @@ body {
 /* Sidebar */
 
 .sidebar {
-    width: 250px;
-    background-color: #6B6487;
+    position: absolute; 
+    left: 0; 
+    width: 250px; 
+    height: 70%; 
+    background-color: #6B6487; 
     padding: 20px;
-    border-radius: 20px;
-    height: 65%;
-    margin-top: 4rem;
-    
+    border-radius:  20px;
+    margin-top: 10%;
 }
+
 
 .profile {
     display: flex;
@@ -60,6 +62,13 @@ body {
     color: white;
     text-decoration: none;
 }
+h2 {
+    position: absolute; 
+    top: 40px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    text-align: center;
+}
 
 
 .filter-form {
@@ -68,12 +77,16 @@ body {
     align-items: center; 
     gap: 10px; 
     background-color: #6B6487; 
-    padding: 15px; /* Add some padding */
-    border-radius: 10px; /* Rounded edges */
-    width: fit-content; /* Adjust width based on content */
-    margin: 0 auto 20px auto; /* Center the form with bottom spacing */
-    
+    padding: 15px; 
+    border-radius: 10px; 
+    width: fit-content; 
+    margin: 95px auto; 
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    top: 10px; 
 }
+
 
 .filter-form label {
     color: white; /* White text */
@@ -100,9 +113,6 @@ body {
   
     color: black;
 }
-
-
-
 
 .chart-container {
     padding-left: 20px; /* Space from the left */
