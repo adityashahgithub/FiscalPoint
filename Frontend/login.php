@@ -85,7 +85,7 @@ $conn->close();
     <div class="container">
         <header>
     <!-- LOGO-->
-            <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+            <img src="css/profile.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
     <!-- NAVIGATION BAR -->  
             <nav class="navbar">
                 <ul>
