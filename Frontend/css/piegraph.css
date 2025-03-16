@@ -67,8 +67,11 @@ body {
 
 h2
 {
+    position: absolute; 
+    top: 40px; 
+    left: 50%; 
+    transform: translateX(-50%); 
     text-align: center;
-    padding-left: 18%;
     font-family: 'Times New Roman', Times, serif;
 }
 
@@ -78,12 +81,14 @@ h2
     align-items: center; 
     gap: 10px; 
     background-color: rgba(92, 84, 112, 0.6); 
-    padding: 15px;
+    padding: 15px; 
     border-radius: 10px; 
     width: fit-content; 
-    margin: 0px auto 20px auto; 
-    margin-left: 34%;
-    
+    margin: 95px auto; 
+    position: absolute; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    top: 10px; 
 }
 
 .filter-form label {
@@ -110,4 +115,18 @@ h2
 .filter-form button:hover {
   
     color: black;
+}
+
+.chart-container {
+    padding-left:10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.expensePieGraph {
+    padding-left: 50px;
+    border-radius: 20px;
+    font-family:'Times New Roman', Times, serif;
 }
