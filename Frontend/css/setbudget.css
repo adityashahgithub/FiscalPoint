@@ -105,7 +105,7 @@ select, input[type="month"] {
 }
 .set-budget-btn {
     padding: 10px;
-    background-color: palevioletred;
+    background-color:#E5C7C2;
     color: black;
     border: none;
     border-radius: 5px;
@@ -114,13 +114,10 @@ select, input[type="month"] {
     margin-left: 30%;
 }
 
-.set-budget-btn:hover {
-    background-color: rgb(167, 62, 97);
-}
 
 .reset-budget-btn {
     padding: 10px;
-    background-color: palevioletred;
+    background-color: #E5C7C2;
     color: black;
     border: none;
     border-radius: 5px;

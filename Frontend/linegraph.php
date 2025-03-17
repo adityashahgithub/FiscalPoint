@@ -16,6 +16,10 @@ $username = "root";
 $password = "";
 $dbname = "FiscalPoint";
 
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
 
 // Fetch User Details
 $sql_user = "SELECT Uname FROM User WHERE Uid = ?";
