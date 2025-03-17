@@ -107,12 +107,19 @@ $conn->close();
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2>Reset Password</h2>
-        <input type="password" id="newPassword" placeholder="Enter new password">
-        <input type="password" id="confirmPassword" placeholder="Confirm new password">
-        <button onclick="resetPassword()">Submit</button>
+
+        <form method="POST" action="reset_password.php">
+            <input type="password" name="new_password" id="newPassword" placeholder="Enter new password" required><br>
+            <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm new password" required><br>
+            
+            <div class="button-group">
+                <button type="submit">Reset Password</button>
+                <button type="button" onclick="closeModal()">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
-<!-- JavaScript for Modal & Password Reset -->
+<!-- JavaScript for Modal,Password Reset,Delete Account-->
 <script>
 function openModal() {
     document.getElementById("resetPasswordModal").style.display = "block";
@@ -169,6 +176,5 @@ function confirmDelete() {
     }
 }
 </script>
-
 </body>
 </html>
