@@ -1,0 +1,64 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.logo {
+  width: 150px;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+}
+
+
+/* Sidebar */
+
+.sidebar {
+    position: absolute; 
+    left: 0; 
+    width: 16%; 
+    height: 67%; 
+    background-color: rgba(92, 84, 112, 0.6); 
+    padding: 20px;
+    border-radius:  20px;
+    margin-top: 10%;
+}
+
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
+}
+.logo {
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    
+}
+.menu a {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+}
