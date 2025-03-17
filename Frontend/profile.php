@@ -50,10 +50,9 @@ $conn->close();
     <link rel="stylesheet" href="css/profile.css">
 </head>
 <body>
-<img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+    <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
 
-
-<aside class="sidebar">
+    <aside class="sidebar">
         <div class="profile">
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
@@ -61,22 +60,20 @@ $conn->close();
             <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
             <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
             <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
-            <li>
             <li class="dropdown">
-            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
-            <ul>
-            <li><a href="linegraph.php">Line Graph Report</a></li>
-            <li><a href="piegraph.php">Pie Graph Report</a></li>
-        </ul>
-            </li>
-            <br>
-    <li>
-        <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
-        <ul>
-            <li><a href="tabularreport.php">All Expenses</a></li>
-            <li><a href="categorywisereport.php">Category wise Expense</a></li>
-        </ul>
-    </li><br>
+                <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
+                <ul>
+                    <li><a href="linegraph.php">Line Graph Report</a></li>
+                    <li><a href="piegraph.php">Pie Graph Report</a></li>
+                </ul>
+            </li><br>
+            <li>
+                <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
+                <ul>
+                    <li><a href="tabularreport.php">All Expenses</a></li>
+                    <li><a href="categorywisereport.php">Category wise Expense</a></li>
+                </ul>
+            </li><br>
             <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
             <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
@@ -93,68 +90,18 @@ $conn->close();
 
             <h2>Phone Number:</h2>
             <div class="input-field"><?php echo htmlspecialchars($user['Phone_no']); ?></div>
-          <br>
+            <br>
             <div class="button-group">
-                <button class="btn reset-btn" onclick="openModal()">Reset Password</button>
-                <button class="btn forgot-btn" onclick="openModal()">Forgot Password</button>
+                <!-- Update reset password button to link to reset_password.php -->
+                <a href="reset_password.php" class="btn reset-btn">Reset Password</a>
+                <a href="forgot_password.php" class="btn forgot-btn">Forgot Password</a>
                 <button class="btn delete-btn" onclick="confirmDelete()">Delete Account</button>
             </div>
         </div>
     </div>
 
-<!-- Password Reset Modal -->
-<div id="resetPasswordModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Reset Password</h2>
-
-        <form method="POST" action="reset_password.php">
-            <input type="password" name="new_password" id="newPassword" placeholder="Enter new password" required><br>
-            <input type="password" name="confirm_password" id="confirmPassword" placeholder="Confirm new password" required><br>
-            
-            <div class="button-group">
-                <button type="submit">Reset Password</button>
-                <button type="button" onclick="closeModal()">Cancel</button>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- JavaScript for Modal,Password Reset,Delete Account-->
+<!-- JavaScript for Delete Account Confirmation -->
 <script>
-function openModal() {
-    document.getElementById("resetPasswordModal").style.display = "block";
-}
-
-function closeModal() {
-    document.getElementById("resetPasswordModal").style.display = "none";
-}
-
-function resetPassword() {
-    let newPassword = document.getElementById("newPassword").value;
-    let confirmPassword = document.getElementById("confirmPassword").value;
-
-    if (newPassword !== confirmPassword) {
-        alert("Passwords do not match!");
-        return;
-    }
-
-    fetch('reset_password.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: newPassword })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Password reset successful!");
-            closeModal();
-        } else {
-            alert("Error: " + data.message);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
 function confirmDelete() {
     let confirmation = confirm("Are you sure you want to delete your account?");
     if (confirmation) {

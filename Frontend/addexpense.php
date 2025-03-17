@@ -142,7 +142,7 @@ $conn->close();
                 <select id="payment_method" name="payment_method" onchange="toggleOtherPayment()" required class="payment-method">
                     <option value="Cash">Cash</option>
                     <option value="Credit / Debit card">Credit/Debit card</option>
-                    <option value="UPI Payment">Credit/Debit card</option>
+                    <option value="UPI Payment">UPI Payment</option>
 
                     <option value="Other">Other</option>
                 </select>
