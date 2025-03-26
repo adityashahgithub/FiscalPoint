@@ -80,6 +80,7 @@ $hasExpenses = count($categories) > 0;
         </div>
         <ul class="menu">
             <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
+            <li><a href="addincome.php"><span style="font-weight: bold;">Income</span></a></li><br>
             <li><a href="setbudget.php"><span style="font-weight: bold;">Budget</span></a></li><br>
             <li><a href="addexpense.php"><span style="font-weight:bold;">Add Expense</span></a></li><br>
             <li class="dropdown">
@@ -121,35 +122,51 @@ $hasExpenses = count($categories) > 0;
     </div>
         
     <?php if ($hasExpenses): ?>
-    <script>
-        // Pie Chart Data
-        const ctx = document.getElementById('expensePieGraph').getContext('2d');
-        const expenseChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: <?php echo json_encode($categories); ?>,
-                datasets: [{
-                    label: 'Expenses',
-                    data: <?php echo json_encode($costs); ?>,
-                    backgroundColor: [
-                        "#fd7f6f", "#7eb0d5", "#b2e061",
-                        "#bd7ebe", "#ffb55a", "#ffee65", 
-                        "#beb9db", "#fdcce5", "#8bd3c7",
-                        "#ff677d", "#56c1ff", "#a0e65d", "#d39cd3"
-                    ],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> <!-- Add this line -->
+
+<script>
+    // Pie Chart Data
+    const ctx = document.getElementById('expensePieGraph').getContext('2d');
+    Chart.register(ChartDataLabels); // Register the plugin
+
+    const expenseChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: <?php echo json_encode($categories); ?>,
+            datasets: [{
+                label: 'Expenses',
+                data: <?php echo json_encode($costs); ?>,
+                backgroundColor: [
+                    "#fd7f6f", "#7eb0d5", "#b2e061",
+                    "#bd7ebe", "#ffb55a", "#ffee65", 
+                    "#beb9db", "#fdcce5", "#8bd3c7",
+                    "#ff677d", "#56c1ff", "#a0e65d", "#d39cd3"
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                datalabels: {
+                    color: 'black', // Text color
+                    anchor: 'end', // Positioning
+                    align: 'start',
+                    font: {
+                        weight: 'bold',
+                        size: 14
                     },
+                    formatter: (value) => `₹${value}` // Format the values with currency
                 }
             }
-        });
-    </script>
+        }
+    });
+</script>
+
     <?php endif; ?>
 </body>
 </html>

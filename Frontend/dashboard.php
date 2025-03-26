@@ -95,6 +95,7 @@ $conn->close();
         </div>
         <ul class="menu">
             <li><a href="dashboard.php"><strong>Dashboard</strong></a></li><br>
+            <li><a href="addincome.php"><span style="font-weight: bold;">Income</span></a></li><br>
             <li><a href="setbudget.php"><strong>Budget</strong></a></li><br>
             <li><a href="addexpense.php"><strong>Add Expense</strong></a></li><br>
             <li class="dropdown">

@@ -83,6 +83,7 @@ $conn->close();
         </div>
         <ul class="menu">
             <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
+            <li><a href="addincome.php"><span style="font-weight: bold;">Income</span></a></li><br>
             <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
             <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
             <li>
@@ -126,6 +127,7 @@ $conn->close();
             </thead>
             <tbody>
                 <?php
+                 $total_cost = 0;
                 if ($result_expense->num_rows > 0) {
                     $sr_no = 1;
                     while ($row = $result_expense->fetch_assoc()) {
@@ -137,11 +139,20 @@ $conn->close();
                         echo "<td>" . date("d-m-Y", strtotime($row["Date"])) . "</td>";
                         echo "<td>" . htmlspecialchars($row["Payment_Method"]) . "</td>";
                         echo "</tr>";
+                        $total_cost += floatval($row["Cost"]);
                         $sr_no++;
+            
                     }
                 } else {
                     echo "<tr><td colspan='5'>No expenses found.</td></tr>";
                 }
+                echo "<tr>";
+                echo "<tr>";
+                echo "<td><strong>Total:</strong></td>"; 
+                echo "<td colspan='2'></td>"; 
+                echo "<td><strong>₹" . number_format($total_cost, 2) . "</strong></td>"; 
+                echo "<td colspan='2'></td>"; 
+                echo "</tr>";
                 ?>
             </tbody>
         </table>

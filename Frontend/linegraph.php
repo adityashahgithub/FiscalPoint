@@ -80,6 +80,7 @@ $conn->close();
         </div>
         <ul class="menu">
             <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
+            <li><a href="addincome.php"><span style="font-weight: bold;">Income</span></a></li><br>
             <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
             <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
             <li>
@@ -98,6 +99,7 @@ $conn->close();
             <li><a href="categorywisereport.php">Category wise Expense</a></li>
         </ul>
     </li><br>
+    <li><a href="temp.php"><span style="font-weight:bold;">trial</span></a></li><br>
             <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
             <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
         </ul>
