@@ -208,10 +208,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      <!-- Linking External JavaScript -->
      <script src="javascript/addexpense.js"></script>
      <script>
-document.getElementById("expenseForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    
-    let budgetAmount = parseFloat(document.getElementById("budget-display").innerText.replace("₹", ""));
+        document.getElementById("expenseForm").addEventListener("submit", function(event) {
+        event.preventDefault();  // Prevent default submission
+
+    let budgetDisplay = document.getElementById("budget-display").innerText.trim();
+    let budgetAmount = budgetDisplay ? parseFloat(budgetDisplay.replace("₹", "")) : 0;
     let expenseAmount = parseFloat(document.getElementById("cost").value);
 
     if (isNaN(expenseAmount) || expenseAmount <= 0) {
@@ -223,10 +224,10 @@ document.getElementById("expenseForm").addEventListener("submit", function(event
         alert("Warning: Expense exceeds budget!");
         return;
     }
-
+    
     let confirmation = confirm(`Are you sure you want to deduct ₹${expenseAmount} from your budget of ₹${budgetAmount}?`);
     if (confirmation) {
-        this.submit();
+        event.target.submit();  // Properly submit the form
     }
 });
 </script>
