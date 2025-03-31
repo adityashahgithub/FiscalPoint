@@ -18,21 +18,50 @@ if ($conn->connect_error) {
 
 // Function to sanitize input data
 function sanitize_input($data) {
-    return htmlspecialchars(trim($data));
+    return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
-// Handle form submission
+// Check if user is logged in
+if (!isset($_SESSION["Uid"])) {
+    echo "<script>alert('Session expired. Please log in again.'); window.location.href='login.php';</script>";
+    exit();
+}
+$uid = $_SESSION["Uid"];
+
+// Fetch current month's budget
+$currentMonth = date("F");
+$sql_budget = "SELECT Amount FROM Budget WHERE Uid = ? AND Month = ?";
+$stmt = $conn->prepare($sql_budget);
+$stmt->bind_param("is", $uid, $currentMonth);
+$stmt->execute();
+$result_budget = $stmt->get_result();
+$row_budget = $result_budget->fetch_assoc();
+$monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
+$stmt->close();
+
+// Handle Expense Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = sanitize_input($_POST["category"]);
     $amount = filter_var(sanitize_input($_POST["cost"]), FILTER_VALIDATE_FLOAT);
     $date = sanitize_input($_POST["date"]);
     $description = sanitize_input($_POST["item"]);
-    $payment_method = sanitize_input($_POST["payment_method"]); // New field for Payment Method
-    $uid = $_SESSION["Uid"];
+    $payment_method = sanitize_input($_POST["payment_method"]); 
 
     // Validate amount
     if ($amount === false || $amount <= 0) {
-        echo "<script>alert('Invalid amount entered. Please enter a positive number.'); window.history.back();</script>";
+        echo "<script>alert('Invalid amount. Enter a positive number.'); window.history.back();</script>";
+        exit();
+    }
+
+    // Validate Date Format (YYYY-MM-DD)
+    if (!DateTime::createFromFormat('Y-m-d', $date)) {
+        echo "<script>alert('Invalid date format. Please enter a valid date.'); window.history.back();</script>";
+        exit();
+    }
+
+    // Check if expense exceeds budget (only if budget is set)
+    if ($monthly_budget !== "No budget set" && $amount > $monthly_budget) {
+        echo "<script>alert('Error: Expense exceeds your monthly budget!'); window.history.back();</script>";
         exit();
     }
 
@@ -49,56 +78,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->execute()) {
         echo "<script>alert('Expense added successfully!'); window.location.href='addexpense.php';</script>";
     } else {
-        echo "<script>alert('Error adding expense. Please try again.'); window.history.back();</script>";
-    }
-
-    // Close statement
-    $stmt->close();
-}
-
-// Fetch Budget for the User and Month
-$budget = 0; // Default budget if not found
-$budget_query = "SELECT Amount FROM Budget WHERE Uid = ? AND Month = ?";
-$stmt = $conn->prepare($budget_query);
-$stmt->bind_param("is", $uid, $current_month);
-$stmt->execute();
-$result = $stmt->get_result();
-if ($row = $result->fetch_assoc()) {
-    $budget = $row["Amount"];}
-// Close database connection
-$conn->close();
-
-// Handle Expense Submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $amount = filter_var($_POST["cost"], FILTER_VALIDATE_FLOAT);
-    $date = $_POST["date"];
-    $description = $_POST["item"];
-    $category = $_POST["category"];
-    $payment_method = $_POST["payment_method"];
-
-    if ($amount === false || $amount <= 0) {
-        echo "<script>alert('Invalid amount. Enter a positive number.'); window.history.back();</script>";
-        exit();
-    }
-
-    if ($amount > $budget) {
-        echo "<script>alert('Error: Expense exceeds your monthly budget!'); window.history.back();</script>";
-        exit();
-    }
-
-    $insert_query = "INSERT INTO Expense (Uid, Category, Amount, Date, Description, Payment_Method) VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($insert_query);
-    $stmt->bind_param("isdsss", $uid, $category, $amount, $date, $description, $payment_method);
-    
-    if ($stmt->execute()) {
-        echo "<script>alert('Expense added successfully!'); window.location.href='addexpense.php';</script>";
-    } else {
+        error_log("SQL Error: " . $stmt->error, 3, "logs/errors.log");
         echo "<script>alert('Error adding expense. Please try again.'); window.history.back();</script>";
     }
 
     $stmt->close();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -151,10 +136,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="form-container">
             <h1>Add Expense:</h1>
-            <div id="budget-box">
-            <h2>Your Budget for This Month:</h2>
-            <p id="budget-display">₹<?php echo $budget; ?></p>
-        </div>
+            <div>
+                <h3 class="budget-text">Your Budget for <?php echo $currentMonth; ?>:</h3>
+                <div class="Budget">
+                    <p><?php echo $monthly_budget; ?></p>
+                </div>
+            </div>
+            <br>
             <form action="addexpense.php" method="POST" onsubmit="return validateDate(event)" id="expenseForm">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" required>
@@ -208,29 +196,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      <!-- Linking External JavaScript -->
      <script src="javascript/addexpense.js"></script>
      <script>
-        document.getElementById("expenseForm").addEventListener("submit", function(event) {
-        event.preventDefault();  // Prevent default submission
 
-    let budgetDisplay = document.getElementById("budget-display").innerText.trim();
-    let budgetAmount = budgetDisplay ? parseFloat(budgetDisplay.replace("₹", "")) : 0;
-    let expenseAmount = parseFloat(document.getElementById("cost").value);
-
-    if (isNaN(expenseAmount) || expenseAmount <= 0) {
-        alert("Please enter a valid expense amount.");
-        return;
-    }
-
-    if (expenseAmount > budgetAmount) {
-        alert("Warning: Expense exceeds budget!");
-        return;
-    }
-    
-    let confirmation = confirm(`Are you sure you want to deduct ₹${expenseAmount} from your budget of ₹${budgetAmount}?`);
-    if (confirmation) {
-        event.target.submit();  // Properly submit the form
-    }
-});
-</script>
+    </script>
 
 </body>
 </html>

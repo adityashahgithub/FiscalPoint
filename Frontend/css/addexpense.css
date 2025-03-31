@@ -153,4 +153,8 @@ object-fit: cover;
     width: 150px;
     margin-left: 30%;
     text-align: center;
-  }
+  }*/
+
+  .budget-text {
+    text-align: center;
+}

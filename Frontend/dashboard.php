@@ -68,7 +68,10 @@ $row_budget = $result_budget->fetch_assoc();
 $monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
 
 // Determine text color for monthly expense
-$expense_color = ($monthly_expense > $monthly_budget && $monthly_budget != "No budget set") ? 'red' : 'green';
+$expense_color = 'white'; // Default color
+if ($monthly_budget !== "No budget set") {
+    $expense_color = ($monthly_expense > $monthly_budget) ? 'red' : 'green';
+}
 
 // Close the database connection
 $conn->close();
