@@ -14,15 +14,12 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 18%;
+    width: 16%;
     background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
     height: 67%;
     margin-top: 10%;
-    
-   
-    
 }
 
 .profile {
@@ -67,13 +64,20 @@ body {
 }
 
 /* Expense Boxes */
+.expense-box{
+    transition: transform 0.40s ease-in-out;
+}
+
 .expense-box h3 {
     margin-bottom: 10px;
 }
 
+.expense-box:hover {
+    transform: scale(1.10);
+}
 .expense-card {
     width: 400px;
-    height: 180px;
+    height: 280px;
     background-color: rgba(92, 84, 112, 0.6);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.491);
@@ -84,11 +88,9 @@ body {
 
 /*Mothly Budget*/
 .budget-text {
-    text-align: center;
-    margin-left: 26rem;
+    margin-left: 8.5rem;
 }
 .Budget {
-    
     width: 300px;
     height: 150px;
     background-color: rgba(92, 84, 112, 0.6);
@@ -96,18 +98,40 @@ body {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.491);
     padding-right: 5%;
     padding-left: 5%;
-   margin-left: 56%;
+    margin-left: 11%;
+    transition: transform 0.40s ease-in-out;
    
 }
+.Budget:hover {
+    transform: scale(1.10);
+}
+
+/* Expense */
 .expense-card, .Budget {
     display: flex;
     justify-content: center; 
     align-items: center;
-    height: 100px; 
+    height: 200px; 
     font-size: 24px; 
     font-weight: bold; 
     text-align: center; 
     color: white; 
 }
 
-
+.progress-container {
+    width: 100%;
+    background-color: #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 15px;
+    margin-top: 10rem;
+}
+.progress-bar {
+    height: 100%;
+    text-align: center;
+    line-height: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    transition: width 0.5s ease-in-out;
+}

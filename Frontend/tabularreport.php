@@ -71,6 +71,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabular Report</title>
     <link rel="stylesheet" href="css/tabularreport.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
@@ -82,28 +83,29 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
-            <li><a href="addincome.php"><span style="font-weight: bold;">Income</span></a></li><br>
-            <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
-            <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
-            <li>
-            <li class="dropdown">
-            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
-            <ul>
-            <li><a href="linegraph.php">Line Graph Report</a></li>
-            <li><a href="piegraph.php">Pie Graph Report</a></li>
-        </ul>
-            </li>
-            <br>
-    <li>
-        <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
+        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
+    <li><a href="addincome.php"><i class="fas fa-wallet"></i> <span style="font-weight: bold;">Income</span></a></li><br>
+    <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
+    <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
+    
+    <li class="dropdown">
+        <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
         <ul>
-            <li><a href="tabularreport.php">All Expenses</a></li>
-            <li><a href="categorywisereport.php">Category wise Expense</a></li>
+            <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
+            <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
         </ul>
     </li><br>
-            <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
-            <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
+    
+    <li>
+        <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
+        <ul>
+            <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
+            <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
+        </ul>
+    </li><br>
+    
+    <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>
     </aside>
    

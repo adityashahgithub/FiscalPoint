@@ -33,6 +33,16 @@ $stmt_user->close();
 // Get the selected month (default: current month)
 $selected_month = isset($_POST['month']) ? $_POST['month'] : date('Y-m');
 
+// Fetch Monthly Budget
+$sql_budget = "SELECT Amount FROM Budget WHERE Uid = ? AND Month = ?";
+$stmt_budget = $conn->prepare($sql_budget);
+$stmt_budget->bind_param("is", $user_id, $selected_month);
+$stmt_budget->execute();
+$result_budget = $stmt_budget->get_result();
+$row_budget = $result_budget->fetch_assoc();
+$monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : 0;
+$stmt_budget->close();
+
 // Fetch Expenses for the selected month
 $sql_expense = "SELECT DATE(date) AS expense_date, SUM(amount) AS total_cost 
                 FROM Expense 
@@ -40,26 +50,32 @@ $sql_expense = "SELECT DATE(date) AS expense_date, SUM(amount) AS total_cost
                 GROUP BY expense_date 
                 ORDER BY expense_date ASC";
 
-// Check if query prepares correctly
-if (!$stmt_expense = $conn->prepare($sql_expense)) {
-    die("SQL Error: " . $conn->error);
-}
-
+$stmt_expense = $conn->prepare($sql_expense);
 $stmt_expense->bind_param("is", $user_id, $selected_month);
 $stmt_expense->execute();
 $result_expense = $stmt_expense->get_result();
 
 $dates = [];
 $costs = [];
+$remaining_budget = [];
+$total_spent = 0;
+$current_budget = $monthly_budget; // Initialize with total budget
 
 // Fetch data for Line Graph
 while ($row = $result_expense->fetch_assoc()) {
     $dates[] = $row["expense_date"];
     $costs[] = $row["total_cost"];
+    
+    // Calculate remaining budget dynamically
+    $total_spent += $row["total_cost"];
+    $current_budget = max($monthly_budget - $total_spent, 0); // Update dynamically
+    $remaining_budget[] = $current_budget;
 }
 $stmt_expense->close();
 $conn->close();
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,6 +83,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Line Graph</title>
     <link rel="stylesheet" href="css/linegraph.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
 </head>
 <body>
@@ -79,29 +96,29 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
-            <li><a href="addincome.php"><span style="font-weight: bold;">Income</span></a></li><br>
-            <li><a href="setbudget.php"><span style="font-weight: bold";>Budget</span></a></li><br>
-            <li><a href="addexpense.php"><span style="font-weight:bold";>Add Expense</span></a></li><br>
-            <li>
-            <li class="dropdown">
-            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
-            <ul>
-            <li><a href="linegraph.php">Line Graph Report</a></li>
-            <li><a href="piegraph.php">Pie Graph Report</a></li>
-        </ul>
-            </li>
-            <br>
-    <li>
-        <a href="#"> <span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
+        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
+    <li><a href="addincome.php"><i class="fas fa-wallet"></i> <span style="font-weight: bold;">Income</span></a></li><br>
+    <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
+    <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
+    
+    <li class="dropdown">
+        <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
         <ul>
-            <li><a href="tabularreport.php">All Expenses</a></li>
-            <li><a href="categorywisereport.php">Category wise Expense</a></li>
+            <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
+            <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
         </ul>
     </li><br>
-    <li><a href="temp.php"><span style="font-weight:bold;">trial</span></a></li><br>
-            <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
-            <li><a href="logout.php"><span style="font-weight:bold";>Logout</span></a></li><br>
+    
+    <li>
+        <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
+        <ul>
+            <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
+            <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
+        </ul>
+    </li><br>
+    
+    <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>
     </aside>
    
@@ -122,20 +139,29 @@ $conn->close();
     </div>
 
     <script>
-       // Line Graph Data
 const ctx = document.getElementById('expenseLineChart').getContext('2d');
 const expenseChart = new Chart(ctx, {
     type: 'line',
     data: {
         labels: <?php echo json_encode($dates); ?>,
-        datasets: [{
-            label: 'Total Expenses (₹)',
-            data: <?php echo json_encode($costs); ?>,
-            fill: false,
-            borderColor: '#ffffff', // White line color
-            backgroundColor: '#86a69c', // Background color for data points
-            tension: 0.1
-        }]
+        datasets: [
+            {
+                label: 'Total Expenses (₹)',
+                data: <?php echo json_encode($costs); ?>,
+                fill: false,
+                borderColor: '#ffffff', // White line color for expenses
+                backgroundColor: '#86a69c', // Background color for data points
+                tension: 0.1
+            },
+            {
+                label: 'Remaining Budget (₹)',
+                data: <?php echo json_encode($remaining_budget); ?>,
+                fill: false,
+                borderColor: '#ff0000', // Red line for budget
+                borderDash: [5, 5], // Dashed line
+                tension: 0.1
+            }
+        ]
     },
     options: {
         responsive: true,
@@ -148,7 +174,7 @@ const expenseChart = new Chart(ctx, {
             },
             title: {
                 display: true,
-                text: 'Expenses Over Time',
+                text: 'Expenses vs Remaining Budget Over Time',
                 color: '#ffffff' // White title text
             }
         },
@@ -176,9 +202,6 @@ const expenseChart = new Chart(ctx, {
         }
     }
 });
-
-
-
 // Set background color of the canvas
 document.getElementById('expenseLineChart').style.backgroundColor = '#86a69c';
 
