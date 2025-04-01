@@ -61,7 +61,7 @@ object-fit: cover;
 
 /* Main Content */
 .form-container {
-  margin-top: 12%;
+  margin-top: 5%;
   width: 28rem;
   background-color: rgba(92, 84, 112, 0.6);
   padding: 20px;
@@ -134,7 +134,7 @@ object-fit: cover;
     border-radius: 5px;
     cursor: pointer;
     width: 150px;
-    margin-left: 30%;
+    margin-left: 33%;
     
   }
   

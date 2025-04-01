@@ -39,6 +39,20 @@ $row_budget = $result_budget->fetch_assoc();
 $monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
 $stmt->close();
 
+// Calculate total expenses for the current month
+$sql_expenses = "SELECT SUM(Amount) AS total_expenses FROM Expense WHERE Uid = ? AND MONTH(Date) = MONTH(CURRENT_DATE())";
+$stmt = $conn->prepare($sql_expenses);
+$stmt->bind_param("i", $uid);
+$stmt->execute();
+$result_expenses = $stmt->get_result();
+$row_expenses = $result_expenses->fetch_assoc();
+$total_expenses = isset($row_expenses['total_expenses']) ? $row_expenses['total_expenses'] : 0;
+$stmt->close();
+
+
+// Calculate Remaining Budget
+$remaining_budget = ($monthly_budget !== "No budget set") ? $monthly_budget - $total_expenses : "No budget set";
+
 // Handle Expense Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = sanitize_input($_POST["category"]);
@@ -171,6 +185,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 <label for="amount">Amount Spent:</label>
                 <input type="number" id="cost" name="cost" step="0.01" required>
+
+                <!-- Display Total Expenses (Hidden) -->
+                <input type="hidden" id="total_expenses" value="<?php echo $total_expenses; ?>">
+
+                <label for="remain-budget">Remaining Budget for <?php echo $currentMonth; ?>:</label>
+                <input type="text" id="remaining_budget" name="remaining_budget" value="<?php echo $remaining_budget; ?>" readonly>
                 
                 <label for="payment_method">Payment Method:</label>
                 <select id="payment_method" name="payment_method" onchange="toggleOtherPayment()" required class="payment-method">
