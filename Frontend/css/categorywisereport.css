@@ -85,13 +85,19 @@ body {
     color: white;
     text-decoration: none;
 }
-
+.table-container {
+    width: 50%;
+    max-height: 500px; 
+    overflow: auto;
+    margin-left: 20rem;
+    background-color: #86a69c;
+    border-radius: 20px;
+}
 
 table {
     width: 60%;
     border-collapse: collapse;
     height: 50%;
-   margin-left: 20rem;
    background-color: #86a69c;
    border-radius: 20px ;
    overflow: auto;

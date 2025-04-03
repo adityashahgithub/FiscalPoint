@@ -127,7 +127,7 @@ $conn->close();
             <input type="month" id="month" name="month" value="<?php echo $selected_month; ?>">
             <button type="submit">Filter</button>
         </form>
-
+      <div class="table-container">
         <table>
             <thead>
                 <tr>
@@ -169,6 +169,7 @@ $conn->close();
                 ?>
             </tbody>
         </table>
+        </div>
     </div>
 </body>
 </html>
