@@ -209,9 +209,8 @@ $conn->close();
             </div>
         </div>
     </div>
-
+    
     <div class="chart-container">
-    <h3> <span s></span>This Year Expense:</h3>
     <canvas id="expenseChart"></canvas>
 </div>
 <script>
