@@ -18,7 +18,8 @@ if (!isset($_SESSION['Uid'])) {
 }
 
 $uid = $_SESSION['Uid'];
-$error = $success = "";
+$error = "";
+$success = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
@@ -41,7 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt->execute()) {
             session_regenerate_id(true); // Prevent session fixation
             session_destroy(); // Logout user after password reset
-            header("Location: login.php?message=Password reset successfully! Please log in.");
+            echo "<script>
+                    alert('Password reset successfully! Please log in.');
+                    window.location.href = 'login.php';
+                  </script>";
             exit();
         } else {
             $error = "Failed to reset password.";
@@ -102,7 +106,6 @@ $conn->close();
             <h2>Reset Password</h2>
 
             <p id="error-box" style="color:red;"><?php echo $error; ?></p>
-            <p style="color:green;"><?php echo $success; ?></p>
 
             <form method="POST" onsubmit="return validateForm();">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">

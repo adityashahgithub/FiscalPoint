@@ -8,7 +8,7 @@ session_start();
 
 // Enable Error Reporting and Logging
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/error.log'); // Save errors to error.log
+ini_set('error_log', __DIR__ . '/error.log');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -16,7 +16,7 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load Environment Variables
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..'); // Adjust path if needed
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
 // Database Credentials
@@ -69,11 +69,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Close session before sending email
         session_write_close();
 
-        // Send reset email
-        $resetLink = "http://localhost/FiscalPoint/frontend/reset_password.php?token=$token";
-        $subject = "Password Reset Request";
-        $body = "Hello,\n\nClick the link below to reset your password:\n$resetLink\n\nThis link is valid for 1 hour.";
+        // Ensure reset_password.php file exists
+        $resetPasswordPath = __DIR__ . "/reset_password.php";
+        if (!file_exists($resetPasswordPath)) {
+            die("<script>alert('Reset password page is missing. Please contact support.'); window.location.href='login.php';</script>");
+        }
 
+        // Get user's IP address
+        $user_ip = $_SERVER['REMOTE_ADDR'];
+
+        // Construct password reset link
+        $resetLink = "http://localhost/FiscalPoint/frontend/reset_password.php?token=$token";
+
+        // Personalize the email body
+        $subject = "Password Reset Request";
+        $body = "Hello,
+
+A password reset request was made for the account associated with this email.
+
+User Email: $email
+Request IP: $user_ip
+Request Time: " . date("Y-m-d H:i:s") . "
+
+Click the link below to reset your password:
+$resetLink
+
+If you did not request this, please ignore this email.
+
+This link is valid for 1 hour.
+
+Best Regards,
+FiscalPoint Support";
+
+        // Send email
         if (sendMail($email, $subject, $body)) {
             echo "<script>alert('Password reset link sent! Check your email.'); window.location.href='login.php';</script>";
         } else {
@@ -100,7 +128,7 @@ function sendMail($to, $subject, $body) {
         $mail->Password   = $_ENV['EMAIL_PASSWORD']; // Load from .env
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587; 
-        $mail->SMTPDebug  = 2;  // Enable debugging
+        $mail->SMTPDebug  = 0;  // Disable debugging in production
 
         // Sender & Recipient
         $mail->setFrom($_ENV['EMAIL_USERNAME'], 'FiscalPoint Support');
