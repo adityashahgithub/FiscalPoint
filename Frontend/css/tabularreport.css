@@ -88,6 +88,7 @@ table {
    margin-left: 20rem;
    background-color: #86a69c;
    border-radius: 20px;
+   overflow: auto;
     
 }
 
