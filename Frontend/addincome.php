@@ -1,3 +1,61 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION["Uid"])) {
+    die("Error: User not logged in. <a href='login.php'>Login here</a>");
+}
+
+$user_id = $_SESSION["Uid"];
+
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "FiscalPoint";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["addincome"])) {
+    $month = $_POST["month"];  // Stores in YYYY-MM format
+    $income = $_POST["budget"]; // Decimal value
+
+    // Convert month from YYYY-MM to "April" format
+    $month_name = date("F", strtotime($month . "-01"));
+
+    // Check if income for this month already exists for the user
+    $check_sql = "SELECT * FROM Income WHERE Uid = ? AND Month = ?";
+    $stmt = $conn->prepare($check_sql);
+    $stmt->bind_param("is", $user_id, $month_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        echo "<script>alert('Income for this month already exists! Reset it before adding a new entry.');</script>";
+    } else {
+        // Insert new income record
+        $insert_sql = "INSERT INTO Income (Uid, Month, Income) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($insert_sql);
+        $stmt->bind_param("isd", $user_id, $month_name, $income);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Income added successfully!'); window.location.href = 'addincome.php';</script>";
+        } else {
+            echo "<script>alert('Error adding income.');</script>";
+        }
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,5 +100,75 @@
     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>
     </aside>
+    <div class="main-content">
+        <div class="form-container">
+            <h1>Add Income:</h1>
+            <form id="IncomeForm" method="POST">
+                <label for="month">Select Month:</label>
+                <input type="month" id="month" name="month" required>
+                <br>
+                <label for="budget">Enter Income for the month:</label>
+                <input type="number" id="budget" name="budget" step="0.01" required>
+                
+                <button type="submit" name="addincome" id="add-income-Btn" class="addincome-btn">Add Income</button>
+                <button type="button" id="resetBtn" class="reset-income-btn" onclick="resetIncome()">Reset Income</button>
+            </form>
+        </div>
+        <script>
+        // Disable past months
+        document.addEventListener("DOMContentLoaded", function () {
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = String(today.getMonth() + 1).padStart(2, '0'); 
+            let minDate = `${year}-${month}`;
+            document.getElementById("month").setAttribute("min", minDate);
+        });
+
+        function checkExistingBudget() {
+            var selectedMonth = document.getElementById("month").value;
+            if (selectedMonth === "") {
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "check_budget.php",
+                data: { month: selectedMonth },
+                success: function(response) {
+                    if (response.trim() === "exists") {
+                        alert("Budget for this month already exists! You must reset it first.");
+                        document.getElementById("setincomeBtn").disabled = true;
+                    } else {
+                        document.getElementById("setincomeBtn").disabled = false;
+                    }
+                }
+            });
+        }
+
+        function resetIncome() {
+            var selectedMonth = document.getElementById("month").value;
+            if (selectedMonth === "") {
+                alert("Please select a month first.");
+                return;
+            }
+
+            if (confirm("Are you sure you want to reset the Income for the selected month?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "addincome.php",
+                    data: { resetBudget: true, month: selectedMonth },
+                    success: function(response) {
+                        alert("Income reset successfully!");
+                        location.reload();
+                    },
+                    error: function() {
+                        alert("Error resetting Income.");
+                    }
+                });
+            }
+        }
+    </script>
+
+
     </body>
    

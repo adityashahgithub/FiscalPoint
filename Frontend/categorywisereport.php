@@ -138,6 +138,7 @@ $conn->close();
             </select>
             <button type="submit">Filter</button>
         </form>
+        <div class="table-container">
         <table>
             <thead>
                 <tr>
@@ -180,6 +181,7 @@ $conn->close();
                 ?>
             </tbody>
         </table>
+        </div>
     </div>
 </body>
 </html>
