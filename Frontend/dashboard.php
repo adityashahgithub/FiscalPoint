@@ -67,11 +67,40 @@ $result_budget = $stmt->get_result();
 $row_budget = $result_budget->fetch_assoc();
 $monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
 
+// Fetch user's Income for the current month
+$currentMonth = date("F");
+$sql_budget = "SELECT Income FROM Income WHERE Uid = ? AND Month = ?";
+$stmt = $conn->prepare($sql_budget);
+$stmt->bind_param("is", $uid, $currentMonth);
+$stmt->execute();
+$result_income = $stmt->get_result();
+$row_income = $result_income->fetch_assoc();
+$monthly_income = isset($row_income['Income']) ? $row_income['Income'] : "No budget set";
+
 // Determine text color for monthly expense
 $expense_color = 'white'; // Default color
 if ($monthly_budget !== "No budget set") {
     $expense_color = ($monthly_expense > $monthly_budget) ? 'red' : 'green';
 }
+// Query: Get expense totals per category
+$sql = "SELECT Category, SUM(amount) AS total FROM Expense WHERE Uid = ? GROUP BY Category";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $uid);
+$stmt->execute();
+$result = $stmt->get_result();
+// Prepare data arrays
+$categories = [];
+$amounts = [];
+
+while ($row = $result->fetch_assoc()) {
+    $categories[] = $row['Category'];  // Expense categories
+    $amounts[] = $row['total'];        // Total amount spent per category
+}
+
+// Convert PHP arrays to JSON for JavaScript
+$categories_json = json_encode($categories);
+$amounts_json = json_encode($amounts);
+
 
 // Close the database connection
 $conn->close();
@@ -85,6 +114,8 @@ $conn->close();
     <title>Expense Dashboard</title>
     <link rel="stylesheet" href="css/dashboard.css"> <!-- External CSS file -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
     <header> 
@@ -127,36 +158,108 @@ $conn->close();
 
     <!-- MAIN CONTENT -->
     <main class="dashboard">
-        <div>
-            <h3 class="budget-text">Your Budget for <?php echo $currentMonth; ?>:</h3>
-            <div class="Budget">
+    <div class="grid-container">
+
+        <!-- Budget Box -->
+      
+        <div class="box">
+            <h3>Your Budget for <?php echo $currentMonth; ?>:</h3>
+            <div class="content-box">
                 <p><?php echo $monthly_budget; ?></p>
             </div>
-        </div><br>
+        
+        </div>
+        <!-- Income Box -->
+        <div class="box">
+            <h3>Your Income for <?php echo $currentMonth; ?>:</h3>
+            <div class="content-box">
+                <p><?php echo $monthly_income; ?></p>
+            </div>
+        </div>
 
-        <div class="expense-box">
+        <!-- Today's Expense -->
+        <div class="box">
             <h3>Today's Expense:</h3>
-            <div class="expense-card">
-                <p style="text-align: center; font-weight: bold;"><?php echo $today_expense; ?></p>
+            <div class="content-box">
+                <p><?php echo $today_expense; ?></p>
             </div>
         </div>
 
-        <div class="expense-box">
+        <!-- Yesterday's Expense -->
+        <div class="box">
             <h3>Yesterday's Expense:</h3>
-            <div class="expense-card"><?php echo $yesterday_expense; ?></div>
-        </div>
-
-        <div class="expense-box">
-            <h3>Monthly Expense:</h3>
-            <div class="expense-card" style="color: <?php echo $expense_color; ?>;">
-                <?php echo $monthly_expense; ?>
+            <div class="content-box">
+                <p><?php echo $yesterday_expense; ?></p>
             </div>
         </div>
 
-        <div class="expense-box">
-            <h3>This Year Expense:</h3>
-            <div class="expense-card"><?php echo $yearly_expense; ?></div>
+        <!-- Monthly Expense -->
+        <div class="box">
+            <h3>Monthly Expense:</h3>
+            <div class="content-box" style="color: <?php echo $expense_color; ?>;">
+                <p><?php echo $monthly_expense; ?></p>
+            </div>
         </div>
-    </main>
+
+        <!-- This Year Expense -->
+        <div class="box">
+            <h3>This Year Expense:</h3>
+            <div class="content-box">
+                <p><?php echo $yearly_expense; ?></p>
+            </div>
+        </div>
+    </div>
+    <div class="chart-container">
+    <canvas id="expenseChart"></canvas>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      let ctx = document.getElementById('expenseChart').getContext('2d');
+      
+      // Get PHP data passed as JSON
+      let categories = <?php echo $categories_json; ?>;
+      let amounts = <?php echo $amounts_json; ?>;
+
+      // Define colors for different categories
+      let colors = ["#fd7f6f", "#7eb0d5", "#b2e061",
+                    "#bd7ebe", "#ffb55a", "#ffee65", 
+                    "#beb9db", "#fdcce5", "#8bd3c7",
+                    "#ff677d", "#56c1ff", "#a0e65d", "#d39cd3"];
+
+      // Create the chart
+      new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+              labels: categories,
+              datasets: [{
+                  data: amounts,
+                  backgroundColor: colors,
+                  borderWidth: 2,
+                  borderColor: '#222',
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'bottom',
+                      labels: {
+                          color: 'white',
+                          font: { size: 14 }
+                      }
+                  }
+              },
+              cutout: '70%' // Makes it a donut chart
+          }
+      });
+  });
+</script>
+
+</main>
+
+
+ 
 </body>
 </html>
