@@ -8,9 +8,6 @@ if (!isset($_SESSION["Uid"])) {
     die("Error: User not logged in. <a href='login.php'>Login here</a>");
 }
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 // Retrieve logged-in user ID
 $user_id = $_SESSION["Uid"];
 
@@ -25,19 +22,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
-}
-
-// Fetch User Details
-$sql_user = "SELECT Uname FROM User WHERE Uid = ?";
-$stmt_user = $conn->prepare($sql_user);
-if ($stmt_user) {
-    $stmt_user->bind_param("i", $user_id);
-    $stmt_user->execute();
-    $result_user = $stmt_user->get_result();
-    $user_name = ($result_user->num_rows > 0) ? $result_user->fetch_assoc()["Uname"] : "Unknown User";
-    $stmt_user->close();
-} else {
-    die("Error preparing user query: " . $conn->error);
 }
 
 // Handle Expense Deletion
@@ -150,7 +134,7 @@ $conn->close();
                         echo "<td>" . $sr_no . "</td>";
                         echo "<td>" . htmlspecialchars($row["category"]) . "</td>";
                         echo "<td>" . htmlspecialchars($row["Item"]) . "</td>";
-                        echo "<td>₹" . htmlspecialchars($row["Cost"]) . "</td>";
+                        echo "<td>₹" . number_format($row["Cost"], 2) . "</td>";
                         echo "<td>" . date("d-m-Y", strtotime($row["Date"])) . "</td>";
                         echo "<td>" . htmlspecialchars($row["Payment_Method"]) . "</td>";
                         echo "<td>
@@ -166,6 +150,12 @@ $conn->close();
                 } else {
                     echo "<tr><td colspan='7'>No expenses found.</td></tr>";
                 }
+                echo "<tr style='background-color:#86a69c; font-weight:bold;'>";
+                echo "<td><strong>Total:</strong></td>";
+                echo "<td colspan='2'></td>";
+                echo "<td><strong>₹" . number_format($total_cost, 2) . "</strong></td>";
+                echo "<td colspan='3'></td>";
+                echo "</tr>";
                 ?>
             </tbody>
         </table>
