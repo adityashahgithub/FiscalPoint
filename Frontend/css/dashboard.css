@@ -118,3 +118,10 @@ body {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
+.chart-container {
+    width: 70%;
+    margin-left: 5%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+}

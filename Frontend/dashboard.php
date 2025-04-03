@@ -203,13 +203,15 @@ $conn->close();
 
         <!-- This Year Expense -->
         <div class="box">
-            <h3>This Year Expense:</h3>
+            <h3 >This Year Expense:</h3>
             <div class="content-box">
                 <p><?php echo $yearly_expense; ?></p>
             </div>
         </div>
     </div>
+
     <div class="chart-container">
+    <h3> <span s></span>This Year Expense:</h3>
     <canvas id="expenseChart"></canvas>
 </div>
 <script>
@@ -256,6 +258,7 @@ $conn->close();
       });
   });
 </script>
+
 
 </main>
 
