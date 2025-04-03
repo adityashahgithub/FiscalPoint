@@ -16,9 +16,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Function to sanitize input data
+// Function to sanitize input data and prevent double encoding
 function sanitize_input($data) {
-    return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
+    return html_entity_decode(htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8'));
 }
 
 // Check if user is logged in
@@ -48,7 +48,6 @@ $result_expenses = $stmt->get_result();
 $row_expenses = $result_expenses->fetch_assoc();
 $total_expenses = isset($row_expenses['total_expenses']) ? $row_expenses['total_expenses'] : 0;
 $stmt->close();
-
 
 // Calculate Remaining Budget
 $remaining_budget = ($monthly_budget !== "No budget set") ? $monthly_budget - $total_expenses : "No budget set";
