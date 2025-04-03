@@ -113,7 +113,7 @@ $conn->close();
             <p class="signup-text">New user? <a href="signup.php">Sign up instead</a></p>
 
              <!-- Forgot Password Link -->
-             <p class="forgotpassword-text"><a href="reset_password.php">Forgot Password?</a></p>
+             <p class="forgotpassword-text"><a href="forgot_password.php">Forgot Password?</a></p>
 
         </div>
     </div>

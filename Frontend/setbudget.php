@@ -105,19 +105,18 @@ $conn->close();
     <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
     
     <li class="dropdown">
-        <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
-        <ul>
-            <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
-            <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
-        </ul>
+                <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
+                <ul>
+                    <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
+                    <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
+                </ul>
     </li><br>
-    
-    <li>
-        <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
-        <ul>
-            <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
-            <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
-        </ul>
+    <li class="dropdown">
+                <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
+                <ul>
+                    <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
+                    <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
+                </ul>
     </li><br>
     
     <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>

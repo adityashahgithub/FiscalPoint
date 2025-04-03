@@ -1,5 +1,25 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+use Dotenv\Dotenv;
+
 session_start();
+
+// Enable Error Reporting and Logging
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/error.log'); // Save errors to error.log
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Ensure Composer's autoload is included
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load Environment Variables
+$dotenv = Dotenv::createImmutable(__DIR__ . '/..'); // Adjust path if needed
+$dotenv->load();
+
+// Database Credentials
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -10,41 +30,93 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Database connection failed: " . $conn->connect_error);
 }
 
+// Only process POST requests
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["email"])) {
+        die("<script>alert('Email field cannot be empty.'); window.history.back();</script>");
+    }
+
     $email = trim($_POST["email"]);
 
     // Check if the email exists
-    $query = "SELECT * FROM User WHERE email = ?";
+    $query = "SELECT email FROM User WHERE email = ?";
     $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        die("Prepare failed: " . $conn->error);
+    }
+
     $stmt->bind_param("s", $email);
     $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->store_result();
 
-    if ($result->num_rows > 0) {
+    if ($stmt->num_rows > 0) {
         // Generate a unique token
         $token = bin2hex(random_bytes(50));
         $expires_at = date("Y-m-d H:i:s", strtotime("+1 hour")); // Token valid for 1 hour
 
         // Store token in database
-        $insertQuery = "UPDATE User SET reset_token=?, token_expires=? WHERE email=?";
-        $stmt = $conn->prepare($insertQuery);
+        $updateQuery = "UPDATE User SET reset_token=?, token_expires=? WHERE email=?";
+        $stmt = $conn->prepare($updateQuery);
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
+        }
         $stmt->bind_param("sss", $token, $expires_at, $email);
         $stmt->execute();
 
-        // Send reset link (Replace this with actual email sending logic)
-        $resetLink = "http://yourwebsite.com/reset_password.php?token=$token";
-        echo "<script>alert('A password reset link has been sent to your email.');</script>";
+        // Close session before sending email
+        session_write_close();
 
-        // Here you can use PHPMailer or `mail()` function to send the email
+        // Send reset email
+        $resetLink = "http://localhost/FiscalPoint/frontend/reset_password.php?token=$token";
+        $subject = "Password Reset Request";
+        $body = "Hello,\n\nClick the link below to reset your password:\n$resetLink\n\nThis link is valid for 1 hour.";
+
+        if (sendMail($email, $subject, $body)) {
+            echo "<script>alert('Password reset link sent! Check your email.'); window.location.href='login.php';</script>";
+        } else {
+            echo "<script>alert('Error sending email. Please try again later.');</script>";
+        }
     } else {
-        echo "<script>alert('Email not found. Please check and try again.');</script>";
+        echo "<script>alert('Email not found. Please check and try again.'); window.history.back();</script>";
     }
 }
 
+// Close database connection
 $conn->close();
+
+// Function to send email
+function sendMail($to, $subject, $body) {
+    $mail = new PHPMailer(true);
+    
+    try {
+        // SMTP Configuration
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $_ENV['EMAIL_USERNAME']; // Load from .env
+        $mail->Password   = $_ENV['EMAIL_PASSWORD']; // Load from .env
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = 587; 
+        $mail->SMTPDebug  = 2;  // Enable debugging
+
+        // Sender & Recipient
+        $mail->setFrom($_ENV['EMAIL_USERNAME'], 'FiscalPoint Support');
+        $mail->addAddress($to);
+
+        // Email Content
+        $mail->isHTML(false);
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+
+        return $mail->send();
+    } catch (Exception $e) {
+        error_log("Mail error: " . $mail->ErrorInfo);
+        return false;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -57,18 +129,18 @@ $conn->close();
 </head>
 <body>
 <div class="container">
-        <header>
-            <!-- LOGO -->
-            <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
-            <!-- NAVIGATION BAR -->  
-            <nav class="navbar">
-                <ul>
-                    <li><a href="landing.html">Home</a></li>
-                    <li><a href="login.php">Expense Tracker</a></li>
-                    <li><a href="landing.html#aboutus">About Us</a></li> 
-                </ul>
-            </nav>
-        </header>
+    <header>
+        <!-- LOGO -->
+        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+        <!-- NAVIGATION BAR -->  
+        <nav class="navbar">
+            <ul>
+                <li><a href="landing.html">Home</a></li>
+                <li><a href="login.php">Expense Tracker</a></li>
+                <li><a href="landing.html#aboutus">About Us</a></li> 
+            </ul>
+        </nav>
+    </header>
 
     <div class="forgot-password-box">
         <h2>Forgot Password</h2>

@@ -22,6 +22,28 @@ body {
     margin-top: 10%;
 }
 
+/* Sidebar Dropdown */
+.dropdown ul {
+    display: none;
+    list-style-type:circle;
+    padding: 0;
+    margin: 0;
+    margin-left: 30px;
+}
+
+.dropdown:hover ul {
+    display: block;
+}
+
+.dropdown ul li {
+    padding: 8px;
+    background: rgba(72, 67, 87, 0.6);
+}
+
+.dropdown ul li a {
+    font-size: 17px;
+}
+
 .profile {
     display: flex;
     justify-content: center;
@@ -62,6 +84,7 @@ body {
     flex-grow: 1;
     padding-left: 50px;
 }
+
 
 /* Expense Boxes */
 .expense-box{

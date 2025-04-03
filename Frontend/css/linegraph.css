@@ -28,9 +28,31 @@ body {
     height: 67%;
     margin-top: 10%;
     position: absolute;
-    left: 0%;
-    
+    left: 0%; 
 }
+
+/* Sidebar Dropdown */
+.dropdown ul {
+    display: none;
+    list-style-type:circle;
+    padding: 0;
+    margin: 0;
+    margin-left: 30px;
+}
+
+.dropdown:hover ul {
+    display: block;
+}
+
+.dropdown ul li {
+    padding: 8px;
+    background: rgba(72, 67, 87, 0.6);
+}
+
+.dropdown ul li a {
+    font-size: 17px;
+}
+
 
 
 .profile {

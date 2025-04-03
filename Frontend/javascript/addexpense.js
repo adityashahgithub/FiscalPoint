@@ -1,26 +1,3 @@
-function toggleOtherPayment() {
-    var paymentMethod = document.getElementById("payment_method").value;
-    var otherPaymentDiv = document.getElementById("otherPaymentDiv");
-
-    if (paymentMethod === "Other") {
-        otherPaymentDiv.style.display = "block";
-    } else {
-        otherPaymentDiv.style.display = "none";
-    }
-}
-
-function validateDate(event) {
-    let selectedDate = document.getElementById("date").value;
-    let today = new Date().toISOString().split('T')[0]; // Get today's date (YYYY-MM-DD)
-
-    if (selectedDate > today) {
-        alert("You cannot add an expense for a future date!");
-        event.preventDefault(); // Prevent form submission
-        return false;
-    }
-    return true;
-}
-
 document.addEventListener("DOMContentLoaded", function () {
     let today = new Date().toISOString().split('T')[0]; 
     let dateInput = document.getElementById("date");
@@ -28,51 +5,66 @@ document.addEventListener("DOMContentLoaded", function () {
     // Set today's date and max attribute for the date input
     if (dateInput) {
         dateInput.value = today;
-        dateInput.setAttribute("max", today);  // Ensure today's date can be selected
+        dateInput.setAttribute("max", today);
     }
 
-    // Fetch and display the budget for the current month
-    let currentMonth = new Date().toISOString().slice(0, 7); 
-    let budget = parseFloat(document.getElementById("budgetAmount").innerText) || 0; // Use the value already fetched and displayed
+    // Get the budget and expenses from the hidden fields
+    let totalExpenses = parseFloat(document.getElementById("total_expenses").value) || 0;
+    let budgetText = document.querySelector(".Budget p").innerText;
+    let monthlyBudget = parseFloat(budgetText) || 0;
 
-    // Ensure budget exists and display it
-    if (budget > 0) {
-        document.getElementById("budgetBox").style.display = "block";  // Show the budget box
-    } else {
-        document.getElementById("budgetBox").style.display = "none";  // Hide budget box if no valid budget is found
-    }
+    // Calculate the initial remaining budget
+    let remainingBudget = monthlyBudget - totalExpenses;
 
-    // Reset form fields on page refresh
-    document.getElementById("expenseForm")?.reset();
+    // Display the remaining budget
+    let remainingBudgetField = document.getElementById("remaining_budget");
+    remainingBudgetField.value = remainingBudget.toFixed(2);
 
-    // Hide the "Other" payment method field
+    // Handle input changes on the cost field
+    let costInput = document.getElementById("cost");
+
+    costInput.addEventListener("input", function () {
+        let enteredAmount = parseFloat(this.value) || 0;  // Get entered amount (default to 0 if empty)
+        
+        // Calculate new remaining budget
+        let newRemainingBudget = monthlyBudget - totalExpenses - enteredAmount;
+
+        // Update the remaining budget field
+        remainingBudgetField.value = newRemainingBudget.toFixed(2);
+
+        // Show warning only if new remaining budget is negative
+        if (newRemainingBudget < 0) {
+            alert("Warning: This expense exceeds your remaining budget!");
+            this.value = ""; // Clear the input field
+            remainingBudgetField.value = (monthlyBudget - totalExpenses).toFixed(2); // Reset remaining budget
+        }
+    });
+
+    // Ensure the "Other" payment method field is hidden by default
     document.getElementById("otherPaymentDiv").style.display = "none";
 
     // Attach validation to form submission
     let expenseForm = document.getElementById("expenseForm");
     if (expenseForm) {
-        expenseForm.onsubmit = validateDate;  // Ensure date validation before submission
+        expenseForm.onsubmit = validateDate;
     }
-
-    // Update remaining budget live while typing
-    let costInput = document.getElementById("cost");
-    let remainingBudgetField = document.getElementById("remaining_budget");
-
-    costInput.addEventListener("input", function () {
-        let expenseAmount = parseFloat(this.value) || 0;  // Get entered amount (default to 0 if empty)
-        let totalExpenses = parseFloat(document.getElementById("total_expenses").value) || 0;  // Fetch total expenses from the hidden field
-
-        // Calculate remaining budget
-        let newRemaining = budget - totalExpenses - expenseAmount;
-
-        // If newRemaining is less than 0, show alert and reset input
-        if (newRemaining < 0) {
-            alert("Warning: This expense exceeds your remaining budget!");
-            this.value = "";  // Clear the input field if the expense exceeds the budget
-            newRemaining = budget - totalExpenses; // Reset to previous valid value
-        }
-
-        // Display the updated remaining budget
-        remainingBudgetField.value = newRemaining.toFixed(2);
-    });
 });
+
+function validateDate(event) {
+    let selectedDate = document.getElementById("date").value;
+    let today = new Date().toISOString().split('T')[0];
+
+    if (selectedDate > today) {
+        alert("You cannot add an expense for a future date!");
+        event.preventDefault();
+        return false;
+    }
+    return true;
+}
+
+function toggleOtherPayment() {
+    let paymentMethod = document.getElementById("payment_method").value;
+    let otherPaymentDiv = document.getElementById("otherPaymentDiv");
+
+    otherPaymentDiv.style.display = (paymentMethod === "Other") ? "block" : "none";
+}
