@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["addincome"])) {
             echo "<script>alert('Error adding income.');</script>";
         }
     }
+    
 
     $stmt->close();
 }
@@ -124,7 +125,7 @@ $conn->close();
             document.getElementById("month").setAttribute("min", minDate);
         });
 
-        function checkExistingBudget() {
+        function checkExistingIncome() {
             var selectedMonth = document.getElementById("month").value;
             if (selectedMonth === "") {
                 return;
@@ -132,11 +133,11 @@ $conn->close();
 
             $.ajax({
                 type: "POST",
-                url: "check_budget.php",
+                url: "addincome.php",
                 data: { month: selectedMonth },
                 success: function(response) {
                     if (response.trim() === "exists") {
-                        alert("Budget for this month already exists! You must reset it first.");
+                        alert("Income for this month already exists! You must reset it first.");
                         document.getElementById("setincomeBtn").disabled = true;
                     } else {
                         document.getElementById("setincomeBtn").disabled = false;
@@ -156,7 +157,7 @@ $conn->close();
                 $.ajax({
                     type: "POST",
                     url: "addincome.php",
-                    data: { resetBudget: true, month: selectedMonth },
+                    data: { resetIncome: true, month: selectedMonth },
                     success: function(response) {
                         alert("Income reset successfully!");
                         location.reload();
