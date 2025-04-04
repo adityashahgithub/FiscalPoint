@@ -171,10 +171,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="Entertainment">Entertainment</option>
                     <option value="Personal Care">Personal Care</option>
                     <option value="Debt Repayment">Debt Repayment</option>
-                    <option value="Savings/Investments">Savings & Investments</option>
+                    <option value="Savings & Investments">Savings & Investments</option>
                     <option value="Insurance">Insurance</option>
                     <option value="Childcare/Dependents">Childcare/Dependents</option>
-                    <option value="Gifts/Donations">Gifts & Donations</option>
+                    <option value="Gifts & Donations">Gifts & Donations</option>
                     <option value="Miscellaneous">Miscellaneous</option>
                 </select>
                 
