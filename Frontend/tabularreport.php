@@ -92,7 +92,7 @@ $conn->close();
                     <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
                 </ul>
             </li><br>
-            <li>
+            <li class="dropdown">
                 <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
                 <ul>
                     <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
