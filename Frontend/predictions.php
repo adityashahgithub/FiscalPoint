@@ -72,6 +72,7 @@ $prediction = json_decode($response, true);
                     <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
                 </ul>
             </li><br>
+            <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
             <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>

@@ -75,7 +75,7 @@ $stmt->bind_param("is", $uid, $currentMonth);
 $stmt->execute();
 $result_income = $stmt->get_result();
 $row_income = $result_income->fetch_assoc();
-$monthly_income = isset($row_income['Income']) ? $row_income['Income'] : "No budget set";
+$monthly_income = isset($row_income['Income']) ? $row_income['Income'] : "No Income set";
 
 // Determine text color for monthly expense
 $expense_color = 'white'; // Default color
@@ -83,23 +83,29 @@ if ($monthly_budget !== "No budget set") {
     $expense_color = ($monthly_expense > $monthly_budget) ? 'red' : 'green';
 }
 // Query: Get expense totals per category
+// Debugging: Output data before JSON encoding
 $sql = "SELECT Category, SUM(amount) AS total FROM Expense WHERE Uid = ? GROUP BY Category";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $uid);
 $stmt->execute();
 $result = $stmt->get_result();
-// Prepare data arrays
+
 $categories = [];
 $amounts = [];
 
 while ($row = $result->fetch_assoc()) {
-    $categories[] = $row['Category'];  // Expense categories
-    $amounts[] = $row['total'];        // Total amount spent per category
+    $categories[] = $row['Category'];
+    $amounts[] = $row['total'];
 }
 
-// Convert PHP arrays to JSON for JavaScript
+//echo "<pre>";
+//print_r($categories);
+//print_r($amounts);
+//echo "</pre>";
+
 $categories_json = json_encode($categories);
 $amounts_json = json_encode($amounts);
+
 
 
 // Close the database connection
@@ -150,7 +156,7 @@ $conn->close();
                     <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
                 </ul>
     </li><br>
-    <li><a href="predictions.php"><i class="fas fa-user"></i> <strong>Predictions</strong></a></li><br>
+    <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
     <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
 </ul>
@@ -225,7 +231,7 @@ $conn->close();
       let colors = ["#fd7f6f", "#7eb0d5", "#b2e061",
                     "#bd7ebe", "#ffb55a", "#ffee65", 
                     "#beb9db", "#fdcce5", "#8bd3c7",
-                    "#ff677d", "#56c1ff", "#a0e65d", "#d39cd3"];
+                    "#ff677d", "#56c1ff"];
 
       // Create the chart
       new Chart(ctx, {
@@ -257,11 +263,6 @@ $conn->close();
       });
   });
 </script>
-
-
 </main>
-
-
- 
 </body>
 </html>

@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["resetBudget"])) {
     if ($stmt_delete->execute()) {
         echo "<script>alert('Budget reset successfully!'); window.location.href='setbudget.php';</script>";
     } else {
-        echo "<script>alert('Error resetting budget.');</script>";
+        echo "<script>alert('Error in resetting budget.');</script>";
     }
 
     $stmt_delete->close();
@@ -118,7 +118,7 @@ $conn->close();
                     <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
                 </ul>
     </li><br>
-    
+    <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
     <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
     <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>
@@ -188,7 +188,7 @@ $conn->close();
                         location.reload();
                     },
                     error: function() {
-                        alert("Error resetting budget.");
+                        alert("Error in resetting budget.");
                     }
                 });
             }

@@ -20,7 +20,8 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
-// Handle form submission
+
+// Handle form submission for adding income
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["addincome"])) {
     $month = $_POST["month"];  // Stores in YYYY-MM format
     $income = $_POST["budget"]; // Decimal value
@@ -49,9 +50,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["addincome"])) {
             echo "<script>alert('Error adding income.');</script>";
         }
     }
-    
 
     $stmt->close();
+}
+
+// Handle budget reset via AJAX
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["resetIncome"]) && $_POST["resetIncome"] === "true") {
+    $month = $_POST["month"];
+    $monthName = date("F", strtotime($month . "-01"));
+
+    $delete_sql = "DELETE FROM Income WHERE Uid = ? AND Month = ?";
+    $stmt_delete = $conn->prepare($delete_sql);
+    $stmt_delete->bind_param("is", $user_id, $monthName);
+
+    if ($stmt_delete->execute()) {
+        echo "success";  // Fix: Return success response
+    } else {
+        echo "error";
+    }
+
+    $stmt_delete->close();
+    exit(); // Fix: Prevent further HTML output
 }
 
 $conn->close();
@@ -62,15 +81,15 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Expense</title>
+    <title>Add Income</title>
     <link rel="stylesheet" href="css/addincome.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Fix: Ensure jQuery is included -->
 </head>
 <body>
     <!-- Header Section -->
     <header>
-        <!-- Logo with click functionality to redirect to landing page -->
-        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"> 
+        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
     </header>
 
     <aside class="sidebar">
@@ -78,29 +97,30 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
-    <li><a href="addincome.php"><i class="fas fa-wallet"></i> <span style="font-weight: bold;">Income</span></a></li><br>
-    <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
-    <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
-    
-    <li class="dropdown">
+            <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
+            <li><a href="addincome.php"><i class="fas fa-wallet"></i> <span style="font-weight: bold;">Income</span></a></li><br>
+            <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
+            <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
+            <li class="dropdown">
                 <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
                 <ul>
                     <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
                     <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
                 </ul>
-    </li><br>
-    <li class="dropdown">
+            </li><br>
+            <li class="dropdown">
                 <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
                 <ul>
                     <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
                     <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
                 </ul>
-    </li><br>
-    <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
-    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
+            </li><br>
+            <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
+            <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>
     </aside>
+
     <div class="main-content">
         <div class="form-container">
             <h1>Add Income:</h1>
@@ -115,61 +135,45 @@ $conn->close();
                 <button type="button" id="resetBtn" class="reset-income-btn" onclick="resetIncome()">Reset Income</button>
             </form>
         </div>
-        <script>
-        // Disable past months
-        document.addEventListener("DOMContentLoaded", function () {
-            let today = new Date();
-            let year = today.getFullYear();
-            let month = String(today.getMonth() + 1).padStart(2, '0'); 
-            let minDate = `${year}-${month}`;
-            document.getElementById("month").setAttribute("min", minDate);
-        });
+    </div>
 
-        function checkExistingIncome() {
-            var selectedMonth = document.getElementById("month").value;
-            if (selectedMonth === "") {
-                return;
-            }
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let today = new Date();
+        let year = today.getFullYear();
+        let month = String(today.getMonth() + 1).padStart(2, '0'); 
+        let minDate = `${year}-${month}`;
+        document.getElementById("month").setAttribute("min", minDate);
+    });
 
+    function resetIncome() {
+        var selectedMonth = document.getElementById("month").value;
+        if (selectedMonth === "") {
+            alert("Please select a month first.");
+            return;
+        }
+
+        if (confirm("Are you sure you want to reset the Income for the selected month?")) {
             $.ajax({
                 type: "POST",
                 url: "addincome.php",
-                data: { month: selectedMonth },
+                data: { resetIncome: "true", month: selectedMonth },
                 success: function(response) {
-                    if (response.trim() === "exists") {
-                        alert("Income for this month already exists! You must reset it first.");
-                        document.getElementById("setincomeBtn").disabled = true;
+                    console.log("Server Response:", response.trim()); // Debugging
+                    if (response.trim() === "success") {
+                        alert("Income reset successfully!");
+                        location.reload();
                     } else {
-                        document.getElementById("setincomeBtn").disabled = false;
+                        alert("Error resetting income.");
                     }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    alert("Error: " + xhr.responseText);
                 }
             });
         }
-
-        function resetIncome() {
-            var selectedMonth = document.getElementById("month").value;
-            if (selectedMonth === "") {
-                alert("Please select a month first.");
-                return;
-            }
-
-            if (confirm("Are you sure you want to reset the Income for the selected month?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "addincome.php",
-                    data: { resetIncome: true, month: selectedMonth },
-                    success: function(response) {
-                        alert("Income reset successfully!");
-                        location.reload();
-                    },
-                    error: function() {
-                        alert("Error resetting Income.");
-                    }
-                });
-            }
-        }
+    }
     </script>
-
-
-    </body>
-   
+</body>
+</html>
