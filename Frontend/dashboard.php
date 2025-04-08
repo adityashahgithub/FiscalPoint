@@ -68,7 +68,6 @@ $row_budget = $result_budget->fetch_assoc();
 $monthly_budget = isset($row_budget['Amount']) ? $row_budget['Amount'] : "No budget set";
 
 // Fetch user's Income for the current month
-$currentMonth = date("F");
 $sql_budget = "SELECT Income FROM Income WHERE Uid = ? AND Month = ?";
 $stmt = $conn->prepare($sql_budget);
 $stmt->bind_param("is", $uid, $currentMonth);
@@ -78,12 +77,12 @@ $row_income = $result_income->fetch_assoc();
 $monthly_income = isset($row_income['Income']) ? $row_income['Income'] : "No Income set";
 
 // Determine text color for monthly expense
-$expense_color = 'white'; // Default color
+$expense_color = 'white';
 if ($monthly_budget !== "No budget set") {
     $expense_color = ($monthly_expense > $monthly_budget) ? 'red' : 'green';
 }
+
 // Query: Get expense totals per category
-// Debugging: Output data before JSON encoding
 $sql = "SELECT Category, SUM(amount) AS total FROM Expense WHERE Uid = ? GROUP BY Category";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $uid);
@@ -98,171 +97,273 @@ while ($row = $result->fetch_assoc()) {
     $amounts[] = $row['total'];
 }
 
-//echo "<pre>";
-//print_r($categories);
-//print_r($amounts);
-//echo "</pre>";
-
 $categories_json = json_encode($categories);
 $amounts_json = json_encode($amounts);
 
+// Day-wise expenses for calendar view
+$sql_calendar = "SELECT DAY(Date) AS day, SUM(amount) AS total FROM Expense WHERE Uid = ? AND MONTH(Date) = MONTH(CURDATE()) GROUP BY DAY(Date)";
+$stmt = $conn->prepare($sql_calendar);
+$stmt->bind_param("i", $uid);
+$stmt->execute();
+$result_calendar = $stmt->get_result();
 
-
-// Close the database connection
-$conn->close();
+$daily_expenses = [];
+while ($row = $result_calendar->fetch_assoc()) {
+    $daily_expenses[$row['day']] = $row['total'];
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense Dashboard</title>
-    <link rel="stylesheet" href="css/dashboard.css"> <!-- External CSS file -->
+    <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        .calendar {
+    display: none;
+    margin-top: 30px;
+    color: white;
+    background-color: #222;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 9999;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.calendar th, .calendar td {
+    padding: 10px;
+    border: 1px solid #444;
+    width: 14.2%;
+}
+.calendar td.today {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+}
+.calendar td.has-expense {
+    background-color: #ff9800;
+    color: white;
+}
+button {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+button:hover {
+    background-color: #666;
+}
+    </style>
 </head>
 <body>
-    <header> 
-        <!-- LOGO -->
-        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
-    </header>
+<header>
+    <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+</header>
 
-    <!-- SIDE BAR -->
-    <aside class="sidebar">
-        <div class="profile">
-            <img src="css/profile.png" alt="Profile Image" class="avatar">
-        </div>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<aside class="sidebar">
+    <div class="profile">
+        <img src="css/profile.png" alt="Profile Image" class="avatar">
+    </div>
+    <ul class="menu">
+        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
+        <li><a href="addincome.php"><i class="fas fa-wallet"></i> <strong>Income</strong></a></li><br>
+        <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
+        <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
+        <li class="dropdown">
+            <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
+            <ul>
+                <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
+                <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
+            </ul>
+        </li><br>
+        <li class="dropdown">
+            <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
+            <ul>
+                <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
+                <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
+            </ul>
+        </li><br>
+        <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
+        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
+    </ul>
+</aside>
 
-<ul class="menu">
-    <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
-    <li><a href="addincome.php"><i class="fas fa-wallet"></i> <span style="font-weight: bold;">Income</span></a></li><br>
-    <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
-    <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
-    
-    <li class="dropdown">
-                <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
-                <ul>
-                    <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
-                    <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
-                </ul>
-    </li><br>
-    <li class="dropdown">
-                <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
-                <ul>
-                    <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
-                    <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
-                </ul>
-    </li><br>
-    <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
-    <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
-    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
-</ul>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="dashboard">
+<main class="dashboard">
     <div class="grid-container">
-
-        <!-- Budget Box -->
-      
         <div class="box">
             <h3>Your Budget for <?php echo $currentMonth; ?>:</h3>
             <div class="content-box">
                 <p><?php echo $monthly_budget; ?></p>
             </div>
-        
         </div>
-        <!-- Income Box -->
         <div class="box">
             <h3>Your Income for <?php echo $currentMonth; ?>:</h3>
             <div class="content-box">
                 <p><?php echo $monthly_income; ?></p>
             </div>
         </div>
-
-        <!-- Today's Expense -->
         <div class="box">
             <h3>Today's Expense:</h3>
             <div class="content-box">
                 <p><?php echo $today_expense; ?></p>
             </div>
         </div>
-
-        <!-- Yesterday's Expense -->
-        <div class="box">
+        <div class="box" onclick="toggleCalendar()">
             <h3>Yesterday's Expense:</h3>
             <div class="content-box">
                 <p><?php echo $yesterday_expense; ?></p>
             </div>
         </div>
-
-        <!-- Monthly Expense -->
         <div class="box">
             <h3>Monthly Expense:</h3>
             <div class="content-box" style="color: <?php echo $expense_color; ?>;">
                 <p><?php echo $monthly_expense; ?></p>
             </div>
         </div>
-
-        <!-- This Year Expense -->
         <div class="box">
-            <h3 >This Year Expense:</h3>
+            <h3>This Year Expense:</h3>
             <div class="content-box">
                 <p><?php echo $yearly_expense; ?></p>
             </div>
         </div>
     </div>
-    
-    <div class="chart-container">
-    <canvas id="expenseChart"></canvas>
+
+    <div class="calendar" id="calendarView">
+    <span class="close-btn" onclick="toggleCalendar()">×</span>
+    <h2><?php echo date("F Y"); ?> Calendar View</h2>
+    <div class="calendar-wrapper" id="calendarCapture">
+        <table>
+            <tr>
+                <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
+                <th>Thu</th><th>Fri</th><th>Sat</th>
+            </tr>
+            <?php
+            $firstDay = date('w', strtotime(date('Y-m-01')));
+            $daysInMonth = date('t');
+            $day = 1;
+            echo "<tr>";
+            for ($i = 0; $i < $firstDay; $i++) echo "<td></td>";
+            for ($i = $firstDay; $i < 7; $i++) {
+                $class = "";
+                $text = "";
+                if (isset($daily_expenses[$day])) {
+                    $class = "has-expense";
+                    $text = "₹" . $daily_expenses[$day];
+                }
+                if ($day == date('j')) $class .= " today";
+                echo "<td class='$class'>$day<br><small>$text</small></td>";
+                $day++;
+            }
+            echo "</tr>";
+            while ($day <= $daysInMonth) {
+                echo "<tr>";
+                for ($i = 0; $i < 7 && $day <= $daysInMonth; $i++) {
+                    $class = "";
+                    $text = "";
+                    if (isset($daily_expenses[$day])) {
+                        $class = "has-expense";
+                        $text = "₹" . $daily_expenses[$day];
+                    }
+                    if ($day == date('j')) $class .= " today";
+                    echo "<td class='$class'>$day<br><small>$text</small></td>";
+                    $day++;
+                }
+                while ($i++ < 7) echo "<td></td>";
+                echo "</tr>";
+            }
+            ?>
+        </table>
+    </div>
+    <div style="text-align:center; margin-top: 20px;">
+        <button onclick="exportCalendarAsImage()">Export as Image</button>
+        <button onclick="exportCalendarAsPDF()">Export as PDF</button>
+    </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-      let ctx = document.getElementById('expenseChart').getContext('2d');
-      
-      // Get PHP data passed as JSON
-      let categories = <?php echo $categories_json; ?>;
-      let amounts = <?php echo $amounts_json; ?>;
 
-      // Define colors for different categories
-      let colors = ["#fd7f6f", "#7eb0d5", "#b2e061",
-                    "#bd7ebe", "#ffb55a", "#ffee65", 
-                    "#beb9db", "#fdcce5", "#8bd3c7",
-                    "#ff677d", "#56c1ff"];
-
-      // Create the chart
-      new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-              labels: categories,
-              datasets: [{
-                  data: amounts,
-                  backgroundColor: colors,
-                  borderWidth: 2,
-                  borderColor: '#222',
-              }]
-          },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                  legend: {
-                      display: true,
-                      position: 'bottom',
-                      labels: {
-                          color: 'white',
-                          font: { size: 14 }
-                      }
-                  }
-              },
-              cutout: '70%' // Makes it a donut chart
-          }
-      });
-  });
-</script>
+    <div class="chart-container">
+        <canvas id="expenseChart"></canvas>
+    </div>
 </main>
+
+<script>
+    function toggleCalendar() {
+        const calendar = document.getElementById('calendarView');
+        calendar.style.display = (calendar.style.display === "none" || calendar.style.display === "") ? "block" : "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let ctx = document.getElementById('expenseChart').getContext('2d');
+        let categories = <?php echo $categories_json; ?>;
+        let amounts = <?php echo $amounts_json; ?>;
+        let colors = ["#fd7f6f", "#7eb0d5", "#b2e061", "#bd7ebe", "#ffb55a", "#ffee65", "#beb9db", "#fdcce5", "#8bd3c7", "#ff677d", "#56c1ff"];
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: categories,
+                datasets: [{
+                    data: amounts,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#222',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: 'white',
+                            font: { size: 14 }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    });
+
+    function exportCalendarAsImage() {
+        const calendar = document.getElementById('calendarCapture');
+        html2canvas(calendar).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'calendar.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    function exportCalendarAsPDF() {
+        const calendar = document.getElementById('calendarCapture');
+        html2canvas(calendar).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jspdf.jsPDF('landscape', 'pt', 'a4');
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 20, 20, pdfWidth - 40, pdfHeight);
+            pdf.save('calendar.pdf');
+        });
+    }
+</script>
 </body>
 </html>
