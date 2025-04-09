@@ -1,39 +1,35 @@
 <?php
+// Enable error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Start session
 session_start();
 
-// Database connection parameters
-$servername = "localhost"; 
-$username = "root"; 
-$password = ""; 
-$dbname = "FiscalPoint"; 
+// Database connection
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "FiscalPoint";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Database Connection Failed: " . $conn->connect_error);
 }
 
-// Enable detailed error reporting
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-// Function to sanitize input data
+// Sanitize input function
 function sanitize_input($data) {
-    $data = trim($data);
-    $data = htmlspecialchars($data);
-    return $data;
+    return htmlspecialchars(trim($data));
 }
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
     $uname = sanitize_input($_POST["Uname"]);
     $email = sanitize_input($_POST["email"]);
     $phone = sanitize_input($_POST["Phone_no"]);
     $password = sanitize_input($_POST["Password"]);
-    $confirm_password = sanitize_input($_POST["ConfirmPassword"]); // New
+    $confirm_password = sanitize_input($_POST["ConfirmPassword"]);
+    $role = sanitize_input($_POST["Role"]);
     $created_at = date("Y-m-d H:i:s");
 
     // Check if passwords match
@@ -42,17 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Debugging - Check if values are being captured correctly
-    error_log("Uname: " . $uname);
-    error_log("Email: " . $email);
-    error_log("Phone: " . $phone);
-    error_log("Password: " . $password);
-    error_log("". $confirm_password);
-
-    // Hash the password before storing it in the database
+    // Hash password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Check if email already exists in the database
+    // Check if email already exists
     $check_query = "SELECT * FROM User WHERE email = ?";
     $stmt = $conn->prepare($check_query);
     $stmt->bind_param("s", $email);
@@ -60,25 +49,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "<script>alert('Email already signed up. Please use a different email.');</script>";
+        echo "<script>alert('Email already exists. Please use a different email.');</script>";
     } else {
-        // Insert new user data into database
-        $insert_query = "INSERT INTO User (`Uname`, `email`, `Phone_no`, `Password`, `Created_At`) VALUES (?, ?, ?, ?, ?)";
+        // Insert new user into database
+        $insert_query = "INSERT INTO User (Uname, email, Phone_no, Password, Created_At, Role) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
-        
-        if ($stmt === false) {
-            die("Error in SQL query: " . $conn->error);
-        }
+        $stmt->bind_param("ssssss", $uname, $email, $phone, $hashed_password, $created_at, $role);
 
-        $stmt->bind_param("sssss", $uname, $email, $phone, $hashed_password, $created_at);
-        
         if ($stmt->execute()) {
-            // Store user session (optional)
-            $_SESSION['Uid'] = $conn->insert_id;
-            $_SESSION['Uname'] = $uname;
+            // Get the inserted user details (including role)
+            $user_id = $conn->insert_id;
+            $_SESSION["Uid"] = $user_id;
+            $_SESSION["Uname"] = $uname;
+            $_SESSION["email"] = $email;
+            $_SESSION["Role"] = $role;  // Store the role in the session
 
-            // Redirect to dashboard
-            header("Location: dashboard.php");
+            // Role-based redirection
+            if ($role === "admin") {
+                header("Location: admin_dashboard.php");
+            } else {
+                header("Location: dashboard.php");
+            }
             exit();
         } else {
             echo "<script>alert('Registration failed. Please try again later.');</script>";
@@ -89,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 
-// Close database connection
+// Close the connection
 $conn->close();
 ?>
 
@@ -147,6 +138,14 @@ $conn->close();
     <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
     <span id="confirm-password-error" class="error-message"></span>
     
+     <!-- Role dropdown added here -->
+     <label for="role">Select Role:</label>
+                <select id="Role" name="Role" required>
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+
     <!-- Signup Button -->
     <button type="submit">Get Started</button>
     

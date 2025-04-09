@@ -1,193 +1,271 @@
 <?php
-// Database Connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "FiscalPoint";
+session_start();
+$user_id = $_SESSION["Uid"];
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+// DB Connection
+$conn = new mysqli("localhost", "root", "", "FiscalPoint");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$currentMonthNum = date('m');
+$currentMonthName = date('F');
 
+// Budget for this month
+$sqlBudget = "SELECT Amount FROM Budget WHERE Uid = ? AND Month = ?";
+$stmt = $conn->prepare($sqlBudget);
+$stmt->bind_param("is", $user_id, $currentMonthName);
+$stmt->execute();
+$resultBudget = $stmt->get_result();
+$budgetAmount = ($resultBudget->num_rows > 0) ? $resultBudget->fetch_assoc()['Amount'] : 0;
 
-// Fetch Budget for Current Month
-$currentMonth = date('m');
-$sqlBudget = "SELECT amount FROM Budget WHERE Uid = $uid AND MONTH(date) = $currentMonth";
-$resultBudget = $conn->query($sqlBudget);
-$budgetAmount = ($resultBudget->num_rows > 0) ? $resultBudget->fetch_assoc()['amount'] : 0;
+// Income for this month
+$sqlIncome = "SELECT SUM(Income) AS Income FROM Income WHERE Uid = ? AND Month = ?";
+$stmtIncome = $conn->prepare($sqlIncome);
+$stmtIncome->bind_param("is", $user_id, $currentMonthName);
+$stmtIncome->execute();
+$resultIncome = $stmtIncome->get_result();
+$totalIncome = ($resultIncome->num_rows > 0) ? $resultIncome->fetch_assoc()['Income'] : 0;
 
-// Fetch Expenses and Categorized Spending
+// Expenses by category this month
 $sqlExpenses = "SELECT category, SUM(amount) AS totalExpense 
-                FROM Expense WHERE Uid = $uid AND MONTH(date) = $currentMonth GROUP BY category";
-$resultExpenses = $conn->query($sqlExpenses);
+                FROM Expense WHERE Uid = ? AND MONTH(Date) = ? GROUP BY category";
+$stmt = $conn->prepare($sqlExpenses);
+$stmt->bind_param("ii", $user_id, $currentMonthNum);
+$stmt->execute();
+$resultExpenses = $stmt->get_result();
 
 $totalExpense = 0;
 $expensesByCategory = [];
+$categoryLabels = [];
+$categoryValues = [];
 
-while ($rowExpense = $resultExpenses->fetch_assoc()) {
-    $totalExpense += $rowExpense['totalExpense'];
-    $expensesByCategory[$rowExpense['category']] = $rowExpense['totalExpense'];
+while ($row = $resultExpenses->fetch_assoc()) {
+    $totalExpense += $row['totalExpense'];
+    $expensesByCategory[$row['category']] = $row['totalExpense'];
+    $categoryLabels[] = $row['category'];
+    $categoryValues[] = $row['totalExpense'];
 }
 
-// Calculate Percentage Spent
+// Spending percentage
 $percentageSpent = ($budgetAmount > 0) ? ($totalExpense / $budgetAmount) * 100 : 0;
 
-// Determine Spending Status
+// Spending status
 if ($totalExpense < ($budgetAmount * 0.7)) {
     $status = "Excellent Budget Management";
     $statusMessage = "Great job! You have spent wisely and saved a good amount.";
     $statusColor = "green";
 } elseif ($totalExpense <= $budgetAmount) {
     $status = "On-Track Spending";
-    $statusMessage = "You are managing your budget well. Keep monitoring your expenses.";
+    $statusMessage = "You are managing your budget well.";
     $statusColor = "blue";
 } else {
     $status = "Over Budget";
-    $statusMessage = "You have exceeded your budget. Consider cutting down on unnecessary expenses.";
+    $statusMessage = "You have exceeded your budget.";
     $statusColor = "red";
 }
 
-// Find Top Spending Category
+// Top category
 $topCategory = array_keys($expensesByCategory, max($expensesByCategory))[0] ?? null;
 $topCategoryAmount = $expensesByCategory[$topCategory] ?? 0;
 
-// Spending Breakdown
+// Breakdown insights
 $insights = "";
 foreach ($expensesByCategory as $category => $amount) {
     $categoryPercentage = ($amount / $totalExpense) * 100;
-    $insights .= "<li><strong>$category:</strong> " . number_format($categoryPercentage, 2) . "% of total spending</li>";
+    $insights .= "<li><strong>$category:</strong> " . number_format($categoryPercentage, 2) . "%</li>";
 }
 
 // Recommendations
 $recommendation = "";
 if ($topCategory) {
-    $recommendation .= "<p><strong>Highest Spending Category:</strong> $topCategory (₹" . number_format($topCategoryAmount, 2) . ")</p>";
+    $recommendation .= "<p><strong>Top Spending Category:</strong> $topCategory (₹" . number_format($topCategoryAmount, 2) . ")</p>";
     if ($topCategory == "Dining") {
-        $recommendation .= "<p>🍽️ Consider home-cooked meals to save money.</p>";
+        $recommendation .= "<p>🍽️ Try home-cooked meals.</p>";
     } elseif ($topCategory == "Shopping") {
-        $recommendation .= "<p>🛍️ Limit impulse purchases and prioritize essential shopping.</p>";
+        $recommendation .= "<p>🛍️ Limit impulse purchases.</p>";
     } elseif ($topCategory == "Transport") {
-        $recommendation .= "<p>🚗 Try public transport or carpooling to cut costs.</p>";
+        $recommendation .= "<p>🚗 Try carpooling or public transport.</p>";
     }
 }
 
-// Close DB Connection
+// Additional Insights
+$monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+$monthlyExpense = [];
+$scatterData = [];
+
+// Expense summary
+$sqlMonthlyExpense = "SELECT MONTH(Date) as m, SUM(amount) as total FROM Expense WHERE Uid = ? GROUP BY MONTH(Date)";
+$stmt = $conn->prepare($sqlMonthlyExpense);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$resAvg = $stmt->get_result();
+
+$monthCount = $resAvg->num_rows;
+$totalForAvg = 0;
+
+while ($row = $resAvg->fetch_assoc()) {
+    $monthlyExpense[$row['m']] = $row['total'];
+    $totalForAvg += $row['total'];
+}
+$avgExpense = ($monthCount > 0) ? $totalForAvg / $monthCount : 0;
+
+// Saving = Income - Expense per month
+$sqlIncomeMonths = "SELECT Month, SUM(Income) AS total FROM Income WHERE Uid = ? GROUP BY Month";
+$stmt = $conn->prepare($sqlIncomeMonths);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$resIncomes = $stmt->get_result();
+
+$savings = [];
+
+while ($row = $resIncomes->fetch_assoc()) {
+    $monthStr = $row['Month'];
+    $monthIndex = array_search($monthStr, $monthNames) + 1;
+    $income = $row['total'];
+    $expense = $monthlyExpense[$monthIndex] ?? 0;
+    $savings[$monthStr] = $income - $expense;
+    $scatterData[] = ["x" => $expense, "y" => $income];
+}
+
+arsort($savings);
+$bestSavingMonth = !empty($savings) ? array_key_first($savings) : 'N/A';
+
+// Highest income month
+$highestIncomeMonth = 'N/A';
+if ($resIncomes->num_rows > 0) {
+    $resIncomes->data_seek(0);
+    $row = $resIncomes->fetch_assoc();
+    $highestIncomeMonth = $row['Month'];
+}
+
 $conn->close();
 ?>
 
+<!-- HTML + CHARTS -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>Insights</title>
     <link rel="stylesheet" href="css/profile.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        .report-container {
-            background: #fff;
-            padding: 20px;
-            width: 500px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-left: 250px;
-            margin-top: 50px;
-        }
-        .report-container h2 {
-            text-align: center;
-            color: #333;
-        }
-        .status {
-            font-size: 18px;
-            font-weight: bold;
-            padding: 10px;
-            color: white;
-            text-align: center;
-            border-radius: 5px;
-        }
-        .status.green { background-color: #28a745; }
-        .status.blue { background-color: #007bff; }
-        .status.red { background-color: #dc3545; }
-        .budget-details {
-            margin: 15px 0;
-        }
-        .category-list {
-            padding: 0;
-            list-style: none;
-        }
-        .category-list li {
-            padding: 5px 0;
-        }
-        .recommendation {
-            background: #f8f9fa;
-            padding: 10px;
-            border-left: 4px solid #ffc107;
-            margin-top: 15px;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
-<img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+<header>
+    <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'">
+</header>
 
 <aside class="sidebar">
     <div class="profile">
         <img src="css/profile.png" alt="Profile Image" class="avatar">
     </div>
     <ul class="menu">
-        <li><a href="dashboard.php"><span style="font-weight: bold;">Dashboard</span></a></li><br>
-        <li><a href="setbudget.php"><span style="font-weight: bold;">Budget</span></a></li><br>
-        <li><a href="addexpense.php"><span style="font-weight:bold;">Add Expense</span></a></li><br>
+        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
+        <li><a href="addincome.php"><i class="fas fa-wallet"></i> <strong>Income</strong></a></li><br>
+        <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
+        <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
         <li class="dropdown">
-            <a href="#"><span style="font-style: italic; font-weight: bold;">Graph Reports:</span></a>
+            <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
             <ul>
-                <li><a href="linegraph.php">Line Graph Report</a></li>
-                <li><a href="piegraph.php">Pie Graph Report</a></li>
-            </ul>
-        </li>
-        <br>
-        <li>
-            <a href="#"><span style="font-style: italic; font-weight: bold;">Tabular Reports:</span></a><br>
-            <ul>
-                <li><a href="tabularreport.php">All Expenses</a></li>
-                <li><a href="categorywisereport.php">Category wise Expense</a></li>
+                <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
+                <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
             </ul>
         </li><br>
-        <li><a href="profile.php"><span style="font-weight:bold;">Profile</span></a></li><br>
-        <li><a href="logout.php"><span style="font-weight:bold;">Logout</span></a></li><br>
+        <li class="dropdown">
+            <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
+            <ul>
+                <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
+                <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
+            </ul>
+        </li><br>
+        <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
+        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
     </ul>
 </aside>
 
-<!-- Budget Report Section -->
 <div class="report-container">
-    <h2>📊 Monthly Budget Report</h2>
-    
-    <div class="status <?php echo $statusColor; ?>">
-        <?php echo $status; ?>
-    </div>
-    
-    <div class="budget-details">
-        <p><strong>Total Budget:</strong> ₹<?php echo number_format($budgetAmount, 2); ?></p>
-        <p><strong>Total Spent:</strong> ₹<?php echo number_format($totalExpense, 2); ?> (<?php echo number_format($percentageSpent, 2); ?>% of budget)</p>
-    </div>
+    <h2>📈 Monthly Financial Insights</h2>
 
-    <h3>Spending Analysis</h3>
-    <ul class="category-list">
-        <?php echo $insights; ?>
-    </ul>
+    <div class="status <?php echo $statusColor; ?>"><?php echo $status; ?></div>
+
+    <p><strong>Total Budget:</strong> ₹<?php echo number_format($budgetAmount, 2); ?></p>
+    <p><strong>Total Spent:</strong> ₹<?php echo number_format($totalExpense, 2); ?> (<?php echo number_format($percentageSpent, 2); ?>%)</p>
+    <p><strong>Total Income (This Month):</strong> ₹<?php echo number_format($totalIncome, 2); ?></p>
+
+    <h3>Spending Breakdown</h3>
+    <ul><?php echo $insights; ?></ul>
 
     <div class="recommendation">
         <h4>Recommendations</h4>
         <p><?php echo $statusMessage; ?></p>
         <?php echo $recommendation; ?>
     </div>
+
+    <div class="extra-insights">
+        <h4>📊 Additional Insights</h4>
+        <p><strong>Average Monthly Expense:</strong> ₹<?php echo number_format($avgExpense, 2); ?></p>
+        <p><strong>Best Saving Month:</strong> <?php echo $bestSavingMonth; ?></p>
+        <p><strong>Highest Income Month:</strong> <?php echo $highestIncomeMonth; ?></p>
+    </div>
+
+    <div class="chart-section">
+        <h4>📊 Bar Chart - Expenses by Category</h4>
+        <canvas id="barChart" height="120"></canvas>
+    </div>
+
+    <div class="chart-section">
+        <h4>📊 Scatter Chart - Monthly Expense vs Income</h4>
+        <canvas id="scatterChart" height="150"></canvas>
+    </div>
 </div>
+
+<script>
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($categoryLabels); ?>,
+            datasets: [{
+                label: 'Expenses (₹)',
+                data: <?php echo json_encode($categoryValues); ?>,
+                backgroundColor: '#007bff'
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('scatterChart'), {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Income vs Expense',
+                data: <?php echo json_encode($scatterData); ?>,
+                backgroundColor: '#dc3545'
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: { display: true, text: 'Expenses (₹)' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Income (₹)' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 
 </body>
 </html>

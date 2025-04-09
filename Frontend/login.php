@@ -1,37 +1,34 @@
 <?php
-// Enable error reporting for debugging
+// Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Start the session
 session_start();
 
-// Database connection parameters
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "FiscalPoint";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
 if ($conn->connect_error) {
     die("Database Connection Failed: " . $conn->connect_error);
 }
 
-// Function to sanitize input data
+// Sanitize input
 function sanitize_input($data) {
     return htmlspecialchars(trim($data));
 }
 
-// Check if form is submitted
+// On form submit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = sanitize_input($_POST["email"]);
     $password = sanitize_input($_POST["password"]);
 
-    // Fetch user data from the database
-    $query = "SELECT Uid, Uname, Password FROM User WHERE email = ?";
+    // Fetch user with role
+    $query = "SELECT Uid, Uname, Password, Role FROM User WHERE email = ?";
     $stmt = $conn->prepare($query);
 
     if (!$stmt) {
@@ -45,15 +42,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // If user found
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        
-        // Verify password (hashed)
+
         if (password_verify($password, $user["Password"])) {
             $_SESSION["Uid"] = $user["Uid"];
             $_SESSION["Uname"] = $user["Uname"];
             $_SESSION["email"] = $email;
-            
-            // Redirect to dashboard
-            header("Location: dashboard.php");
+            $_SESSION["Role"] = $user["Role"]; // Store role
+
+            // Role-based redirect
+            if ($user["Role"] === "admin") {
+                header("Location: admin_dashboard.php");
+            } else {
+                header("Location: dashboard.php");
+            }
             exit();
         } else {
             echo "<script>alert('Invalid password!'); window.location.href='login.php';</script>";
@@ -62,13 +63,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<script>alert('Invalid email!'); window.location.href='login.php';</script>";
     }
 
-    // Close statement
     $stmt->close();
 }
 
-// Close database connection
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

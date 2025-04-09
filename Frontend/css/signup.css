@@ -127,6 +127,13 @@ header {
     outline: none;
 }
 
+.role {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%;
+  }
+
 /* ======= Signup Button Styling ======= */
 button {
     background-color: #e5c4c4; /* Soft pink button */
