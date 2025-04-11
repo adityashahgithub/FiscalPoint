@@ -1,0 +1,194 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.logo {
+  width: 150px;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+}
+
+
+/* Sidebar */
+
+.sidebar {
+    position: absolute; 
+    left: 0; 
+    width: 16%; 
+    height: 67%; 
+    background-color: rgba(92, 84, 112, 0.6); 
+    padding: 20px;
+    border-radius:  20px;
+    margin-top: 10%;
+}
+
+/* Sidebar Dropdown */
+.dropdown ul {
+    display: none;
+    list-style-type:circle;
+    padding: 0;
+    margin: 0;
+    margin-left: 30px;
+}
+
+.dropdown:hover ul {
+    display: block;
+}
+
+.dropdown ul li {
+    padding: 8px;
+    background: rgba(72, 67, 87, 0.6);
+}
+
+.dropdown ul li a {
+    font-size: 17px;
+}
+
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    
+}
+.menu a {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+}
+.table-container {
+    width: 52%;
+    max-height: 500px; 
+    overflow: auto;
+    margin-left: 20rem;
+    background-color: #86a69c;
+    border-radius: 20px;
+}
+
+
+
+table {
+    width: 62%;
+    border-collapse: collapse;
+    height: 50%;
+
+   background-color: #86a69c;
+   border-radius: 20px;
+   overflow: auto;
+ 
+    
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 12px;
+    text-align: left;
+    font-size: 18px;
+    width: 150px;
+}
+
+th {
+    background-color: #86a69c;
+    font-weight: bold;
+}
+h2{
+ text-align: center;
+ font-family: 'Times New Roman', Times, serif;
+ font-size: 25px;
+
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adds spacing between elements */
+    margin: 20px auto; /* Centers horizontally */
+    padding: 10px;
+    width: fit-content;
+    background-color: rgba(92, 84, 112, 0.6); /* Light background */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+form select, 
+form button {
+    color: black; /* Button text color */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button {
+    background-color: #E5C4C4;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #dea0a0;
+}
+
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+.edit-btn {
+    background-color: #ffc107;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 1px 14px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+}
+.edit-btn:hover, .delete-btn:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+.form-inline input[type="text"] {
+    padding: 5px;
+    width: 60%;
+}
