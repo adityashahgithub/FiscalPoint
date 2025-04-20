@@ -6,6 +6,9 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import io
 import base64
+from flask import make_response
+import json
+
 
 # Flask app
 app = Flask(__name__)
@@ -41,8 +44,8 @@ def fetch_expense_data(user_id):
     return df
 
 # Predict next month
-def predict_next_month(user_id):
-    data = fetch_expense_data(user_id)
+def predict_next_month(Uid):
+    data = fetch_expense_data(Uid)
     if data is None or len(data) < 2:
         return {"message": "Not enough data to predict."}
 
@@ -126,7 +129,18 @@ def predict_budget():
         return jsonify({"error": "user_id parameter is required"}), 400
 
     prediction = predict_next_month(user_id)
-    return jsonify(prediction)
+    
+@app.route('/predict_budget', methods=['GET'])
+def predict_budget():
+    user_id = request.args.get('user_id', type=int)
+    if not user_id:
+        return jsonify({"error": "user_id parameter is required"}), 400
+
+    prediction = predict_next_month(user_id)
+
+    response = make_response(json.dumps(prediction))
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
 # Run Flask app
 if __name__ == '__main__':
