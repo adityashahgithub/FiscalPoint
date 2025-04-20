@@ -53,7 +53,6 @@ $result_users = $conn->query($sql);
         <img src="css/profile.png" alt="Admin Profile" class="avatar">
     </div>
     <ul class="menu">
-        <li><a href="admin_dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li><br>
         <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
         <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
         <li><a href="admin_profile.php"><i class="fas fa-user"></i> Profile</a></li><br>
