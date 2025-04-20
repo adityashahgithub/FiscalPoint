@@ -208,5 +208,6 @@ const expenseChart = new Chart(ctx, {
 document.getElementById('expenseLineChart').style.backgroundColor = '#86a69c';
 
     </script>
+    
 </body>
 </html>

@@ -268,4 +268,5 @@ while ($row = $result_calendar->fetch_assoc()) {
     }
 </script>
 </body>
+
 </html>

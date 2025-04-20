@@ -216,9 +216,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
      <!-- Linking External JavaScript -->
      <script src="javascript/addexpense.js"></script>
-     <script>
-
-    </script>
+   
 
 </body>
 </html>

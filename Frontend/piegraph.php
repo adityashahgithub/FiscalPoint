@@ -170,5 +170,6 @@ $hasExpenses = count($categories) > 0;
 </script>
 
     <?php endif; ?>
+    
 </body>
 </html>
