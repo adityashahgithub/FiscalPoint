@@ -199,6 +199,7 @@ button:hover {
                 <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
             </ul>
         </li><br>
+        <li><a href="insights.php"><i class="fas fa-robot"></i> <strong>Insights</strong></a></li><br>
         <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
         <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
