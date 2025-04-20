@@ -47,72 +47,40 @@ $current_year = date("Y");
 <html>
 <head>
     <title>Calendar Day-wise Report</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        .calendar {
-            margin-top: 30px;
-            background-color: #222;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-        .calendar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .calendar table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        .calendar th, .calendar td {
-            padding: 10px;
-            border: 1px solid #444;
-            width: 14.2%;
-        }
-        .calendar td.today {
-            background-color: #4caf50;
-            color: white;
-            font-weight: bold;
-        }
-        .calendar td.has-expense {
-            background-color: #ff9800;
-            color: white;
-            cursor: pointer;
-        }
-        .calendar td.empty {
-            background-color: #333;
-        }
-        form button {
-            background-color: #4caf50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        form button:hover {
-            background-color: #45a049;
-        }
-        .month-nav {
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+   <link rel="stylesheet" href="css/calendarview.css">
 </head>
 <body>
-
+<aside class="sidebar">
+        <div class="profile">
+            <img src="css/profile.png" alt="Profile Image" class="avatar">
+        </div>
+        <ul class="menu">
+        <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
+    <li><a href="addincome.php"><i class="fas fa-wallet"></i> <span style="font-weight: bold;">Income</span></a></li><br>
+    <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
+    <li><a href="addexpense.php"><i class="fas fa-plus-circle"></i> <strong>Add Expense</strong></a></li><br>
+    
+    <li class="dropdown">
+                <a href="#"><i class="fas fa-chart-bar"></i> <strong><em>Graph Reports:</em></strong></a>
+                <ul>
+                    <li><a href="linegraph.php"><i class="fas fa-chart-line"></i> Line Graph Report</a></li>
+                    <li><a href="piegraph.php"><i class="fas fa-chart-pie"></i> Pie Graph Report</a></li>
+                </ul>
+    </li><br>
+    <li class="dropdown">
+                <a href="#"><i class="fas fa-table"></i> <strong><em>Tabular Reports:</em></strong></a><br>
+                <ul>
+                    <li><a href="tabularreport.php"><i class="fas fa-list-alt"></i> All Expenses</a></li>
+                    <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
+                </ul>
+    </li><br>
+    <li><a href="insights.php"><i class="fas fa-robot"></i> <strong>Insights</strong></a></li><br>
+    <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>
+    <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
+        </ul>
+    </aside>
+    
 <div class="calendar">
     <h2><?php echo date("F Y", strtotime("$year-$month-01")); ?></h2>
     <table>

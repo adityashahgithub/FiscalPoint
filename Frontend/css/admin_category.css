@@ -186,7 +186,7 @@ form button:hover {
     color: white;
     padding: 5px 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 5px
 }
 .edit-btn:hover, .delete-btn:hover {
     opacity: 0.9;
