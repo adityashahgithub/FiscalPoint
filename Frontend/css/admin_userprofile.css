@@ -1,0 +1,241 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.logo {
+  width: 150px;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+}
+
+
+/* Sidebar */
+
+.sidebar {
+    position: absolute; 
+    left: 0; 
+    width: 16%; 
+    height: 67%; 
+    background-color: rgba(92, 84, 112, 0.6); 
+    padding: 20px;
+    border-radius:  20px;
+    margin-top: 10%;
+}
+
+/* Sidebar Dropdown */
+.dropdown ul {
+    display: none;
+    list-style-type:circle;
+    padding: 0;
+    margin: 0;
+    margin-left: 30px;
+}
+
+.dropdown:hover ul {
+    display: block;
+}
+
+.dropdown ul li {
+    padding: 8px;
+    background: rgba(72, 67, 87, 0.6);
+}
+
+.dropdown ul li a {
+    font-size: 17px;
+}
+
+
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
+}
+.logo {
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    
+}
+.menu a {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+}
+
+
+h1{
+    font-family: 'Times New Roman', Times, serif;
+}
+h2{
+    text-align:left;
+    color: white;
+    font-size: 18px;
+}
+body {
+    background-color: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    font-size: 20px;
+}
+
+.input-field {
+    background-color: #716c8f;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    width: 250px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+    color: white;
+
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    background-color: #E5C7C2;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: black;
+}
+
+/* Profile Container */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Profile Card */
+.profile-card {
+    background-color: rgba(92, 84, 112, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(248, 231, 231, 0.476);
+    text-align: center;
+    width: 350px;
+}
+
+/* Input Fields */
+.input-field {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    text-align: left;
+    color: rgb(70, 68, 68);
+    font-weight: bold;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Button Styling */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    width: 45%;
+}
+
+.reset-btn {
+    background-color: #E5C7C2;
+    color: black;
+}
+
+.reset-btn:hover {
+    background-color: #e3b2a9;
+}
+
+.delete-btn {
+    background-color: #E5C7C2;
+    color: black;
+}
+
+.delete-btn:hover {
+    background-color: #e3b2a9;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    margin: 10% auto;
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.forgot-btn {
+    background-color: #E5C7C2;
+    color: black;
+}
+
+.forgot-btn:hover {
+    background-color: #e3b2a9;
+}

@@ -84,7 +84,7 @@ body {
     width: 80%; /* Increased width of the table container */
     max-height: 500px;
     overflow: auto;
-    margin-left: 10%; /* Center the table */
+    margin-left: 20%; /* Center the table */
     background-color: #86a69c;
     border-radius: 20px;
 }
@@ -164,13 +164,15 @@ form button:hover {
     justify-content: center;
 }
 .edit-btn {
-    background-color: #ffc107;
+    margin-top: 10%;
+    background-color: #dea0a0;
     color: #000;
     border: none;
     border-radius: 10px;
     padding: 1px 14px;
     font-weight: bold;
     font-size: 14px;
+    height: 10%;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -178,7 +180,7 @@ form button:hover {
 .delete-btn {
     background-color: red;
     color: white;
-    padding: 5px 10px;
+    padding: 7px 10px;
     border: none;
     border-radius: 5px;
 }
