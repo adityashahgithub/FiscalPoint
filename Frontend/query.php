@@ -27,6 +27,26 @@ if (!isset($_SESSION["Uid"])) {
     exit();
 }
 $uid = $_SESSION["Uid"];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize input data
+    $email = sanitize_input($_POST["email"]);
+    $query_type = sanitize_input($_POST["category"]);
+    $description = sanitize_input($_POST["description"]);
+
+    // Prepared statement to insert into Query table
+    $stmt = $conn->prepare("INSERT INTO Query (Uid, Email, Query_type, Description) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("isss", $uid, $email, $query_type, $description);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Query submitted successfully!'); window.location.href='query.php';</script>";
+    } else {
+        echo "<script>alert('Error submitting query: " . $stmt->error . "');</script>";
+    }
+
+    $stmt->close();
+}
+
+ 
 
 
   
@@ -92,36 +112,32 @@ $uid = $_SESSION["Uid"];
             </div>
             <br>
             <form action="query.php" method="POST" onsubmit="return validateDate(event)" id="expenseForm">
-                
-            <label for="description">Enter your registered email:</label>
-                <input type="text" id="item" name="item" required>
-                
-                <label for="category">Query Type :</label>
-                <select id="category" name="category" class="category" required>
-                    <option value="Dashboard">Dashboard</option>
-                    <option value="Add Income">Add Income</option>
-                    <option value="Add Budget">Add Budget</option>
-                    <option value="Add Expense">Add Expense</option>
-                    <option value="Graph Report">Graph Report</option>
-                    <option value="Tabular report">Tabular report</option>
-                    <option value="Insights">Insights</option>
-                    <option value="Predicitions">Predicitions</option>
-                    <option value="Profile">Profile</option></select>
-                
-                
-                <label for="description">Description:</label>
-                <input type="text" id="item" name="item" required>
-                
-               
-                
-                <button type="submit" class="add-expense-btn">Submit Query</button>
-            </form>
-        </div>
+
+<label for="email">Enter your registered email:</label>
+<input type="email" id="email" name="email" required>
+
+<label for="category">Query Type :</label>
+<select id="category" name="category" class="category" required>
+    <option value="Dashboard">Dashboard</option>
+    <option value="Add Income">Add Income</option>
+    <option value="Add Budget">Add Budget</option>
+    <option value="Add Expense">Add Expense</option>
+    <option value="Graph Report">Graph Report</option>
+    <option value="Tabular report">Tabular report</option>
+    <option value="Insights">Insights</option>
+    <option value="Predictions">Predictions</option>
+    <option value="Profile">Profile</option>
+</select>
+
+<label for="description">Description:</label>
+<input type="text" id="description" name="description" required>
+
+<button type="submit" class="add-expense-btn">Submit Query</button>
+</form>
+
     </div>
 
-    <div id="budgetBox" style="display: none; background-color: #6B6487; padding: 10px; border-radius: 8px; text-align: center; color: white; margin-right: 10rem;" class="budget-box">
-        <p>Your budget for this month is: <span id="budgetAmount">0</span></p>
-    </div>
+   
     
      <!-- Linking External JavaScript -->
      <script src="javascript/addexpense.js"></script>
