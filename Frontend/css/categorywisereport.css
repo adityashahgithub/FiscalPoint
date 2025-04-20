@@ -86,10 +86,10 @@ body {
     text-decoration: none;
 }
 .table-container {
-    width: 50%;
-    max-height: 500px; 
+    width: 44%;
+    max-height: 700px; 
     overflow: auto;
-    margin-left: 20rem;
+    margin-left: 28rem;
     background-color: #86a69c;
     border-radius: 20px;
 }
@@ -97,10 +97,11 @@ body {
 table {
     width: 60%;
     border-collapse: collapse;
-    height: 50%;
+    height: 60%;
    background-color: #86a69c;
    border-radius: 20px ;
    overflow: auto;
+   
     
 }
 
