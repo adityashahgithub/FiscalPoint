@@ -81,7 +81,7 @@ body {
 
 /* Updated styles for table container */
 .table-container {
-    width: 80%; /* Increased width of the table container */
+    width: 90%; /* Increased width of the table container */
     max-height: 500px;
     overflow: auto;
     margin-left: 20%; /* Center the table */

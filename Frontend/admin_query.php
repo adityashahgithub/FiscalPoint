@@ -44,7 +44,12 @@ if ($conn->connect_error) {
         <li><a href="admin_profile.php"><i class="fas fa-user"></i> Profile</a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
         <div class="main-content">
-    <h1>User Queries</h1>
+    </ul>
+    </aside>
+    <div>
+    <h1> <span style="text-align:center;">User Queries </span></h1>
+    <div class="table-container">
+    
     <table class="query-table">
         <thead>
             <tr>
@@ -74,8 +79,10 @@ if ($conn->connect_error) {
             ?>
         </tbody>
     </table>
+    </div>
+    </div>
 </div>
 
-    </ul>
-</aside>
+    
+
 </body>
