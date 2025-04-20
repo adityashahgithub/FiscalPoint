@@ -60,11 +60,13 @@ $costs = [];
 $remaining_budget = [];
 $total_spent = 0;
 $current_budget = $monthly_budget; // Initialize with total budget
+$budget_line = []; // New array for flat monthly budget
 
 // Fetch data for Line Graph
 while ($row = $result_expense->fetch_assoc()) {
     $dates[] = $row["expense_date"];
     $costs[] = $row["total_cost"];
+    $budget_line[] = $monthly_budget; // Fill the array with the same budget amount
     
     // Calculate remaining budget dynamically
     $total_spent += $row["total_cost"];
@@ -153,8 +155,8 @@ const expenseChart = new Chart(ctx, {
                 tension: 0.1
             },
             {
-                label: 'Remaining Budget (₹)',
-                data: <?php echo json_encode($remaining_budget); ?>,
+                label: 'Budget Line (₹)',
+                data: <?php echo json_encode($budget_line); ?>,
                 fill: false,
                 borderColor: '#ff0000', // Red line for budget
                 borderDash: [5, 5], // Dashed line

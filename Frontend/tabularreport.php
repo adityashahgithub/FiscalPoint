@@ -182,6 +182,8 @@ $conn->close();
             <input type="hidden" name="payment_type" value="<?php echo isset($_POST['payment_type']) ? $_POST['payment_type'] : ''; ?>">
             <button type="submit" style="background-color:#4CAF50; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">
                 Download Excel
+                <button type="submit" onclick="location.href='calendarview.php'style="background-color:#4CAF50; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">
+                Calendar wise expense
             </button>
             </form>
 
