@@ -37,10 +37,7 @@ def fetch_expense_data(user_id):
     df['Year'] = df['Date'].dt.year
     df['Month'] = df['Date'].dt.month
 
-    # Group by Year & Month and sum amounts
-    monthly_expenses = df.groupby(['Year', 'Month'])['amount'].sum().reset_index()
-
-    return monthly_expenses
+    return df
 
 # Train model
 def train_model(user_id):
@@ -76,10 +73,26 @@ def predict_next_month(user_id):
     next_time = np.array([[next_year * 100 + next_month]])
     predicted_expense = model.predict(next_time)[0]
 
+    # Predict category-wise expenses for next month
+    category_predictions = {}
+    unique_categories = data['category'].unique()
+
+    for category in unique_categories:
+        category_data = data[data['category'] == category]
+        X_category = category_data[['Time']].values
+        y_category = category_data['amount'].values
+
+        model_category = LinearRegression()
+        model_category.fit(X_category, y_category)
+
+        predicted_expense_category = model_category.predict(next_time)[0]
+        category_predictions[category] = float(round(predicted_expense_category, 2))
+
     return {
         "year": int(next_year),
         "month": int(next_month),
-        "predicted_expense": float(round(predicted_expense, 2))
+        "predicted_expense": float(round(predicted_expense, 2)),
+        "category_predictions": category_predictions
     }
 
 # Flask route
