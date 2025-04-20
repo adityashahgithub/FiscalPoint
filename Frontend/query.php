@@ -132,6 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <label for="description">Description:</label>
 <input type="text" id="description" name="description" required>
 
+<p class="signup-text">Please keep cheking your mailbox for reponse</p>
+
 <button type="submit" class="add-expense-btn">Submit Query</button>
 </form>
 
