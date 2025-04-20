@@ -1,4 +1,4 @@
-/* General Styles */
+
 body {
     margin: 0;
     padding: 0;
@@ -7,10 +7,10 @@ body {
     color: white;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+  
+   
 }
-
 
 /* Sidebar */
 .sidebar {
@@ -18,14 +18,14 @@ body {
     background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
-    height: 67%;
-    margin-top: 10%;
+    height: auto;
+    margin-top: 20px;
 }
 
 /* Sidebar Dropdown */
 .dropdown ul {
     display: none;
-    list-style-type:circle;
+    list-style-type: circle;
     padding: 0;
     margin: 0;
     margin-left: 30px;
@@ -51,11 +51,11 @@ body {
 }
 
 .avatar {
-  width: 140px;
-  height: 140px;
-  object-fit: cover; 
-
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
 }
+
 .logo {
     width: 150px;
     position: absolute;
@@ -66,8 +66,8 @@ body {
 .menu {
     list-style: none;
     padding: 0;
-    
 }
+
 .menu a {
     margin: 15px 0;
     font-size: 18px;
@@ -75,29 +75,34 @@ body {
     text-decoration: none;
 }
 
-
+/* Status and Info Boxes */
 .status {
     font-size: 18px;
     font-weight: bold;
     padding: 10px;
     color: white;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 6px;
 }
 .status.green { background-color: #28a745; }
 .status.blue { background-color: #007bff; }
 .status.red { background-color: #dc3545; }
+
 .budget-details, .recommendation, .extra-insights {
     margin-top: 15px;
 }
+
 .category-list { padding: 0; list-style: none; }
 .category-list li { padding: 5px 0; }
+
 .recommendation {
     background: #f8f9fa;
     padding: 10px;
     border-left: 4px solid #ffc107;
+    color: black;
 }
 
+/* Report Container */
 .report-container {
     max-width: 750px;
     background: white;
@@ -105,16 +110,12 @@ body {
     margin: 50px auto;
     border-radius: 10px;
     box-shadow: 0 0 10px #ccc;
+    color: black;
 }
-.status {
-    color: white;
-    padding: 10px;
-    border-radius: 6px;
-    text-align: center;
-}
-.green { background: #28a745; }
-.blue { background: #007bff; }
-.red { background: #dc3545; }
+
 ul { list-style: none; padding: 0; }
 li { margin-bottom: 6px; }
-.chart-section { margin-top: 30px; }
+
+.chart-section {
+    margin-top: 30px;
+}

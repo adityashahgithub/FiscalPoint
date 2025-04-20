@@ -1,19 +1,17 @@
 import mysql.connector
 import pandas as pd
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 import numpy as np
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import io
 import base64
-from flask import make_response
 import json
 
-
-# Flask app
+# Initialize Flask app
 app = Flask(__name__)
 
-# Database connection function
+# Database connection
 def get_db_connection():
     return mysql.connector.connect(
         host="localhost",
@@ -22,7 +20,7 @@ def get_db_connection():
         database="FiscalPoint"
     )
 
-# Fetch expense data from MySQL
+# Fetch expense data from database
 def fetch_expense_data(user_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -43,7 +41,7 @@ def fetch_expense_data(user_id):
     df['Month'] = df['Date'].dt.month
     return df
 
-# Predict next month
+# Predict next month expenses
 def predict_next_month(Uid):
     data = fetch_expense_data(Uid)
     if data is None or len(data) < 2:
@@ -62,26 +60,24 @@ def predict_next_month(Uid):
 
     next_time = np.array([[next_year * 100 + next_month]])
 
-    # Group by category for last month
     current_month_data = data[(data['Year'] == last_year) & (data['Month'] == last_month)]
     current_category_expenses = current_month_data.groupby('category')['amount'].sum().to_dict()
 
-    # Predict category-wise expenses
     category_predictions = {}
     unique_categories = data['category'].unique()
+
     for category in unique_categories:
         category_data = data[data['category'] == category]
         X_category = category_data[['Time']].values
         y_category = category_data['amount'].values
 
-        model_category = LinearRegression()
-        model_category.fit(X_category, y_category)
+        model = LinearRegression()
+        model.fit(X_category, y_category)
 
-        predicted_expense = model_category.predict(next_time)[0]
-        category_predictions[category] = float(round(predicted_expense, 2))
+        predicted = model.predict(next_time)[0]
+        category_predictions[category] = float(round(predicted, 2))
 
-    # Generate comparison graph
-    img = generate_comparison_graph(current_category_expenses, category_predictions)
+    graph = generate_comparison_graph(current_category_expenses, category_predictions)
 
     return {
         "year": next_year,
@@ -89,10 +85,10 @@ def predict_next_month(Uid):
         "predicted_expense": float(round(sum(category_predictions.values()), 2)),
         "category_predictions": category_predictions,
         "current_category_expenses": current_category_expenses,
-        "comparison_graph": img
+        "comparison_graph": graph
     }
 
-# Generate graph as base64 string
+# Generate base64 bar chart comparing expenses
 def generate_comparison_graph(current, predicted):
     categories = sorted(set(current.keys()) | set(predicted.keys()))
     current_values = [current.get(cat, 0) for cat in categories]
@@ -105,7 +101,7 @@ def generate_comparison_graph(current, predicted):
     ax.bar(x - width/2, current_values, width, label='Current')
     ax.bar(x + width/2, predicted_values, width, label='Predicted')
 
-    ax.set_ylabel('Expenses')
+    ax.set_ylabel('Expenses (₹)')
     ax.set_title('Category-wise Expenses Comparison')
     ax.set_xticks(x)
     ax.set_xticklabels(categories, rotation=45)
@@ -121,15 +117,7 @@ def generate_comparison_graph(current, predicted):
 
     return img_base64
 
-# Flask route
-@app.route('/predict_budget', methods=['GET'])
-def predict_budget():
-    user_id = request.args.get('user_id', type=int)
-    if not user_id:
-        return jsonify({"error": "user_id parameter is required"}), 400
-
-    prediction = predict_next_month(user_id)
-    
+# Route to predict and return insights
 @app.route('/predict_budget', methods=['GET'])
 def predict_budget():
     user_id = request.args.get('user_id', type=int)
@@ -138,10 +126,43 @@ def predict_budget():
 
     prediction = predict_next_month(user_id)
 
-    response = make_response(json.dumps(prediction))
-    response.headers['Content-Type'] = 'application/json'
-    return response
+    if "message" in prediction:
+        return jsonify({"message": prediction["message"]})
 
-# Run Flask app
+    year = prediction['year']
+    month = prediction['month']
+    predicted_total = prediction['predicted_expense']
+    current_exp = prediction['current_category_expenses']
+    predicted_exp = prediction['category_predictions']
+    graph = prediction['comparison_graph']
+
+    # Format human-readable insights
+    insights = f"📅 Predicted Insights for {month:02d}/{year}\n"
+    insights += f"\n🔮 Total Predicted Spending: ₹{predicted_total:.2f}\n\n"
+    insights += "📊 Category-wise Prediction:\n"
+    for cat, val in predicted_exp.items():
+        insights += f"- {cat}: ₹{val:.2f}\n"
+
+    insights += "\n🟩 Current Spending Breakdown (This Month):\n"
+    for cat, val in current_exp.items():
+        insights += f"- {cat}: ₹{val:.2f}\n"
+
+    insights += "\n🪄 Insights:\n"
+    for cat in predicted_exp:
+        current_val = current_exp.get(cat, 0)
+        predicted_val = predicted_exp[cat]
+        if predicted_val > current_val:
+            insights += f"- 📈 {cat} expenses may increase.\n"
+        elif predicted_val < current_val:
+            insights += f"- 📉 {cat} expenses may decrease.\n"
+        else:
+            insights += f"- ➖ {cat} expenses expected to stay the same.\n"
+
+    return jsonify({
+        "summary": insights,
+        "graph_base64": graph
+    })
+
+# Run the app
 if __name__ == '__main__':
     app.run(debug=True)

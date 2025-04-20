@@ -9,17 +9,20 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+   
 }
 
 
 /* Sidebar */
 .sidebar {
-    width: 30%;
+    
+    width: 35%;
     background-color: rgba(92, 84, 112, 0.6);
     padding: 20px;
     border-radius: 20px;
     height: 67%;
-    margin-top: 10%;
+    margin-top: 12%;
+    padding-left: 0%;
 }
 
 /* Sidebar Dropdown */

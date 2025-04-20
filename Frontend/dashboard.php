@@ -123,53 +123,8 @@ while ($row = $result_calendar->fetch_assoc()) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        .calendar {
-    display: none;
-    margin-top: 30px;
-    color: white;
-    background-color: #222;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    z-index: 9999;
-    position: relative;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-.calendar table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-}
-.calendar th, .calendar td {
-    padding: 10px;
-    border: 1px solid #444;
-    width: 14.2%;
-}
-.calendar td.today {
-    background-color: #4caf50;
-    color: white;
-    font-weight: bold;
-}
-.calendar td.has-expense {
-    background-color: #ff9800;
-    color: white;
-}
-button {
-    background-color: #444;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    margin: 5px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-button:hover {
-    background-color: #666;
-}
-    </style>
+  
+       
 </head>
 <body>
 <header>
@@ -246,56 +201,6 @@ button:hover {
         </div>
     </div>
 
-    <div class="calendar" id="calendarView">
-    <span class="close-btn" onclick="toggleCalendar()">×</span>
-    <h2><?php echo date("F Y"); ?> Calendar View</h2>
-    <div class="calendar-wrapper" id="calendarCapture">
-        <table>
-            <tr>
-                <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th>
-                <th>Thu</th><th>Fri</th><th>Sat</th>
-            </tr>
-            <?php
-            $firstDay = date('w', strtotime(date('Y-m-01')));
-            $daysInMonth = date('t');
-            $day = 1;
-            echo "<tr>";
-            for ($i = 0; $i < $firstDay; $i++) echo "<td></td>";
-            for ($i = $firstDay; $i < 7; $i++) {
-                $class = "";
-                $text = "";
-                if (isset($daily_expenses[$day])) {
-                    $class = "has-expense";
-                    $text = "₹" . $daily_expenses[$day];
-                }
-                if ($day == date('j')) $class .= " today";
-                echo "<td class='$class'>$day<br><small>$text</small></td>";
-                $day++;
-            }
-            echo "</tr>";
-            while ($day <= $daysInMonth) {
-                echo "<tr>";
-                for ($i = 0; $i < 7 && $day <= $daysInMonth; $i++) {
-                    $class = "";
-                    $text = "";
-                    if (isset($daily_expenses[$day])) {
-                        $class = "has-expense";
-                        $text = "₹" . $daily_expenses[$day];
-                    }
-                    if ($day == date('j')) $class .= " today";
-                    echo "<td class='$class'>$day<br><small>$text</small></td>";
-                    $day++;
-                }
-                while ($i++ < 7) echo "<td></td>";
-                echo "</tr>";
-            }
-            ?>
-        </table>
-    </div>
-    <div style="text-align:center; margin-top: 20px;">
-        <button onclick="exportCalendarAsImage()">Export as Image</button>
-        <button onclick="exportCalendarAsPDF()">Export as PDF</button>
-    </div>
 </div>
 
     <div class="chart-container">
@@ -304,11 +209,7 @@ button:hover {
 </main>
 
 <script>
-    function toggleCalendar() {
-        const calendar = document.getElementById('calendarView');
-        calendar.style.display = (calendar.style.display === "none" || calendar.style.display === "") ? "block" : "none";
-    }
-
+   
     document.addEventListener("DOMContentLoaded", function () {
         let ctx = document.getElementById('expenseChart').getContext('2d');
         let categories = <?php echo $categories_json; ?>;
