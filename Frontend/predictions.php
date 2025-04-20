@@ -12,6 +12,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Check if logged in
 if (!isset($_SESSION["Uid"])) {
     echo "<script>alert('Session expired. Please log in again.'); window.location.href='login.php';</script>";
     exit();
@@ -20,8 +21,13 @@ if (!isset($_SESSION["Uid"])) {
 $uid = $_SESSION["Uid"];
 $api_url = "http://127.0.0.1:5000/predict_budget?user_id=" . $uid;
 
-$response = file_get_contents($api_url);
-$prediction = json_decode($response, true);
+$response = @file_get_contents($api_url);  // Suppress warning
+
+if ($response === FALSE) {
+    $prediction = ['message' => 'Unable to connect to prediction server. Please try again later.'];
+} else {
+    $prediction = json_decode($response, true);
+}
 ?>
 
 <!DOCTYPE html>
@@ -29,34 +35,8 @@ $prediction = json_decode($response, true);
 <head>
     <meta charset="UTF-8">
     <title>Predictions</title>
-    <link rel="stylesheet" href="css/addincome.css">
+    <link rel="stylesheet" href="css/predictions.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .prediction-card {
-            margin-left: 270px;
-            padding: 25px;
-            background-color: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            max-width: 800px;
-        }
-        .prediction-card h3 {
-            color: #333;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-        }
-        .summary-text {
-            white-space: pre-line;
-            font-family: 'Courier New', Courier, monospace;
-            margin-bottom: 20px;
-        }
-        .prediction-graph {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-    </style>
 </head>
 <body>
     <!-- Header -->
@@ -70,7 +50,6 @@ $prediction = json_decode($response, true);
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <!-- Sidebar Links Same as before -->
             <li><a href="dashboard.php"><i class="fas fa-tachometer-alt"></i> <strong>Dashboard</strong></a></li><br>
             <li><a href="addincome.php"><i class="fas fa-wallet"></i> <strong>Income</strong></a></li><br>
             <li><a href="setbudget.php"><i class="fas fa-coins"></i> <strong>Budget</strong></a></li><br>
@@ -104,7 +83,7 @@ $prediction = json_decode($response, true);
             if (isset($prediction['summary'])) {
                 echo "<div class='summary-text'>" . htmlspecialchars($prediction['summary']) . "</div>";
             } else {
-                echo "<p><strong>⚠️ " . $prediction['message'] . "</strong></p>";
+                echo "<p><strong>⚠️ " . htmlspecialchars($prediction['message']) . "</strong></p>";
             }
 
             if (isset($prediction['graph_base64'])) {

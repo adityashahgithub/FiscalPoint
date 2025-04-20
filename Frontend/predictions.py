@@ -21,12 +21,12 @@ def get_db_connection():
     )
 
 # Fetch expense data from database
-def fetch_expense_data(user_id):
+def fetch_expense_data(Uid):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
     query = "SELECT Date, amount, category FROM Expense WHERE Uid = %s ORDER BY Date"
-    cursor.execute(query, (user_id,))
+    cursor.execute(query, (Uid))
     result = cursor.fetchall()
 
     cursor.close()

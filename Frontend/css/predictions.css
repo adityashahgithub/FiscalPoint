@@ -75,3 +75,29 @@ body {
     color: white;
     text-decoration: none;
 }
+.prediction-card {
+    margin-left: 270px;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    max-width: 800px;
+    color: black;
+}
+.prediction-card h3 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+.summary-text {
+    white-space: pre-line;
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 20px;
+    color: black;
+}
+.prediction-graph {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
