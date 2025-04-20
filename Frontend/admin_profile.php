@@ -64,6 +64,8 @@ $conn->close();
         <ul class="menu">
             <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
             <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
+            <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
+
             <li><a href="admin_profile.php"><i class="fas fa-user"></i> Profile</a></li><br>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
         </ul>
