@@ -16,6 +16,15 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qid'], $_POST['status'])) {
+    $qid = intval($_POST['qid']);
+    $status = ($_POST['status'] === 'Solved') ? 'Solved' : 'Pending';
+
+    $update = $conn->prepare("UPDATE Query SET Status = ? WHERE Qid = ?");
+    $update->bind_param("si", $status, $qid);
+    $update->execute();
+    $update->close();
+}
 
 
 ?>
@@ -47,39 +56,49 @@ if ($conn->connect_error) {
     </ul>
     </aside>
     <div>
-    <h1> <span style="text-align:center;">User Queries </span></h1>
+    <h1 style="text-align:center;">User Queries</h1>
     <div class="table-container">
-    
-    <table class="query-table">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Query Type</th>
-                <th>Description</th>
-                <th>Submitted At</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $sql = "SELECT Email, Query_type, Description, Created_At FROM Query ORDER BY Created_At DESC";
-            $result = $conn->query($sql);
+        <table class="query-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Query Type</th>
+                    <th>Description</th>
+                    <th>Submitted At</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = "SELECT Qid, Email, Query_type, Description, Created_At, Status FROM Query ORDER BY Created_At DESC";
+                $result = $conn->query($sql);
 
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>
                             <td>" . htmlspecialchars($row['Email']) . "</td>
                             <td>" . htmlspecialchars($row['Query_type']) . "</td>
                             <td>" . htmlspecialchars($row['Description']) . "</td>
                             <td>" . $row['Created_At'] . "</td>
+                            <td>
+                                <form method='POST' action=''>
+                                    <input type='hidden' name='qid' value='{$row['Qid']}'>
+                                    <select name='status' onchange='this.form.submit()'>
+                                        <option value='Pending'" . ($row['Status'] == 'Pending' ? ' selected' : '') . ">Pending</option>
+                                        <option value='Solved'" . ($row['Status'] == 'Solved' ? ' selected' : '') . ">Solved</option>
+                                    </select>
+                                </form>
+                            </td>
                           </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='5'>No queries submitted yet.</td></tr>";
                 }
-            } else {
-                echo "<tr><td colspan='4'>No queries submitted yet.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+                ?>
+            </tbody>
+        </table>
     </div>
+</div>
     </div>
 </div>
 

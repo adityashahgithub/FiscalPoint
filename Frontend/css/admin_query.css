@@ -105,3 +105,8 @@ th {
     background-color: #86a69c;
     font-weight: bold;
 }
+select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
