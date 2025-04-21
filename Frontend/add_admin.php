@@ -116,12 +116,13 @@ $conn->close();
         <!-- Signup Form -->
         <form class="signup-form" action="signup.php" method="POST"method="post" action="signup.php">
     <!-- Email Input -->
-    <label for="email">Enter your email:</label>
+    <input type="hidden" name="Role" value="admin">
+    <label for="email">Enter admin email:</label>
     <input type="email" id="email" name="email" placeholder="Email" required>
     <span id="email-error" class="error-message"></span>
 
     <!-- Full Name Input -->
-    <label for="Uname">Full Name:</label>
+    <label for="Uname">Amin Name:</label>
     <input type="text" id="Uname" name="Uname" placeholder="Full Name" required>
 
     <!-- Phone Number Input --> 
@@ -146,7 +147,7 @@ $conn->close();
 </form>
 
         <!-- Login Redirect -->
-        <p class="login-text">Already a user? <a href="login.php">Login instead</a></p>
+        <p class="login-text">Already a login? <a href="login.php">Login instead</a></p>
     </div>
 </div>
 
