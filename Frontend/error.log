@@ -1,0 +1,10 @@
+[04-Apr-2025 20:09:20 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'reset_token' in 'field list' in E:\xampp\htdocs\FiscalPoint\Frontend\forgot_password.php:62
+Stack trace:
+#0 E:\xampp\htdocs\FiscalPoint\Frontend\forgot_password.php(62): mysqli->prepare('UPDATE User SET...')
+#1 {main}
+  thrown in E:\xampp\htdocs\FiscalPoint\Frontend\forgot_password.php on line 62
+[20-Apr-2025 18:20:50 Europe/Berlin] Mail error: SMTP Error: Could not authenticate.
+[20-Apr-2025 18:20:52 Europe/Berlin] Mail error: SMTP Error: Could not authenticate.
+[20-Apr-2025 18:20:53 Europe/Berlin] Mail error: SMTP Error: Could not authenticate.
+[20-Apr-2025 18:20:53 Europe/Berlin] Mail error: SMTP Error: Could not authenticate.
+[20-Apr-2025 18:22:13 Europe/Berlin] Mail error: SMTP Error: Could not authenticate.
