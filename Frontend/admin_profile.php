@@ -62,18 +62,19 @@ $conn->close();
             <img src="css/profile.png" alt="Profile Image" class="avatar">
         </div>
         <ul class="menu">
-            <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
-            <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
-            <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
-
-            <li><a href="admin_profile.php"><i class="fas fa-user"></i> Profile</a></li><br>
-            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
-        </ul>
+        <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
+        <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
+        <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
+        <li><a href="add_admin.php"><i class="fas fa-user"></i> <strong>Add Admin</strong></a></li><br>
+        <li><a href="manage_admin.php"><i class="fas fa-user"></i> <strong>Manage Admin</strong></a></li><br>
+        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+        <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
+    </ul>
     </aside>
 
     <div class="profile-container">
         <div class="profile-card">
-            <h1>User Details</h1>
+            <h1>Admin Details</h1>
             <h2>Name:</h2>
             <div class="input-field"><?php echo htmlspecialchars($user['Uname']); ?></div>
 

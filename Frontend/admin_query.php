@@ -50,9 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['qid'], $_POST['status
         <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
         <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
         <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
-        <li><a href="admin_profile.php"><i class="fas fa-user"></i> Profile</a></li><br>
+        <li><a href="add_admin.php"><i class="fas fa-user"></i> <strong>Add Admin</strong></a></li><br>
+        <li><a href="manage_admin.php"><i class="fas fa-user"></i> <strong>Manage Admin</strong></a></li><br>
+        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
-        <div class="main-content">
     </ul>
     </aside>
     <div>

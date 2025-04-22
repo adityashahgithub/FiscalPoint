@@ -1,0 +1,183 @@
+/* ===== General Page Styling ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Black background */
+    color: white; /* White text */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: black; 
+}
+
+/* Logo */
+.logo {
+    width: 150px; /* Adjust as needed */
+}
+
+/* Navigation Bar */
+.sidebar {
+    width: 18%;
+    background-color: rgba(92, 84, 112, 0.6);
+    padding: 20px;
+    border-radius: 20px;
+    height: 67%;
+    margin-top: 10%;
+}
+
+/* Sidebar Dropdown */
+.dropdown ul {
+    display: none;
+    list-style-type:circle;
+    padding: 0;
+    margin: 0;
+    margin-left: 30px;
+}
+
+.dropdown:hover ul {
+    display: block;
+}
+
+.dropdown ul li {
+    padding: 8px;
+    background: rgba(72, 67, 87, 0.6);
+}
+
+.dropdown ul li a {
+    font-size: 17px;
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.avatar {
+  width: 140px;
+  height: 140px;
+  object-fit: cover; 
+
+}
+.logo {
+    width: 150px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    
+}
+.menu a {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+    text-decoration: none;
+}
+
+
+
+
+/* ======= Signup Form Container ======= */
+.signup-container {
+    width: 450px; /* Adjust width */
+    margin: 2px auto; /* Center alignment */
+    padding: 50px;
+    padding-top: 100px; /* Adjust padding */
+    padding-bottom: 420px; /* Adjust padding */
+    height: 240px; /* Adjust height */
+    border-radius: 10px;
+    
+    
+
+  
+}
+
+/* Heading Styling */
+.signup-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ======= Signup Form Styling ======= */
+.signup-form {
+    display: flex;
+    width: 80%;
+    padding: 40px;
+    flex-direction: column;
+    text-align: left;
+    
+}
+
+/* Label Styling */
+.signup-form label {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Input Fields */
+.signup-form input {
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: white; /* Dark input background */
+    font-size: 16px;
+    color: black;
+    outline: none;
+}
+
+.role {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%;
+  }
+
+/* ======= Signup Button Styling ======= */
+button {
+    background-color: #e5c4c4; /* Soft pink button */
+    color: black;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Hover Effect for Button */
+button:hover {
+    background-color: #d0a8a8; /* Darker shade on hover */
+}
+
+/* ======= Login Text Styling ======= */
+.login-text {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* Login Link Styling */
+.login-text a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Hover Effect for Login Link */
+.login-text a:hover {
+    color: paleturquoise; /* Gold effect on hover */
+}

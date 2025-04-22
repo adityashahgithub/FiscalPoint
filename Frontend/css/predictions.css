@@ -5,13 +5,40 @@ body {
     font-family: Arial, sans-serif;
     color: white;
     display: flex;
+    min-height: 100vh;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    font-family: Arial, sans-serif;
+    color: white;
+    display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
+.logo {
+  width: 150px;
+  position: absolute; 
+  top: 10px; 
+  left: 10px; 
+}
 
 
 /* Sidebar */
+
 .sidebar {
     position: absolute; 
     left: 0; 
@@ -45,6 +72,7 @@ body {
     font-size: 17px;
 }
 
+
 .profile {
     display: flex;
     justify-content: center;
@@ -56,12 +84,6 @@ body {
   height: 140px;
   object-fit: cover; 
 
-}
-.logo {
-    width: 150px;
-    position: absolute;
-    top: 10px;
-    left: 10px;
 }
 
 .menu {
@@ -75,29 +97,190 @@ body {
     color: white;
     text-decoration: none;
 }
+
+/* Main Content */
+.main-content {
+    margin-left: 20%;
+    margin-top: 100px;
+    padding: 20px;
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .prediction-card {
-    margin-left: 270px;
-    padding: 25px;
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    max-width: 800px;
+    padding: 25px;
+    max-width: 900px;
+    width: 100%;
     color: black;
+    margin: 0 auto;
 }
+
+.prediction-card h2, 
 .prediction-card h3 {
     color: #333;
     font-size: 1.5em;
     margin-bottom: 15px;
+    text-align: center;
 }
+
 .summary-text {
     white-space: pre-line;
-    font-family: 'Courier New', Courier, monospace;
-    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
     color: black;
 }
+
 .prediction-graph {
     max-width: 100%;
     height: auto;
     border: 1px solid #ccc;
     border-radius: 10px;
+    margin: 20px auto;
+    display: block;
+}
+
+/* Error and Diagnostic */
+.error-message {
+    background-color: #ffe6e6;
+    border: 1px solid #ff9999;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+    color: #cc0000;
+}
+
+.server-status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 1100;
+}
+
+.server-online {
+    background-color: #e6ffe6;
+    border: 1px solid #99ff99;
+    color: #006600;
+}
+
+.server-offline {
+    background-color: #ffe6e6;
+    border: 1px solid #ff9999;
+    color: #cc0000;
+}
+
+.diagnostic-info {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 20%;
+    }
+    
+    .main-content {
+        margin-left: 25%;
+        width: 70%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+        padding: 10px;
+    }
+    
+    .sidebar .profile {
+        padding: 10px 0;
+    }
+    
+    .sidebar .avatar {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .menu li span, .menu li strong, .menu li em {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+        width: calc(100% - 100px);
+    }
+}
+.error-message {
+    background-color: #ffe6e6;
+    border: 1px solid #ff9999;
+    padding: 15px;
+    margin: 20px;
+    border-radius: 5px;
+    color: #cc0000;
+}
+.server-status {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.server-online {
+    background-color: #e6ffe6;
+    border: 1px solid #99ff99;
+    color: #006600;
+}
+.server-offline {
+    background-color: #ffe6e6;
+    border: 1px solid #ff9999;
+    color: #cc0000;
+}
+.prediction-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px;
+    max-width: 1200px;
+}
+.prediction-graph {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+.summary-text {
+    white-space: pre-line;
+    line-height: 1.6;
+    font-size: 16px;
+    margin-top: 20px;
+}
+.diagnostic-info {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-family: monospace;
+    white-space: pre-wrap;
 }

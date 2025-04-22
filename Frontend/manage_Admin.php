@@ -65,7 +65,7 @@ $result_users = $conn->query($sql);
 
 <div>
  
-    <h2 style="text-align:center;">Registered Users</h2>
+    <h2 style="text-align:center;">Registered Admin</h2>
     <div class="table-container">
         <table>
             <thead>

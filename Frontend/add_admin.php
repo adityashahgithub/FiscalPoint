@@ -90,7 +90,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Fiscal Point</title>
-    <link rel="stylesheet" href="css/signup.css">  
+    <link rel="stylesheet" href="css/add_admin.css">  
 </head>
 <body>
  <!-- Main Container -->
@@ -100,20 +100,23 @@ $conn->close();
        <img src="css/logo.png" alt="Logo" class="logo" onclick="location.href='landing.html'"> 
        
        <!-- NAVIGATION BAR -->
-       <nav class="navbar">
-           <ul>
-           <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
+       <aside class="sidebar">
+    <div class="profile">
+        <img src="css/profile.png" alt="Admin Profile" class="avatar">
+    </div>
+    <ul class="menu">
+        <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
         <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
         <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
         <li><a href="add_admin.php"><i class="fas fa-user"></i> <strong>Add Admin</strong></a></li><br>
         <li><a href="manage_admin.php"><i class="fas fa-user"></i> <strong>Manage Admin</strong></a></li><br>
-        <li><a href="admin_profile.php"><i class="fas fa-user"></i> Profile</a></li><br>
+        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
-           </ul>
-       </nav>
-   </header>    
-
+    </ul>
+</aside>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <!--  Signup Form Section -->
+    
     <div class="signup-container">
         <h2>Welcome to Fiscal Point!</h2>
 
