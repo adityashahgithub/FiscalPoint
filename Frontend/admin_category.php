@@ -47,7 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_id"])) {
     $stmt_delete = $conn->prepare("DELETE FROM Expense WHERE category = ?");
     $stmt_delete->bind_param("s", $delete_category);
     if ($stmt_delete->execute()) {
-        echo "<script>alert('Category deleted successfully.'); window.location.href='admin_category.php';</script>";
+        echo "<script>
+            alert('Category deleted successfully.');
+            window.location.reload();
+        </script>";
     } else {
         echo "<script>alert('Failed to delete category.');</script>";
     }
@@ -68,6 +71,56 @@ $conn->close();
     <title>Manage Category</title>
     <link rel="stylesheet" href="css/admin_category.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .form-inline input[type="text"] {
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-inline input[type="text"]:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76,175,80,0.5);
+            outline: none;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .action-buttons .edit-btn,
+        .action-buttons .delete-btn,
+        .form-inline .edit-btn,
+        .form-inline .delete-btn {
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            font-weight: 500;
+        }
+        .action-buttons .edit-btn,
+        .form-inline .edit-btn {
+            background-color: #4CAF50;
+        }
+        .action-buttons .edit-btn:hover,
+        .form-inline .edit-btn:hover {
+            background-color: #45a049;
+        }
+        .action-buttons .delete-btn,
+        .form-inline .delete-btn {
+            background-color: #f44336;
+        }
+        .action-buttons .delete-btn:hover,
+        .form-inline .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        .action-buttons form {
+            display: inline;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -79,12 +132,12 @@ $conn->close();
         <img src="css/profile.png" alt="Admin Profile" class="avatar">
     </div>
     <ul class="menu">
-        <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
-        <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
-        <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
-        <li><a href="add_admin.php"><i class="fas fa-user"></i> <strong>Add Admin</strong></a></li><br>
-        <li><a href="manage_admin.php"><i class="fas fa-user"></i> <strong>Manage Admin</strong></a></li><br>
-        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+        <li><a href="admin_category.php"><i class="fas fa-tags"></i> Category</a></li><br>
+        <li><a href="admin_registered_users.php"><i class="fas fa-user-friends"></i> Reg Users</a></li><br>
+        <li><a href="admin_query.php"><i class="fas fa-question-circle"></i> <strong>Query</strong></a></li><br>
+        <li><a href="add_admin.php"><i class="fas fa-user-plus"></i> <strong>Add Admin</strong></a></li><br>
+        <li><a href="manage_admin.php"><i class="fas fa-user-cog"></i> <strong>Manage Admin</strong></a></li><br>
+        <li><a href="admin_profile.php"><i class="fas fa-id-card"></i> Profile</a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
     </ul>
 </aside>
@@ -111,13 +164,17 @@ if ($result_expense->num_rows > 0) {
         echo "<td>{$sr_no}</td>";
 
         if ($edit_id === $sr_no) {
-            echo "<form method='POST' class='form-inline'>";
-            echo "<td colspan='2'><input type='text' name='updated_category' value='" . htmlspecialchars($row["category"]) . "' required>
+            echo "<form method='POST' class='form-inline' style='display: flex; align-items: center; gap: 10px; width: 100%;'>";
+            echo "<td style='width: 40%;'>
+                    <input type='text' name='updated_category' value='" . htmlspecialchars($row["category"]) . "' 
+                           style='width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;' required>
                     <input type='hidden' name='original_category' value='" . htmlspecialchars($row["category"]) . "'>
-                    <button type='submit' name='update_category' class='edit-btn' style='margin-left:10px;'>Save</button>
-                    <a href='admin_category.php' class='delete-btn' style='margin-left:5px;'>Cancel</a>
                   </td>";
-            echo "<td></td>";
+            echo "<td style='width: 30%;'>" . date("d-m-Y", strtotime($row["CreatedDate"])) . "</td>";
+            echo "<td style='width: 30%;'>
+                    <button type='submit' name='update_category' class='edit-btn' style='margin-right: 5px;'>Save</button>
+                    <a href='admin_category.php' class='delete-btn'>Cancel</a>
+                  </td>";
             echo "</form>";
         } else {
             echo "<td>" . htmlspecialchars($row["category"]) . "</td>";

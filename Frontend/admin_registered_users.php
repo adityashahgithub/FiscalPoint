@@ -23,7 +23,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_id"])) {
     $stmt = $conn->prepare("DELETE FROM User WHERE Uid = ?");
     $stmt->bind_param("i", $delete_uid);
     if ($stmt->execute()) {
-        echo "<script>alert('User deleted successfully.'); window.location.href='manage_users.php';</script>";
+        echo "<script>
+            alert('User deleted successfully.');
+            window.location.href='admin_registered_users.php';
+        </script>";
     } else {
         echo "<script>alert('Failed to delete user.');</script>";
     }
@@ -53,12 +56,12 @@ $result_users = $conn->query($sql);
         <img src="css/profile.png" alt="Admin Profile" class="avatar">
     </div>
     <ul class="menu">
-        <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
-        <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
-        <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
-        <li><a href="add_admin.php"><i class="fas fa-user"></i> <strong>Add Admin</strong></a></li><br>
-        <li><a href="manage_admin.php"><i class="fas fa-user"></i> <strong>Manage Admin</strong></a></li><br>
-        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+        <li><a href="admin_category.php"><i class="fas fa-tags"></i> Category</a></li><br>
+        <li><a href="admin_registered_users.php"><i class="fas fa-user-friends"></i> Reg Users</a></li><br>
+        <li><a href="admin_query.php"><i class="fas fa-question-circle"></i> <strong>Query</strong></a></li><br>
+        <li><a href="add_admin.php"><i class="fas fa-user-plus"></i> <strong>Add Admin</strong></a></li><br>
+        <li><a href="manage_admin.php"><i class="fas fa-user-cog"></i> <strong>Manage Admin</strong></a></li><br>
+        <li><a href="admin_profile.php"><i class="fas fa-id-card"></i> Profile</a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
     </ul>
 </aside>

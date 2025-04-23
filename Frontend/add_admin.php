@@ -49,7 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "<script>alert('Email already exists. Please use a different email.');</script>";
+        echo "<script>alert('Email already exists. Please use a different email.'); window.location.href='add_admin.php';</script>";
+        exit();
     } else {
         // Insert new user into database
         $insert_query = "INSERT INTO User (Uname, email, Phone_no, Password, Created_At, Role) VALUES (?, ?, ?, ?, ?, ?)";
@@ -62,17 +63,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["Uid"] = $user_id;
             $_SESSION["Uname"] = $uname;
             $_SESSION["email"] = $email;
-            $_SESSION["Role"] = $role;  // Store the role in the session
+            $_SESSION["Role"] = "admin";  // Force role to be admin
 
-            // Role-based redirection
-            if ($role === "admin") {
-                header("Location: admin_dashboard.php");
+            // Redirect to admin_category.php
+            if (headers_sent()) {
+                echo "<script>window.location.href='admin_category.php';</script>";
             } else {
-                header("Location: dashboard.php");
+                header("Location: admin_category.php");
             }
             exit();
         } else {
-            echo "<script>alert('Registration failed. Please try again later.');</script>";
+            echo "<script>alert('Registration failed. Please try again later.'); window.location.href='add_admin.php';</script>";
+            exit();
         }
     }
 
@@ -90,7 +92,8 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Fiscal Point</title>
-    <link rel="stylesheet" href="css/add_admin.css">  
+    <link rel="stylesheet" href="css/add_admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
  <!-- Main Container -->
@@ -105,12 +108,12 @@ $conn->close();
         <img src="css/profile.png" alt="Admin Profile" class="avatar">
     </div>
     <ul class="menu">
-        <li><a href="admin_category.php"><i class="fas fa-layer-group"></i> Category</a></li><br>
-        <li><a href="admin_registered_users.php"><i class="fas fa-users-cog"></i> Reg Users</a></li><br>
-        <li><a href="admin_query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
-        <li><a href="add_admin.php"><i class="fas fa-user"></i> <strong>Add Admin</strong></a></li><br>
-        <li><a href="manage_admin.php"><i class="fas fa-user"></i> <strong>Manage Admin</strong></a></li><br>
-        <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+        <li><a href="admin_category.php"><i class="fas fa-tags"></i> Category</a></li><br>
+        <li><a href="admin_registered_users.php"><i class="fas fa-user-friends"></i> Reg Users</a></li><br>
+        <li><a href="admin_query.php"><i class="fas fa-question-circle"></i> <strong>Query</strong></a></li><br>
+        <li><a href="add_admin.php"><i class="fas fa-user-plus"></i> <strong>Add Admin</strong></a></li><br>
+        <li><a href="manage_admin.php"><i class="fas fa-user-cog"></i> <strong>Manage Admin</strong></a></li><br>
+        <li><a href="admin_profile.php"><i class="fas fa-id-card"></i> Profile</a></li><br>
         <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li><br>
     </ul>
 </aside>
@@ -121,7 +124,7 @@ $conn->close();
         <h2>Welcome to Fiscal Point!</h2>
 
         <!-- Signup Form -->
-        <form class="signup-form" action="signup.php" method="POST"method="post" action="signup.php">
+        <form class="signup-form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <!-- Email Input -->
     <input type="hidden" name="Role" value="admin">
     <label for="email">Enter admin email:</label>
