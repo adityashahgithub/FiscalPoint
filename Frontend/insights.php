@@ -223,10 +223,6 @@ $conn->close();
         <canvas id="barChart" height="120"></canvas>
     </div>
 
-    <div class="chart-section">
-        <h4>📊 Scatter Chart - Monthly Expense vs Income</h4>
-        <canvas id="scatterChart" height="150"></canvas>
-    </div>
 </div>
 
 <script>
@@ -247,28 +243,7 @@ $conn->close();
         }
     });
 
-    new Chart(document.getElementById('scatterChart'), {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                label: 'Income vs Expense',
-                data: <?php echo json_encode($scatterData); ?>,
-                backgroundColor: '#dc3545'
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: { display: true, text: 'Expenses (₹)' },
-                    beginAtZero: true
-                },
-                y: {
-                    title: { display: true, text: 'Income (₹)' },
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+    
 </script>
 
 </body>

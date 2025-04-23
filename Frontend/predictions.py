@@ -341,7 +341,7 @@ def evaluate_model_accuracy(Uid):
     try:
         # Fetch data
         data = fetch_expense_data(Uid)
-        if data is None or len(data) < 3:  # Need more data points for meaningful evaluation
+        if data is None or len(data) < 3:  
             return {
                 "error": "Insufficient data for model evaluation. Need at least 3 months of data."
             }
