@@ -202,18 +202,32 @@ $result = $conn->query($sql);
     justify-content: center;
 }
 
-.edit-btn {
-    background-color: #4CAF50;
+.edit-btn, .delete-btn, button[type="submit"] {
     color: white;
     border: none;
     padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
     text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    font-weight: 500;
 }
 
-.edit-btn:hover {
+.edit-btn, button[type="submit"] {
+    background-color: #4CAF50;
+}
+
+.edit-btn:hover, button[type="submit"]:hover {
     background-color: #45a049;
+}
+
+.delete-btn {
+    background-color: #f44336;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
 }
 </style>
 

@@ -41,11 +41,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt->execute()) {
             session_regenerate_id(true); // Prevent session fixation
-            session_destroy(); // Logout user after password reset
-            echo "<script>
-                    alert('Password reset successfully! Please log in.');
-                    window.location.href = 'login.php';
-                  </script>";
+            
+            // Check if admin or regular user
+            if (isset($_SESSION['Role']) && $_SESSION['Role'] === 'admin') {
+                // Admin - Keep session, redirect to admin profile
+                echo "<script>
+                        alert('Password reset successfully!');
+                        window.location.href = 'admin_profile.php';
+                      </script>";
+            } else {
+                // Regular user - Logout and redirect to login
+                session_destroy(); 
+                echo "<script>
+                        alert('Password reset successfully! Please log in.');
+                        window.location.href = 'login.php';
+                      </script>";
+            }
             exit();
         } else {
             $error = "Failed to reset password.";
@@ -119,7 +130,13 @@ $conn->close();
                 <button type="submit">Reset Password</button>
             </form>
 
-            <p class="back-to-profile"><a href="profile.php">Back to Profile</a></p>
+            <p class="back-to-profile">
+                <?php if(isset($_SESSION['Role']) && $_SESSION['Role'] === 'admin'): ?>
+                    <a href="admin_profile.php">Back to Profile</a>
+                <?php else: ?>
+                    <a href="profile.php">Back to Profile</a>
+                <?php endif; ?>
+            </p>
         </div>
     </div>
 

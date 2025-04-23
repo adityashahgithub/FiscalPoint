@@ -93,6 +93,52 @@ $conn->close();
         </div>
     </div>
 
+<style>
+/* Add consistent styling for buttons */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.reset-btn {
+    background-color: #4CAF50;
+}
+
+.reset-btn:hover {
+    background-color: #45a049;
+}
+
+.forgot-btn {
+    background-color: #2196F3;
+}
+
+.forgot-btn:hover {
+    background-color: #0b7dda;
+}
+
+.delete-btn {
+    background-color: #f44336;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+</style>
+
 <!-- JavaScript for Delete Account Confirmation -->
 <script>
 function confirmDelete() {

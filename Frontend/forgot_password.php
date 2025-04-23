@@ -163,9 +163,15 @@ function sendMail($to, $subject, $body) {
         <!-- NAVIGATION BAR -->  
         <nav class="navbar">
             <ul>
-                <li><a href="landing.html">Home</a></li>
-                <li><a href="login.php">Expense Tracker</a></li>
-                <li><a href="landing.html#aboutus">About Us</a></li> 
+                <?php if (isset($_SESSION['Role']) && $_SESSION['Role'] === 'admin'): ?>
+                    <li><a href="admin_profile.php">Back to Profile</a></li>
+                    <li><a href="admin_category.php">Dashboard</a></li>
+                    <li><a href="logout.php">Logout</a></li>
+                <?php else: ?>
+                    <li><a href="landing.html">Home</a></li>
+                    <li><a href="login.php">Expense Tracker</a></li>
+                    <li><a href="landing.html#aboutus">About Us</a></li> 
+                <?php endif; ?>
             </ul>
         </nav>
     </header>
@@ -180,7 +186,12 @@ function sendMail($to, $subject, $body) {
             <button type="submit">Send Reset Link</button>
         </form>
 
-        <p><a href="login.php">Back to Login</a></p>
+        <?php if (isset($_SESSION['Role']) && $_SESSION['Role'] === 'admin'): ?>
+            <p><a href="admin_profile.php">Back to Profile</a></p>
+        <?php else: ?>
+            <p><a href="login.php">Back to Login</a></p>
+        <?php endif; ?>
     </div>
+</div>
 </body>
 </html>

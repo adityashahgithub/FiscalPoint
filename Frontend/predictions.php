@@ -99,7 +99,60 @@ if (!$server_running) {
     <link rel="stylesheet" href="css/predictions.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        .chart-container {
+            height: 360px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
         
+        .prediction-card {
+            background-color: #f5f5f5;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .summary-text {
+            background-color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            white-space: pre-wrap;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .prediction-graph {
+            display: none;
+        }
+        
+        .prediction-card h2 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            padding: 0;
+        }
+        
+        /* Remove extra space in diagnostic info section */
+        .diagnostic-info {
+            margin-top: 10px;
+            padding: 10px;
+        }
+        
+        /* Fix the spacing in the server status indicator */
+        .server-status {
+            padding: 4px 8px;
+            margin: 0;
+            font-size: 12px;
+        }
+        
+        /* Only apply this to content area, not sidebar */
+        .main-content br {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -132,10 +185,11 @@ if (!$server_running) {
                     <li><a href="categorywisereport.php"><i class="fas fa-layer-group"></i> Category-wise Expense</a></li>
                 </ul>
             </li><br>
-            <li><a href="insights.php"><i class="fas fa-robot"></i> <strong>Insights</strong></a></li><br>
-            <li><a href="predictions.php"><i class="fas fa-robot"></i> <strong>Predictions</strong></a></li><br>            <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
+            <li><a href="insights.php"><i class="fas fa-lightbulb"></i> <strong>Insights</strong></a></li><br>
+            <li><a href="predictions.php"><i class="fas fa-chart-line"></i> <strong>Predictions</strong></a></li><br>            
+            <li><a href="profile.php"><i class="fas fa-user"></i> <strong>Profile</strong></a></li><br>
             
-            <li><a href="query.php"><i class="fas fa-user"></i> <strong>Query</strong></a></li><br>
+            <li><a href="query.php"><i class="fas fa-question-circle"></i> <strong>Query</strong></a></li><br>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> <strong>Logout</strong></a></li><br>
         </ul>
     </aside>
@@ -171,13 +225,121 @@ if (!$server_running) {
             <?php else: ?>
                 <?php if (isset($prediction['summary'])): ?>
                     <div class="summary-text">
-                        <?php echo nl2br(htmlspecialchars($prediction['summary'])); ?>
+                        <?php 
+                        $summary = $prediction['summary'];
+                        // Make text more concise and readable
+                        $summary = str_replace('📅 Predicted Insights for Month', '<strong style="font-size:16px">📅 Prediction for Month</strong>', $summary);
+                        $summary = str_replace('🔮 Prediction based on your past spending patterns:', '<strong style="font-size:16px">🔮 Based on your spending patterns:</strong>', $summary);
+                        // Remove extra blank lines
+                        $summary = preg_replace('/\n\s*\n/', "\n", $summary);
+                        echo nl2br($summary);
+                        ?>
                     </div>
-                    <?php if (isset($prediction['graph_base64'])): ?>
-                        <img src="data:image/png;base64,<?php echo $prediction['graph_base64']; ?>" 
-                             class="prediction-graph" 
-                             alt="Expense Prediction Graph">
-                    <?php endif; ?>
+                    
+                    <?php 
+                    // Parse category data from the summary
+                    $categoryData = [];
+                    $summaryLines = explode("\n", $prediction['summary']);
+                    foreach ($summaryLines as $line) {
+                        if (strpos($line, '-') === 0) {
+                            preg_match('/- ([^:]+): ₹([0-9.]+)/', $line, $matches);
+                            if (count($matches) === 3) {
+                                $categoryData[$matches[1]] = floatval($matches[2]);
+                            }
+                        }
+                    }
+                    
+                    // Simplified month and year extraction
+                    preg_match('/Month ([0-9]+), ([0-9]+)/', $prediction['summary'], $dateMatches);
+                    $predictedMonth = isset($dateMatches[1]) ? $dateMatches[1] : '';
+                    $predictedYear = isset($dateMatches[2]) ? $dateMatches[2] : '';
+                    $monthName = $predictedMonth ? date("F", mktime(0, 0, 0, $predictedMonth, 1)) : '';
+                    ?>
+                    
+                    <div class="chart-container">
+                        <canvas id="categoryExpenseChart"></canvas>
+                    </div>
+                    
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        const ctx = document.getElementById('categoryExpenseChart').getContext('2d');
+                        
+                        const categoryChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: <?php echo json_encode(array_keys($categoryData)); ?>,
+                                datasets: [{
+                                    label: 'Predicted Expenses for <?php echo $monthName . " " . $predictedYear; ?>',
+                                    data: <?php echo json_encode(array_values($categoryData)); ?>,
+                                    backgroundColor: [
+                                        '#3498db', '#2ecc71', '#9b59b6', '#e74c3c', 
+                                        '#f1c40f', '#1abc9c', '#34495e', '#e67e22',
+                                        '#95a5a6', '#16a085', '#d35400', '#c0392b'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Category-wise Predicted Expenses',
+                                        color: '#333',
+                                        font: {
+                                            size: 16,
+                                            weight: 'bold'
+                                        },
+                                        padding: {
+                                            top: 5,
+                                            bottom: 10
+                                        }
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                return '₹' + context.parsed.y.toFixed(2);
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Amount (₹)',
+                                            color: '#333'
+                                        },
+                                        ticks: {
+                                            callback: function(value) {
+                                                return '₹' + value;
+                                            },
+                                            font: {
+                                                size: 10
+                                            }
+                                        }
+                                    },
+                                    x: {
+                                        title: {
+                                            display: false
+                                        },
+                                        ticks: {
+                                            maxRotation: 45,
+                                            minRotation: 45,
+                                            font: {
+                                                size: 10
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    </script>
                 <?php elseif (isset($prediction['message'])): ?>
                     <div class="error-message">
                         <i class="fas fa-exclamation-triangle"></i>

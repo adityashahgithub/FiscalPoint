@@ -43,16 +43,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $uname = $_POST['uname'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
+    
+    // Get the referring page if it was set
+    $redirect_page = isset($_POST['redirect_page']) ? $_POST['redirect_page'] : 'admin_registered_users.php';
 
     $update_stmt = $conn->prepare("UPDATE User SET Uname = ?, email = ?, Phone_no = ? WHERE Uid = ?");
     $update_stmt->bind_param("sssi", $uname, $email, $phone, $uid);
 
     if ($update_stmt->execute()) {
-        echo "<script>alert('User updated successfully.'); window.location.href='admin_registered_users.php';</script>";
+        echo "<script>alert('User updated successfully.'); window.location.href='" . $redirect_page . "';</script>";
     } else {
         echo "<script>alert('Failed to update user.');</script>";
     }
     $update_stmt->close();
+}
+
+// Determine the referring page
+$redirect_page = 'admin_registered_users.php'; // Default
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $referer = $_SERVER['HTTP_REFERER'];
+    if (strpos($referer, 'manage_admin.php') !== false) {
+        $redirect_page = 'manage_admin.php';
+    }
 }
 ?>
 
@@ -103,8 +115,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         
         <div class="form-actions">
+            <input type="hidden" name="redirect_page" value="<?php echo $redirect_page; ?>">
             <button type="submit" class="save-btn"><i class="fas fa-save"></i> Save Changes</button>
-            <a href="admin_registered_users.php" class="cancel-btn"><i class="fas fa-times"></i> Cancel</a>
+            <a href="<?php echo $redirect_page; ?>" class="cancel-btn"><i class="fas fa-times"></i> Cancel</a>
         </div>
     </form>
 </div>
@@ -151,34 +164,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 .save-btn, .cancel-btn {
-    padding: 10px 20px;
+    color: white;
     border: none;
+    padding: 8px 15px;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    font-weight: 500;
 }
 
 .save-btn {
-    background-color: #2ecc71;
-    color: white;
-}
-
-.cancel-btn {
-    background-color: #e74c3c;
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
+    background-color: #4CAF50;
 }
 
 .save-btn:hover {
-    background-color: #27ae60;
+    background-color: #45a049;
+}
+
+.cancel-btn {
+    background-color: #f44336;
 }
 
 .cancel-btn:hover {
-    background-color: #c0392b;
+    background-color: #d32f2f;
 }
 </style>
 

@@ -94,6 +94,24 @@ $conn->close();
     <title>Sign Up - Fiscal Point</title>
     <link rel="stylesheet" href="css/add_admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        button[type="submit"] {
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            font-weight: 500;
+            background-color: #4CAF50;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
  <!-- Main Container -->
