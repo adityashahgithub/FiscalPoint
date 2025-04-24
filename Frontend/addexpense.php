@@ -55,10 +55,19 @@ $remaining_budget = ($monthly_budget !== "No budget set") ? $monthly_budget - $t
 // Handle Expense Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category = sanitize_input($_POST["category"]);
+    // If category is "Other", use the custom category input
+    if ($category === "Other" && !empty($_POST["other_category"])) {
+        $category = sanitize_input($_POST["other_category"]);
+    }
     $amount = filter_var(sanitize_input($_POST["cost"]), FILTER_VALIDATE_FLOAT);
     $date = sanitize_input($_POST["date"]);
     $description = sanitize_input($_POST["item"]);
     $payment_method = sanitize_input($_POST["payment_method"]); 
+    
+    // If payment method is "Other", use the custom payment method input
+    if ($payment_method === "Other" && !empty($_POST["other_payment"])) {
+        $payment_method = sanitize_input($_POST["other_payment"]);
+    }
 
     // Validate amount
     if ($amount === false || $amount <= 0) {
@@ -164,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="date" id="date" name="date" required>
                 
                 <label for="category">Category:</label>
-                <select id="category" name="category" class="category" required>
+                <select id="category" name="category" class="category" required onchange="toggleOtherCategory()">
                     <option value="Housing">Housing</option>
                     <option value="Food">Food</option>
                     <option value="Transportation">Transportation</option>
@@ -178,7 +187,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="Childcare/Dependents">Childcare/Dependents</option>
                     <option value="Gifts & Donations">Gifts & Donations</option>
                     <option value="Miscellaneous">Miscellaneous</option>
+                    <option value="Other">Other</option>
                 </select>
+                
+                <div id="otherCategoryDiv" style="display: none;">
+                    <label for="other_category">Specify Category:</label>
+                    <input type="text" id="other_category" name="other_category">
+                </div>
                 
                 <label for="description">Description:</label>
                 <input type="text" id="item" name="item" required>
@@ -218,6 +233,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      <!-- Linking External JavaScript -->
      <script src="javascript/addexpense.js"></script>
    
+     <script>
+        function toggleOtherCategory() {
+            var categorySelect = document.getElementById('category');
+            var otherCategoryDiv = document.getElementById('otherCategoryDiv');
+            
+            if (categorySelect.value === 'Other') {
+                otherCategoryDiv.style.display = 'block';
+            } else {
+                otherCategoryDiv.style.display = 'none';
+            }
+        }
 
+        function toggleOtherPayment() {
+            var paymentSelect = document.getElementById('payment_method');
+            var otherPaymentDiv = document.getElementById('otherPaymentDiv');
+            
+            if (paymentSelect.value === 'Other') {
+                otherPaymentDiv.style.display = 'block';
+            } else {
+                otherPaymentDiv.style.display = 'none';
+            }
+        }
+     </script>
 </body>
 </html>

@@ -70,7 +70,7 @@ if ($totalExpense < ($budgetAmount * 0.7)) {
 }
 
 // Top category
-$topCategory = array_keys($expensesByCategory, max($expensesByCategory))[0] ?? null;
+$topCategory = !empty($expensesByCategory) ? array_keys($expensesByCategory, max($expensesByCategory))[0] : null;
 $topCategoryAmount = $expensesByCategory[$topCategory] ?? 0;
 
 // Breakdown insights

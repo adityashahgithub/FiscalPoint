@@ -19,6 +19,9 @@ if ($conn->connect_error) {
 
 // Sanitize input function
 function sanitize_input($data) {
+    if ($data === null) {
+        return '';
+    }
     return htmlspecialchars(trim($data));
 }
 
@@ -114,7 +117,7 @@ $conn->close();
         <h2>Welcome to Fiscal Point!</h2>
 
         <!-- Signup Form -->
-        <form class="signup-form" action="signup.php" method="POST"method="post" action="signup.php">
+        <form class="signup-form" action="signup.php" method="POST">
     <!-- Email Input -->
     <label for="email">Enter your email:</label>
     <input type="email" id="email" name="email" placeholder="Email" required>
@@ -128,6 +131,13 @@ $conn->close();
     <label for="Phone_no">Phone Number:</label>
     <input type="tel" id="Phone_no" name="Phone_no" placeholder="Enter Phone Number" required pattern="[0-9]{10}" maxlength="10">
 
+    <!-- Role Selection -->
+    <label for="Role">Account Type:</label>
+    <select id="Role" name="Role" class="role-select" required>
+        <option value="user">Regular User</option>
+        <option value="admin">Administrator</option>
+    </select>
+
     <!-- Password Input -->
     <label for="Password">Create Password:</label>
     <input type="password" id="Password" name="Password" placeholder="Password" required>
@@ -138,8 +148,6 @@ $conn->close();
     <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
     <span id="confirm-password-error" class="error-message"></span>
     
-    
-
     <!-- Signup Button -->
     <button type="submit">Get Started</button>
     
