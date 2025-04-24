@@ -36,6 +36,28 @@ while ($row = $result_calendar->fetch_assoc()) {
 }
 $stmt->close();
 
+$sql_details = "SELECT DAY(Date) AS day, Category, SUM(Amount) AS category_total, Description 
+                FROM Expense 
+                WHERE Uid = ? AND MONTH(Date) = ? AND YEAR(Date) = ? 
+                GROUP BY DAY(Date), Category";
+$stmt = $conn->prepare($sql_details);
+$stmt->bind_param("iii", $uid, $month, $year);
+$stmt->execute();
+$result_details = $stmt->get_result();
+
+$expense_details = [];
+while ($row = $result_details->fetch_assoc()) {
+    if (!isset($expense_details[$row['day']])) {
+        $expense_details[$row['day']] = [];
+    }
+    $expense_details[$row['day']][] = [
+        'category' => $row['Category'],
+        'amount' => $row['category_total'],
+        'description' => $row['Description']
+    ];
+}
+$stmt->close();
+
 $first_day_of_month = date('N', strtotime("$year-$month-01")); // 1 (Mon) to 7 (Sun)
 $total_days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 $today = date("j");
@@ -49,6 +71,68 @@ $current_year = date("Y");
     <title>Calendar Day-wise Report</title>
     <link rel="stylesheet" href="css/calendarview.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Popup styling */
+        .expense-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color:rgb(0, 0, 2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            min-width: 300px;
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .expense-popup h3 {
+            margin-top: 0;
+            color: white;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        
+        .expense-popup table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        .expense-popup th, .expense-popup td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .expense-popup th {
+            background-color:rgb(0, 0, 2);
+        }
+        
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #999;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+    </style>
 </head>
 <body>
 <aside class="sidebar">
@@ -140,6 +224,14 @@ $current_year = date("Y");
     </form>
 </div>
 
+<!-- Add the popup and overlay divs -->
+<div class="overlay" id="overlay"></div>
+<div class="expense-popup" id="expensePopup">
+    <span class="close-popup" onclick="closePopup()">&times;</span>
+    <h3 id="popupDate"></h3>
+    <div id="popupContent"></div>
+</div>
+
 <script>
     function changeMonth(offset) {
         const currentMonth = new Date(document.getElementById('monthInput').value + '-01');
@@ -158,15 +250,60 @@ $current_year = date("Y");
         }
     });
 
-    // Click day cell to show popup
+    // Click day cell to show popup with detailed expense breakdown
     document.querySelectorAll(".calendar td.has-expense").forEach(cell => {
         cell.addEventListener("click", () => {
             const day = cell.dataset.day.padStart(2, '0');
-            const amount = cell.dataset.amount;
             const date = "<?php echo "$year-$month-"; ?>" + day;
-            alert("📅 Date: " + date + "\n💸 Expense: ₹" + amount);
+            
+            // Get the expense details from PHP
+            const expenseDetails = <?php echo json_encode($expense_details); ?>;
+            const dayDetails = expenseDetails[parseInt(cell.dataset.day)];
+            
+            // Format the date for display
+            const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Set the popup title
+            document.getElementById('popupDate').textContent = formattedDate;
+            
+            // Build the content table
+            let content = '<table><thead><tr><th>Category</th><th>Amount</th></tr></thead><tbody>';
+            
+            if (dayDetails && dayDetails.length > 0) {
+                dayDetails.forEach(detail => {
+                    content += `<tr>
+                        <td>${detail.category}</td>
+                        <td>₹${parseFloat(detail.amount).toFixed(2)}</td>
+                    </tr>`;
+                });
+            }
+            
+            content += '</tbody></table>';
+            
+            // Add total row
+            content += `<p><strong>Total: ₹${parseFloat(cell.dataset.amount).toFixed(2)}</strong></p>`;
+            
+            // Set the content
+            document.getElementById('popupContent').innerHTML = content;
+            
+            // Show the popup
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('expensePopup').style.display = 'block';
         });
     });
+    
+    function closePopup() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('expensePopup').style.display = 'none';
+    }
+    
+    // Close popup when clicking overlay
+    document.getElementById('overlay').addEventListener('click', closePopup);
 </script>
 
 </body>
